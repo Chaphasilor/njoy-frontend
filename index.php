@@ -1,9 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <title>Portal</title>
+
+    <style>
+
+      body {
+        padding: 1%;
+      }
+
+      video {
+        width: 100%;
+        height: auto;
+        min-height: 50%;
+        margin: 20px auto;
+      }
+
+      a {
+        font-size: 4em;
+        font-family: sans-serif;
+        text-decoration: none;
+        color: rgb(237, 0, 158);
+        display: inline-block;
+        width: 48%;
+        line-height: 2em;
+        margin: 0;
+      }
+
+      a:first-of-type {
+        text-align: left;
+        margin-right: 2%;
+      }
+
+      a:last-of-type {
+        text-align: right;
+      }
+
+    </style>
+
   </head>
   <body>
+
     <?php
 
       $dir = 'videos';
@@ -22,7 +60,7 @@
 
         if ($i < sizeof($files)+2) {
           echo "
-            <video controls width='400' height='225' style='display:block;'>
+            <video controls width='400' height='225' oncanplay='createThumb(this);'>
               <source src='".$dir."/".$files[$i]."'>
             </video>
                ";
@@ -37,6 +75,7 @@
     ?>
 
     <a href='index.php?p=<?php echo $page+2; ?>'>Next Page</a>
+
 
   </body>
 </html>
