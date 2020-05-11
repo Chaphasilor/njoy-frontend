@@ -1,3 +1,3 @@
-# videoportal
+# njoy-frontend
 
-A website that serves videos through a web portal
+A VueJS-based frontend for njoy
