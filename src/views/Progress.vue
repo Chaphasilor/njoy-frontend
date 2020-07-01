@@ -1,0 +1,55 @@
+<template>
+  <div>
+
+    <ProgressCard 
+      filename="Once Upon a Time ... in Hollywood (2019).mp4"
+      status="downloading"
+      size="2.3 GB"
+      :percentage="80"
+      :eta="new Date(Date.now() + 2 * 60 * 60 * 1000)"
+    />
+
+    <ProgressCard 
+      filename="The Avengers (2015).mp4"
+      status="paused"
+      size="1.9 GB"
+      :percentage="23"
+      :eta="new Date(Date.now() + 9 * 60 * 60 * 1000)"
+    />
+
+    <ProgressCard 
+      filename="Extraction (2020).mkv"
+      status="pending"
+      size="1.7 GB"
+    />
+
+    <ProgressCard 
+      filename="Extraction (2020).mkv"
+      status="pending"
+      size="1.7 GB"
+    />
+
+    <ProgressCard 
+      filename="Extraction (2020).mkv"
+      status="pending"
+      size="1.7 GB"
+    />
+
+  </div>
+</template>
+
+<script>
+
+import ProgressCard from '@/components/ProgressCard';
+
+export default {
+  name: `Progress`,
+  components: {
+    ProgressCard,
+  },
+}
+</script>
+
+<style>
+
+</style>
