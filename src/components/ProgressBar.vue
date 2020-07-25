@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <div
+    class="flex flex-col justify-center"
+  >
     <div
-      class="w-full bg-njoy-bg-gray my-3 h-2 rounded-md overflow-hidden"
+      class="w-full bg-njoy-bg-gray h-2 rounded-md overflow-hidden"
     >
       <div
-        class="bg-cover bg-left w-1/2 h-full rounded-md"
+        class="bg-cover bg-left w-1/2 h-2 rounded-md"
         :style="{
           'background-color': progressBarColor,
           width: `${percentage}%`, 
         }"
       >
-      {{ progressBarColor }}
+      <!-- {{ progressBarColor }} -->
       </div>
     </div>    
   </div>

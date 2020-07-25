@@ -1,5 +1,10 @@
 <template>
   <div>
+    <h2
+      class="p-2 text-center text-2xl antialiased font-semibold text-dark"    
+    >
+      Progress Overview
+    </h2>
 
     <ProgressCard 
       filename="Once Upon a Time ... in Hollywood (2019).mp4"

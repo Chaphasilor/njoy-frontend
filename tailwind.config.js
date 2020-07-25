@@ -10,13 +10,17 @@ module.exports = {
     extend: {
       colors: {
         'eggshell': '#FFFAFA',
+        'dark': '#3D3D3D',
       },
       backgroundColor: {
         // 'progress-gradient': 'linear-gradient(90deg, #E9E016 0%, #B1DC1C 92.97%, #40D428 124.83%);'
         'njoy-bg-gray': '#DFDFDF',
+        // 'cta-green': 'linear-gradient(156.44deg, #40D428 0%, #5CE346 100%)',
+        // 'cta-yellow': 'linear-gradient(168.12deg, #D4C328 0%, #E3DD46 100%)',
+        // 'cta-red': 'linear-gradient(118.83deg, #D64C21 0%, rgba(214, 76, 33, 0.76) 197.3%)',
       },
       fontFamily: {
-        'quicksand': ['Quicksand', 'serif', 'system-ui'],
+        'quicksand': ['Quicksand script=latin rev=1', 'serif', 'system-ui'],
       },
       boxShadow: {
         'top': '0 -2px 4px 0 rgba(0, 0, 0, 0.15)',

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="mx-4 my-2 bg-white rounded-xl shadow-md flex flex-row flex-wrap justify-between px-4 py-2 leading-9"
+    class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md flex flex-row flex-wrap justify-between px-4 py-2 leading-9"
   >
     <div
-      class="w-4/5 text-left font-bold break-all h-8 overflow-hidden"
+      class="w-4/5 text-left font-semibold break-all h-8 overflow-hidden"
     >
       {{ filename }}
     </div>
@@ -15,7 +15,7 @@
     />
     
     <div
-      class="w-1/6 text-right"
+      class="w-1/6 text-right h-8"
     >
       {{ statusString }}
     </div>
@@ -47,17 +47,24 @@
     >
       {{ size }}
     </div>
+
+    <CTAButton
+      class="w-full h-8 my-2"
+      type="cancel"
+    />
   </div>
 </template>
 
 <script>
 
 import ProgressBar from '@/components/ProgressBar';
+import CTAButton from '@/components/CTAButton';
 
 export default {
   name: "ProgressCard",
   components: {
     ProgressBar,
+    CTAButton,
   },
   data: function() {
     return {
