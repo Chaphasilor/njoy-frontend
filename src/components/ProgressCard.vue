@@ -10,12 +10,12 @@
 
     <ProgressBar
       v-if="showProgressbar"
-      class="w-5/6 h-8 overflow-hidden"
+      class="w-7/8 h-8 overflow-hidden"
       :percentage="percentage"
     />
     
     <div
-      class="w-1/6 text-right h-8"
+      class="w-1/8 text-right h-8"
     >
       {{ statusString }}
     </div>
@@ -49,8 +49,19 @@
     </div>
 
     <CTAButton
+      v-if="showPauseButton"
       class="w-full h-8 my-2"
+      type="pause"
+    />
+    <CTAButton
+      v-if="showCancelButton"
+      class="w-1/2 h-8 my-2"
       type="cancel"
+    />
+    <CTAButton
+      v-if="showResumeButton"
+      class="w-1/2 h-8 my-2"
+      type="resume"
     />
   </div>
 </template>
@@ -71,6 +82,9 @@ export default {
       progressBarStates: [`downloading`, `paused`],
       etaStates: [`downloading`],
       sizeStates: [`pending`,`paused`],
+      pauseButtonStates: [`downloading`],
+      cancelButtonStates: [`paused`],
+      resumeButtonStates: [`paused`],
     }
   },
   props: {
@@ -131,6 +145,15 @@ export default {
     },
     showSize: function() {
       return this.sizeStates.includes(this.status);
+    },
+    showPauseButton: function() {
+      return this.pauseButtonStates.includes(this.status);
+    },
+    showCancelButton: function() {
+      return this.cancelButtonStates.includes(this.status);
+    },
+    showResumeButton: function() {
+      return this.resumeButtonStates.includes(this.status);
     },
     etaString: function() {
       

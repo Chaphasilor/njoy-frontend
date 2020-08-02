@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="p-xs"
+  >
     <div
       v-if="type == 'resume'"
       class="w-full h-full rounded-xl bg-cta-green flex flex-col justify-center"
