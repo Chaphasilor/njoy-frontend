@@ -7,6 +7,9 @@ module.exports = {
     ]
   },
   theme: {
+    borderRadius: {
+      'lg': '15px',
+    },
     extend: {
       colors: {
         'eggshell': '#FFFAFA',

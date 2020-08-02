@@ -3,34 +3,44 @@
     class="p-xs"
   >
     <div
-      v-if="type == 'resume'"
-      class="w-full h-full rounded-xl bg-cta-green flex flex-col justify-center"
+      class="w-full h-full rounded-lg overflow-hidden text-center text-lg text-white font-medium antialiased"
     >
-      <img
-        src="@/assets/icons/resume.svg"
-        alt="Resume"
-        class="w-4 h-4 m-auto"
+      <div
+        v-if="type == 'resume'"
+        class="w-full h-full bg-cta-green flex flex-col justify-center"
       >
-    </div>
-    <div
-      v-if="type == 'pause'"
-      class="w-full h-full rounded-xl bg-cta-yellow flex flex-col justify-center"
-    >
-      <img
-        src="@/assets/icons/pause.png"
-        alt="Pause"
-        class="w-4 h-4 m-auto"
+        <img
+          src="@/assets/icons/resume.svg"
+          alt="Resume"
+          class="w-4 h-4 m-auto"
+        >
+      </div>
+      <div
+        v-if="type == 'pause'"
+        class="w-full h-full bg-cta-yellow flex flex-col justify-center"
       >
-    </div>
-    <div
-      v-if="type == 'cancel'"
-      class="w-full h-full rounded-xl bg-cta-red flex flex-col justify-center"
-    >
-      <img
-        src="@/assets/icons/cancel.svg"
-        alt="Cancel"
-        class="w-4 h-4 m-auto"
+        <img
+          src="@/assets/icons/pause.png"
+          alt="Pause"
+          class="w-4 h-4 m-auto"
+        >
+      </div>
+      <div
+        v-if="type == 'cancel'"
+        class="w-full h-full bg-cta-red flex flex-col justify-center"
       >
+        <img
+          src="@/assets/icons/cancel.svg"
+          alt="Cancel"
+          class="w-4 h-4 m-auto"
+        >
+      </div>
+      <div
+        v-if="type == 'good'"
+        class="w-full h-full bg-cta-green flex flex-col justify-center"
+      >
+        {{ label }}
+      </div>
     </div>
   </div>
 </template>
@@ -50,8 +60,12 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'resume',
-    }
+      required: true,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     // iconSource: function() {

@@ -3,10 +3,10 @@
     class="flex flex-col justify-center"
   >
     <div
-      class="w-full bg-njoy-bg-gray h-2 rounded-md overflow-hidden"
+      class="w-full bg-njoy-bg-gray rounded-xl h-full overflow-hidden"
     >
       <div
-        class="bg-cover bg-left w-1/2 h-2 rounded-md"
+        class="bg-cover bg-left w-1/2 h-full rounded-xl"
         :style="{
           'background-color': progressBarColor,
           width: `${percentage}%`, 
