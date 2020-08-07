@@ -79,6 +79,8 @@
         :value="download.retries.toString()"
       />
 
+      <!-- TODO collapse headers by default (also design in Figma) -->
+
       <span
         class="w-full h-8 text-center"
       >

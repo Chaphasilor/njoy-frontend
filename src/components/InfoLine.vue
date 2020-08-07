@@ -3,7 +3,7 @@
     class="flex flex-row justify-between"
   >
     <div
-      class="w-1/3 text-left h-full"
+      class="w-1/3 text-left h-full whitespace-no-wrap"
     >
       {{ name }}
     </div>

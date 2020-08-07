@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-row justify-between text-xs"
+    class="flex flex-row justify-between text-sm"
   >
     <div
-      class="w-1/3 text-left"
+      class="w-1/3 text-left whitespace-no-wrap"
     >
       {{ name }}:
     </div>
