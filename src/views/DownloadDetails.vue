@@ -37,34 +37,68 @@
 
       <br>
 
-      <div
-        class="w-1/2 text-left h-8"
+      <InfoLine
+        class="w-full h-8"
+        name="ETA"
+        :value="etaString"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Download Speed"
+        :value="download.speed"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Progress"
+        :value="progressSizeString"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Elapsed"
+        :value="elapsedString"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Destination"
+        :value="download.path"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="URL"
+        :value="download.url"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Retries"
+        :value="download.retries.toString()"
+      />
+
+      <span
+        class="w-full h-8 text-center"
       >
-        ETA
-      </div>
-      <div
-        class="w-1/2 text-right h-8"
-      >
-        {{ etaString }}
-      </div>
+        Headers
+      </span>
+
+      <HeaderLine
+        :key="header"
+        v-for="header in Object.keys(download.headers)"
+        class="w-full h-8"
+        :name="header"
+        :value="download.headers[header]"
+      />
 
       <div
-        class="w-1/2 text-left h-8"
-      >
-        Size
-      </div>
-      <div
-        class="w-1/2 text-right h-8"
-      >
-        {{ download.size }}
-      </div>
-
-      <div
-        class="w-full h-12 mt-6 flex flex-row flex-wrap justify-between"
+        class="w-full h-12 mt-8 flex flex-row flex-wrap justify-between"
       >
         <CTAButton
           v-if="showCancelButton"
-          class="w-1/2 h-full"
+          class="w-1/2 h-12"
           type="cancel"
         />
         <CTAButton
@@ -92,12 +126,16 @@
 
 import ProgressBar from '@/components/ProgressBar';
 import CTAButton from '@/components/CTAButton';
+import InfoLine from '@/components/InfoLine';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
   name: 'DownloadDetails',
   components: {
     ProgressBar,
     CTAButton,
+    InfoLine,
+    HeaderLine,
   },
   data: function() {
     return {
@@ -110,9 +148,16 @@ export default {
       download: {
         filename: `Unknown Filename`,
         status: `Unknown`,
-        size: `Unknown Size`,
         percentage: 0,
         eta: new Date(NaN),
+        size: `Unknown Size`,
+        downloaded: '-',
+        startDate: new Date(NaN),
+        speed: '-',
+        path: 'Unknown',
+        url: 'Unknown',
+        retries: 'Unknown',
+        headers: {},
       },
     }
   },
@@ -187,7 +232,15 @@ export default {
       //TODO show date as designed in Figma
       return this.download.eta.toLocaleTimeString();
       
-    }
+    },
+    elapsedString: function() {
+      //TODO show date as designed in Figma
+      return this.download.startDate.toLocaleTimeString();
+      
+    },
+    progressSizeString: function() {
+      return `${this.download.downloaded} / ${this.download.size}`;
+    },
   },
   mounted: function() {
     console.log(`this.download:`, this.download);

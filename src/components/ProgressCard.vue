@@ -34,31 +34,19 @@
 
     <br>
 
-    <div
+    <InfoLine
       v-if="showETA"
-      class="w-1/2 text-left h-8"
-    >
-      ETA
-    </div>
-    <div
-      v-if="showETA"
-      class="w-1/2 text-right h-8"
-    >
-      {{ etaString }}
-    </div>
+      class="w-full h-8"
+      name="ETA"
+      :value="etaString"
+    />
 
-    <div
+    <InfoLine
       v-if="showSize"
-      class="w-1/2 text-left h-8"
-    >
-      Size
-    </div>
-    <div
-      v-if="showSize"
-      class="w-1/2 text-right h-8"
-    >
-      {{ download.size }}
-    </div>
+      class="w-full h-8"
+      name="Size"
+      :value="download.size"
+    />
 
     <CTAButton
       v-if="showPauseButton"
@@ -82,12 +70,14 @@
 
 import ProgressBar from '@/components/ProgressBar';
 import CTAButton from '@/components/CTAButton';
+import InfoLine from '@/components/InfoLine';
 
 export default {
   name: "ProgressCard",
   components: {
     ProgressBar,
     CTAButton,
+    InfoLine
   },
   data: function() {
     return {

@@ -12,7 +12,7 @@
         <img
           src="@/assets/icons/resume.svg"
           alt="Resume"
-          class="w-4 h-4 m-auto"
+          class="w-5 m-auto"
         >
       </div>
       <div
@@ -22,7 +22,7 @@
         <img
           src="@/assets/icons/pause.png"
           alt="Pause"
-          class="w-4 h-4 m-auto"
+          class="w-5 m-auto"
         >
       </div>
       <div
@@ -32,7 +32,7 @@
         <img
           src="@/assets/icons/cancel.svg"
           alt="Cancel"
-          class="w-4 h-4 m-auto"
+          class="w-5 m-auto"
         >
       </div>
       <div

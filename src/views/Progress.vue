@@ -8,11 +8,25 @@
 
     <ProgressCard
       :download="{
-        filename:'Once Upon a Time ... in Hollywood (2019).mp4',
-        status:'downloading',
-        size:'2.3 GB',
+        filename: 'Once Upon a Time ... in Hollywood (2019).mp4',
+        status: 'downloading',
         percentage: 80,
         eta: new Date(Date.now() + 2 * 60 * 60 * 1000),
+        size: '2.3 GB',
+        downloaded: '800 MB',
+        startDate: new Date(Date.now() - 1.5 * 60 * 60 * 1000),
+        speed: '786 Kb/s',
+        path: 'Storage / Media / Movies',
+        url: 'https://example.com/download',
+        retries: 0,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer t73485z235u9835498',
+          'Cookie': [
+            'approve = 1',
+            'allow = true',
+          ]
+        },
       }"
     />
 
