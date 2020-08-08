@@ -63,7 +63,6 @@
         size: '1.7 GB',
       }"
     />
-
   </div>
 </template>
 
@@ -72,7 +71,7 @@
 import ProgressCard from '@/components/ProgressCard';
 
 export default {
-  name: `Progress`,
+  name: 'Progress',
   components: {
     ProgressCard,
   },

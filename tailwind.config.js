@@ -14,6 +14,7 @@ module.exports = {
       colors: {
         'eggshell': '#FFFAFA',
         'dark': '#3D3D3D',
+        'accent': '#27E19E',
       },
       backgroundColor: {
         // 'progress-gradient': 'linear-gradient(90deg, #E9E016 0%, #B1DC1C 92.97%, #40D428 124.83%);'
@@ -40,7 +41,10 @@ module.exports = {
         '9/10': '90%',
         '1/8': '12.5%',
         '7/8': '87.5%',
-      }
+      },
+      height: {
+        'navbar': '3.5rem',
+      },
     }, 
   },
   variants: {},

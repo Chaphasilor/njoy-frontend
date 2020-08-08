@@ -20,7 +20,7 @@
         class="w-full h-full bg-cta-yellow flex flex-col justify-center"
       >
         <img
-          src="@/assets/icons/pause.png"
+          src="@/assets/icons/pause.svg"
           alt="Pause"
           class="w-5 m-auto"
         >
