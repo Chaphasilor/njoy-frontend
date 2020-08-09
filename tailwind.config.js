@@ -24,7 +24,8 @@ module.exports = {
         // 'cta-red': 'linear-gradient(118.83deg, #D64C21 0%, rgba(214, 76, 33, 0.76) 197.3%)',
       },
       fontFamily: {
-        'quicksand': ['Quicksand script=latin rev=1', 'serif', 'system-ui'],
+        'quicksand': ['Quicksand', 'serif', 'system-ui'],
+        'quicksand-bold': ['QuicksandBold', 'serif', 'system-ui'],
       },
       boxShadow: {
         'top': '0 -2px 4px 0 rgba(0, 0, 0, 0.15)',
