@@ -10,7 +10,7 @@
       class="relative bg-white w-full mx-6 my-16 text-dark rounded-xl shadow-xl"
     >
       <h3
-        class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark"
+        class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark tracking-wide"
       >
         Download a Single File
       </h3>

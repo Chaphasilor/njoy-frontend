@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2
-      class="p-2 text-center text-2xl antialiased font-semibold text-dark"
+      class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"
     >
       Download Details
     </h2>
