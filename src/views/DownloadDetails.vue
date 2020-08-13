@@ -88,11 +88,11 @@
       </span>
 
       <HeaderLine
-        :key="header"
-        v-for="header in Object.keys(download.headers)"
+        :key="key"
+        v-for="(header, key) in download.headers"
         class="w-full h-8"
-        :name="header"
-        :value="download.headers[header]"
+        :name="key"
+        :value="header"
       />
 
       <div

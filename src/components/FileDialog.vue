@@ -19,13 +19,17 @@
         class="flex flex-row h-12 mb-6 justify-between"
       >
         <TextField
+          name="url"
           class="w-full pl-4"
+          placeholder="Download-URL"
+          v-model="fileToDownload.url"
         />
 
         <SmallButton
           class="w-20 h-12 ml-2 mr-4"
           type="action"
           icon="clipboard"
+          @click.native="pasteClipboard()"
         />
 
       </div>
@@ -34,7 +38,10 @@
         class="flex flex-row h-12 mb-6 px-4 justify-between"
       >
         <TextField
+          name="path"
           class="w-full"
+          placeholder="Destination Path"
+          v-model="fileToDownload.path"
         />
 
         <SmallButton
@@ -49,7 +56,10 @@
         class="flex flex-row h-12 mb-6 px-4 justify-between"
       >
         <TextField
+          name="filename"
           class="w-full"
+          placeholder="Filename"
+          v-model="fileToDownload.filename"
         />
 
       </div>
@@ -72,6 +82,7 @@
           class=" w-full h-12"
           type="good"
           label="Download!"
+          @click.native="submitDownload()"
         />    
       </div>
     </div>
@@ -94,10 +105,10 @@ export default {
   data: function() {
     return {
       fileToDownload: {
-        filename: `Unknown Filename`,
-        size: `Unknown Size`,
-        path: 'Unknown',
-        url: 'Unknown',
+        filename: '',
+        size: '',
+        path: '',
+        url: '',
         headers: {},
       },
     }
@@ -106,6 +117,24 @@ export default {
     showSize: function() {
       return false;
     },
+  },
+  methods: {
+    async pasteClipboard() {
+
+      let clipboard = '';
+
+      try {
+        clipboard = await navigator.clipboard.readText();
+      } catch (err) {
+        alert("Clipboard couldn't be accessed!");
+      }
+
+      this.fileToDownload.url = clipboard;
+        
+    },
+    async submitDownload() {
+
+    }
   },
   mounted: function() {
 
