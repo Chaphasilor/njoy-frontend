@@ -23,7 +23,7 @@
     <FileDialog
       v-if="showSingleFileDialog"
       v-on:dialog-dismissed="type = undefined"
-      class="absolute top-0 left-0 w-full h-full flex flex-row justify-center"
+      class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
   </div>
 </template>
