@@ -18,7 +18,7 @@
     <div
       class="h-8 mb-2 bg-gray-300 rounded-lg"
       :key="index"
-      v-for="(dir, index) of subdirectories"
+      v-for="(dir, index) of currentDirectory.subdirectories"
       @click="directoryDown(dir)"
     >
       <div
@@ -46,10 +46,12 @@ export default {
   data: function() {
     return {
       currentPath: [],
+      invalidPart: [],
+      currentDirectory: {},
     }
   },
   computed: {
-    allDirectories: function() {
+    rootDirectory: function() {
 
       //TODO fetch these from vuex
       
@@ -188,28 +190,17 @@ export default {
         ]
       }
     },
-    subdirectories: function() {
-
-      console.log(`this.currentPath:`, this.currentPath);
-      console.log(`this.allDirectories:`, this.allDirectories);
-
-      let dir = this.findCurrentPathInSubdirectories(this.currentPath, this.allDirectories);
-
-      if (dir == false) {
-        console.warn(`The path specified couldn't be found!`);
-        alert(`The path specified couldn't be found!`);
-        return [];
-      } else {
-
-        return dir.subdirectories;
-        
-      }
-      
-    }
   },
   watch: {
     currentPath: function() {
       this.$emit('input', this.currentPath);
+      this.currentDirectory = this.findCurrentDirectory();
+    },
+    invalidPart: function() {
+      if (this.invalidPart.length != 0) {
+        this.currentPath = this.removeInvalidPath(this.currentPath, this.invalidPart);
+        this.invalidPart = [];
+      }
     }
   },
   methods: {
@@ -218,30 +209,53 @@ export default {
       console.log(`currentDirectory:`, currentDirectory);
       if (currentPath.length === 0) {
         return currentDirectory;
-      } else if (currentDirectory.subdirectories.length === 0) {
-        return false;
       } else {
 
         let foundDir = currentDirectory.subdirectories.filter(dir => dir.name === currentPath[0]);
         console.log(`foundDir:`, foundDir);
         if (foundDir.length === 0) {
-          return false;
+          return {
+            exists: false,
+            invalidPart: currentPath,
+            closest: currentDirectory,
+          }
         } else {
           return this.findCurrentPathInSubdirectories(currentPath.slice(1), foundDir[0]);
         }
         
       }
     },
+    findCurrentDirectory() {
+
+      let dir = this.findCurrentPathInSubdirectories(this.currentPath, this.rootDirectory);
+
+      if (dir.exists === false) {
+        console.warn(`The path specified couldn't be found!`);
+        //TODO handle invalid path error
+        alert(`The path specified couldn't be found!`);
+        this.invalidPart = dir.invalidPart;
+        return dir.closest;
+      } else {
+
+        return dir;
+        
+      }
+
+    },
     directoryDown(dir) {
       this.currentPath.push(dir.name);
     },
     directoryUp() {
       this.currentPath.pop();
+    },
+    removeInvalidPath(specifiedPath, invalidPart) {
+      return specifiedPath.slice(0, specifiedPath.length - invalidPart.length);
     }
   },
   mounted() {
 
     this.currentPath = this.value;
+    console.log(`this.rootDirectory:`, this.rootDirectory);
     
   }
 }
