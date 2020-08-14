@@ -34,7 +34,11 @@
         <DirectoryBrowser
           class="w-full"
           placeholder="Destination Path"
-          v-model="currentPath"
+          :rootDirectoryTree="rootDirectoryTree"
+          :currentDirectory="currentDirectory"
+          :currentPath="currentPath"
+          v-on:directory-down="directoryDown"
+          v-on:directory-up="directoryUp"
         />
 
       </div>
@@ -46,6 +50,7 @@
           class=" w-full h-12"
           type="action"
           label="New Folder"
+          @click.native="createNewDirectory('Test')"
         />    
       </div>
 
@@ -87,14 +92,28 @@ export default {
   data: function() {
     return {
       currentPath: [],
+      currentDirectory: {},
     }
   },
   computed: {
-
+    rootDirectoryTree: function() {
+      return this.$store.getters.rootDirectoryTree;
+    }
   },
   watch: {
     currentPath: function() {
       this.$emit('input', this.currentPath);
+      console.log(`this.currentPath:`, this.currentPath);
+      this.currentDirectory = this.findCurrentDirectory();
+    },
+    invalidPart: function() {
+      if (this.invalidPart.length != 0) {
+        this.currentPath = this.removeInvalidPath(this.currentPath, this.invalidPart);
+        this.invalidPart = [];
+      }
+    },
+    rootDirectoryTree: function() {
+      this.currentDirectory = this.findCurrentDirectory();
     }
   },
   methods: {
@@ -104,9 +123,88 @@ export default {
         return `${pathString}${folderName}/`;
       }, '');
     },
+    findCurrentPathInSubdirectories(currentPath, currentDirectory) {
+      console.log(`currentPath:`, currentPath);
+      console.log(`currentDirectory:`, currentDirectory);
+      if (currentPath.length === 0) {
+        return currentDirectory;
+      } else {
+
+        let foundDir = currentDirectory.subdirectories.filter(dir => dir.name === currentPath[0]);
+        console.log(`foundDir:`, foundDir);
+        if (foundDir.length === 0) {
+          return {
+            exists: false,
+            invalidPart: currentPath,
+            closest: currentDirectory,
+          }
+        } else {
+          return this.findCurrentPathInSubdirectories(currentPath.slice(1), foundDir[0]);
+        }
+        
+      }
+    },
+    findCurrentDirectory() {
+
+      let dir = this.findCurrentPathInSubdirectories(this.currentPath, this.rootDirectoryTree);
+
+      if (dir.exists === false) {
+        console.warn(`The path specified couldn't be found!`);
+        //TODO handle invalid path error
+        alert(`The path specified couldn't be found!`);
+        this.invalidPart = dir.invalidPart;
+        return dir.closest;
+      } else {
+
+        return dir;
+        
+      }
+
+    },
+    findCurrentDirectoryDummy(rootDir) {
+      //TODO remove
+      let dir = this.findCurrentPathInSubdirectories(this.currentPath, rootDir);
+
+      if (dir.exists === false) {
+        console.warn(`The path specified couldn't be found!`);
+        alert(`The path specified couldn't be found!`);
+        this.invalidPart = dir.invalidPart;
+        return dir.closest;
+      } else {
+
+        return dir;
+        
+      }
+
+    },
+    directoryDown(dir) {
+      this.currentPath.push(dir.name);
+    },
+    directoryUp() {
+      this.currentPath.pop();
+    },
+    removeInvalidPath(specifiedPath, invalidPart) {
+      return specifiedPath.slice(0, specifiedPath.length - invalidPart.length);
+    },
     createNewDirectory(name) {
       //TODO create the folder through the API on the server, (then reload all directories)
-      return name;
+      let rootDirectoryTreeCopy = JSON.parse(JSON.stringify(this.rootDirectoryTree));
+
+      let current = this.findCurrentDirectoryDummy(rootDirectoryTreeCopy);
+
+      current.subdirectories.push({
+        name: name,
+        subdirectories: [],
+      })
+      
+      console.log(`current:`, current);
+      console.log(`rootDirectoryTreeCopy:`, rootDirectoryTreeCopy);
+
+      this.$store.dispatch('createNewDummyDirectory', {
+        path: this.currentPath,
+        name: name,
+        newRootDirectoryTree: rootDirectoryTreeCopy,
+      })
     }
   },
   created: function() {
