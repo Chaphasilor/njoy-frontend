@@ -103,6 +103,10 @@ export default {
       return pathArray.reduce((pathString, folderName)  => {
         return `${pathString}${folderName}/`;
       }, '');
+    },
+    createNewDirectory(name) {
+      //TODO create the folder through the API on the server, (then reload all directories)
+      return name;
     }
   },
   created: function() {

@@ -48,14 +48,7 @@ export default {
       currentPath: [],
       invalidPart: [],
       currentDirectory: {},
-    }
-  },
-  computed: {
-    rootDirectory: function() {
-
-      //TODO fetch these from vuex
-      
-      return {
+      dummyDirs: {
         name: 'ROOT',
         subdirectories: [
           {
@@ -188,7 +181,13 @@ export default {
             ]
           },
         ]
-      }
+      },
+    }
+  },
+  computed: {
+    rootDirectory: function() {
+      //TODO fetch these from vuex
+      return this.dummyDirs;
     },
   },
   watch: {
@@ -201,6 +200,9 @@ export default {
         this.currentPath = this.removeInvalidPath(this.currentPath, this.invalidPart);
         this.invalidPart = [];
       }
+    },
+    rootDirectory: function() {
+      this.currentDirectory = this.findCurrentDirectory();
     }
   },
   methods: {
@@ -250,7 +252,7 @@ export default {
     },
     removeInvalidPath(specifiedPath, invalidPart) {
       return specifiedPath.slice(0, specifiedPath.length - invalidPart.length);
-    }
+    },
   },
   mounted() {
 
