@@ -22,7 +22,7 @@
           name="displayPath"
           class="w-full px-4"
           :value="stringifyPath(currentPath)"
-          prefix="/"
+          prefix="/ "
           disabled
         />
 
@@ -119,9 +119,8 @@ export default {
   },
   methods: {
     stringifyPath(pathArray) {
-      console.log(`pathArray:`, pathArray);
       return pathArray.reduce((pathString, folderName)  => {
-        return `${pathString}${folderName}/`;
+        return `${pathString}${folderName} / `;
       }, '');
     },
     findCurrentPathInSubdirectories(currentPath, currentDirectory) {

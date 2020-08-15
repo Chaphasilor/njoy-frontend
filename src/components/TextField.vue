@@ -34,6 +34,15 @@ export default {
       }
     },
   },
+  watch: {
+    value: function() {
+      // scroll to the right of the text field when the value changes
+      // use timeout to use updated width instead of old one
+      setTimeout(() => {
+        this.$el.firstChild.scrollLeft = this.$el.firstChild.scrollWidth;
+      }, 0);
+    }
+  },
   methods: {
     removePrefix(textWithPrefix) {
       return textWithPrefix.replace(this.prefix, '');

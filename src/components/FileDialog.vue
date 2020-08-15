@@ -153,7 +153,7 @@ export default {
     },
     arrayifyPath(pathString) {
       return pathString.split('/').reduce((pathArray, folderName) => {
-        return [...pathArray, folderName];
+        return [...pathArray, folderName].filter(name => name.length > 0);
       }, []);
     },
     async pasteClipboard() {
