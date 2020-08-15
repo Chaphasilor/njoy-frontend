@@ -91,7 +91,7 @@
 
     <PathDialog
       v-if="showPathDialog"
-      v-on:dialog-dismissed="showPathDialog = false"
+      v-on:confirmed="showPathDialog = false; pathString = stringifyPath(fileToDownload.path)"
       v-model="fileToDownload.path"
       class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
@@ -141,11 +141,12 @@ export default {
       handler: function() {
         console.log(`this.fileToDownload:`, this.fileToDownload);
       }
-    }
+    },
     //TODO update pathString when path array changes
   },
   methods: {
     stringifyPath(pathArray) {
+      //TODO trailing slash causes 'invalid' path when trying to find currentDirectory
       return pathArray.reduce((pathString, folderName)  => {
         return `${pathString}${folderName}/`;
       }, '');

@@ -61,6 +61,7 @@
           class=" w-full h-12"
           type="good"
           label="Confirm"
+          @click.native="$emit('confirmed')"
         />    
       </div>
     </div>
