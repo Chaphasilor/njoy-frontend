@@ -134,7 +134,6 @@ export default {
         headers: {
           cookies: {
             'approve': 1,
-            'allow': 'true',
           },
           'Authorization': 'Bearer t73485z235u9835498',
         },

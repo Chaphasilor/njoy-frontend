@@ -39,7 +39,7 @@
           class=" w-full h-12"
           type="action"
           label="Add a Cookie"
-          @click.native="createNewDirectory('Test')"
+          @click.native="addCookie('allow', 'true')"
         />    
       </div>
 
@@ -67,7 +67,7 @@
           class=" w-full h-12"
           type="action"
           label="Add a Header"
-          @click.native="createNewDirectory('Test')"
+          @click.native="addHeader('Content-Type', 'application/json')"
         />    
       </div>
 
@@ -107,16 +107,16 @@ export default {
   },
   data: function() {
     return {
-
+      headers: {},
     }
   },
   computed: {
     cookiePairs: function() {
-      return this.generatePairsFromObject(this.value.cookies);
+      return this.generatePairsFromObject(this.headers.cookies);
     },
     headerPairs: function() {
 
-      let headersWithoutCookies = JSON.parse(JSON.stringify(this.value));
+      let headersWithoutCookies = JSON.parse(JSON.stringify(this.headers));
       delete headersWithoutCookies.cookies;
 
       return this.generatePairsFromObject(headersWithoutCookies);
@@ -124,6 +124,13 @@ export default {
     }
   },
   watch: {
+    headers: {
+      deep: true,
+      handler: function() {
+        console.log(`this.headers:`, this.headers);
+        this.$emit('input', this.headers);
+      }
+    }
   },
   methods: {
     generatePairsFromObject(object) {
@@ -146,7 +153,18 @@ export default {
 
       return pairs;
       
-    }
+    },
+    addCookie(name, value) {
+      this.$set(this.headers.cookies, name, value);
+    },
+    addHeader(name, value) {
+      this.$set(this.headers, name, value);
+    },
+  },
+  created: function() {
+
+    this.headers = this.value; // leave in created so that the initial empty object isn't propagated throught the event
+
   },
   mounted: function() {
 
