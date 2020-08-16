@@ -74,6 +74,7 @@
           class=" w-full h-12"
           type="action"
           label="Manage Cookies & Headers"
+          @click.native="showCookiesAndHeadersDialog = true"
         />    
       </div>
 
@@ -91,8 +92,15 @@
 
     <PathDialog
       v-if="showPathDialog"
-      v-on:confirmed="showPathDialog = false; pathString = stringifyPath(fileToDownload.path)"
+      @confirmed="showPathDialog = false; pathString = stringifyPath(fileToDownload.path)"
       v-model="fileToDownload.path"
+      class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
+    />
+
+    <CookiesAndHeadersDialog
+      v-if="showCookiesAndHeadersDialog"
+      @confirmed="showCookiesAndHeadersDialog = false"
+      v-model="fileToDownload.headers"
       class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
     
@@ -101,10 +109,11 @@
 
 <script>
 
-import CTAButton from '@/components/CTAButton';
-import SmallButton from '@/components/SmallButton';
-import TextField from '@/components/TextField';
-import PathDialog from  '@/components/PathDialog';
+import CTAButton from '@/components/buttons/CTAButton';
+import SmallButton from '@/components/buttons/SmallButton';
+import TextField from '@/components/inputs/TextField';
+import PathDialog from  '@/components/dialogs/PathDialog';
+import CookiesAndHeadersDialog from  '@/components/dialogs/CookiesAndHeadersDialog';
 
 export default {
   name: 'FileDialog',
@@ -113,6 +122,7 @@ export default {
     SmallButton,
     TextField,
     PathDialog,
+    CookiesAndHeadersDialog,
   },
   data: function() {
     return {
@@ -121,9 +131,16 @@ export default {
         size: '',
         path: [],
         url: '',
-        headers: {},
+        headers: {
+          cookies: {
+            'approve': 1,
+            'allow': 'true',
+          },
+          'Authorization': 'Bearer t73485z235u9835498',
+        },
       },
       showPathDialog: false,
+      showCookiesAndHeadersDialog: false,
       pathString: '',
     }
   },

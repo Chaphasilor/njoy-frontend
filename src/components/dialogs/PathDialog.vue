@@ -33,12 +33,11 @@
       >
         <DirectoryBrowser
           class="w-full"
-          placeholder="Destination Path"
           :rootDirectoryTree="rootDirectoryTree"
           :currentDirectory="currentDirectory"
           :currentPath="currentPath"
-          v-on:directory-down="directoryDown"
-          v-on:directory-up="directoryUp"
+          @directory-down="directoryDown"
+          @directory-up="directoryUp"
         />
 
       </div>
@@ -70,9 +69,9 @@
 
 <script>
 
-import CTAButton from '@/components/CTAButton';
-import TextField from '@/components/TextField';
-import DirectoryBrowser from '@/components/DirectoryBrowser';
+import CTAButton from '@/components/buttons/CTAButton';
+import TextField from '@/components/inputs/TextField';
+import DirectoryBrowser from '@/components/inputs/DirectoryBrowser';
 
 export default {
   name: 'PathDialog',

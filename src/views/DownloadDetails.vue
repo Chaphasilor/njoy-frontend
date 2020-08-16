@@ -126,10 +126,10 @@
 
 <script>
 
-import ProgressBar from '@/components/ProgressBar';
-import CTAButton from '@/components/CTAButton';
-import InfoLine from '@/components/InfoLine';
-import HeaderLine from '@/components/HeaderLine';
+import ProgressBar from '@/components/outputs/ProgressBar';
+import CTAButton from '@/components/buttons/CTAButton';
+import InfoLine from '@/components/outputs/InfoLine';
+import HeaderLine from '@/components/outputs/HeaderLine';
 
 export default {
   name: 'DownloadDetails',

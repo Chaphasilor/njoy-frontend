@@ -22,7 +22,7 @@
     />
     <FileDialog
       v-if="showSingleFileDialog"
-      v-on:dialog-dismissed="type = undefined"
+      @dialog-dismissed="type = undefined"
       class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
   </div>
@@ -30,8 +30,8 @@
 
 <script>
 
-import BigButton from '@/components/BigButton';
-import FileDialog from '@/components/FileDialog';
+import BigButton from '@/components/buttons/BigButton';
+import FileDialog from '@/components/dialogs/FileDialog';
 
 export default {
   name: 'Download',

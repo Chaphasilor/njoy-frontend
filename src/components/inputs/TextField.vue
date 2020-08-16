@@ -7,7 +7,7 @@
       :placeholder="placeholder"
       :value="`${prefix}${value}`"
       @input="$emit('input', removePrefix($event.target.value))"
-    />
+    >
   </div>
 </template>
 
@@ -17,9 +17,15 @@ export default {
   props: {
     value: {
       type: String,
+      default: function() {
+        return '';
+      }
     },
     placeholder: {
       type: String,
+      default: function() {
+        return '';
+      }
     },
     prefix: {
       type: String,
