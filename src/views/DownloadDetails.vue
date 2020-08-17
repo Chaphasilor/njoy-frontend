@@ -247,6 +247,8 @@ export default {
   mounted: function() {
     console.log(`this.download:`, this.download);
 
+    this.$store.dispatch('navigate', { target: 'download-details' });
+
     // if params are missing, this will cause errors because of missing nested objects
     if (this.$route.params.download != undefined) {
       this.download = this.$route.params.download;

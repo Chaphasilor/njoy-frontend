@@ -51,6 +51,11 @@ export default {
     showBatchFileDialog: function() {
       return this.type === 'batch';
     },
+  },
+  mounted: function() {
+
+    this.$store.dispatch('navigate', { target: 'download' });
+    
   }
 }
 </script>

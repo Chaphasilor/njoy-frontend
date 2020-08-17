@@ -76,6 +76,11 @@ export default {
   components: {
     ProgressCard,
   },
+  mounted: function() {
+
+    this.$store.dispatch('navigate', { target: 'progress' });
+    
+  }
 }
 </script>
 

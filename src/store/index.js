@@ -3,8 +3,15 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const VIEWS = {
+  PROGRESS: 0,
+  DOWNLOAD: 1,
+  DOWNLOAD_DETAILS: 2,
+}
+
 export default new Vuex.Store({
   state: {
+    activeView: VIEWS.PROGRESS,
     rootDirectoryTree: {
       name: 'ROOT',
       subdirectories: [
@@ -138,14 +145,37 @@ export default new Vuex.Store({
           ]
         },
       ]
-    }
+    },
   },
   mutations: {
+    SET_ACTIVE_VIEW(state, view) {
+      state.activeView = view;
+    },
     SET_ROOT_DIRECTORY_TREE(state, newRootDirectoryTree) {
       state.rootDirectoryTree = newRootDirectoryTree;
     }
   },
   actions: {
+    navigate(context, { target }) {
+      switch (target) {
+        case 'progress':
+          context.commit('SET_ACTIVE_VIEW', VIEWS.PROGRESS);
+          break;
+        case 'download':
+          context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
+          break;
+        case 'download-details':
+          context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD_DETAILS);
+          break;
+      
+        default:
+          context.commit('SET_ACTIVE_VIEW', VIEWS.PROGRESS);
+          break;
+      }
+    },
+    nativgateToDownload(context) {
+      context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
+    },
     loadRootDirectoryTree(context) {
       //TODO fetch from API
       context.commit('SET_ROOT_DIRECTORY_TREE', context.getters.getRootDirectoryTree);
@@ -164,6 +194,25 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    activeView: state => {
+      let view;
+      switch (state.activeView) {
+        case VIEWS.PROGRESS:
+          view = 'progress';
+          break;
+        case VIEWS.DOWNLOAD:
+          view = 'download';
+          break;
+        case VIEWS.DOWNLOAD_DETAILS:
+          view = 'download-details';
+          break;
+      
+        default:
+          view = 'progress';
+          break;
+      }
+      return view;
+    },
     rootDirectoryTree: state => state.rootDirectoryTree,
   }
 })
