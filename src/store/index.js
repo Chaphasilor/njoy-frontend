@@ -146,6 +146,11 @@ export default new Vuex.Store({
         },
       ]
     },
+    downloads: {
+      active: [],
+      queue: [],
+      downloaded: [],
+    },
   },
   mutations: {
     SET_ACTIVE_VIEW(state, view) {
@@ -153,7 +158,10 @@ export default new Vuex.Store({
     },
     SET_ROOT_DIRECTORY_TREE(state, newRootDirectoryTree) {
       state.rootDirectoryTree = newRootDirectoryTree;
-    }
+    },
+    SET_DOWNLOADS(state, newDownloads) {
+      state.downloads = newDownloads;
+    },
   },
   actions: {
     navigate(context, { target }) {
@@ -191,6 +199,22 @@ export default new Vuex.Store({
       console.log(`name:`, name);
       console.log(`newRootDirectoryTree:`, newRootDirectoryTree);
       context.commit('SET_ROOT_DIRECTORY_TREE', newRootDirectoryTree);
+    },
+    fetchProgress(context) {
+
+      //TODO call API endpoint
+
+      let dateTimeReviver = (key, value) => {
+        if (key === 'eta') {
+          return new Date(value);
+        }
+        return value;
+      }
+      
+      let response = JSON.parse(`{"downloads":{"active":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"downloading","percentage":80,"eta":"2020-08-18T20:29:28.204Z","size":"2.3 GB","downloaded":"800 MB","startDate":"2020-08-18T16:59:28.204Z","speed":"786 Kb/s","path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}},{"filename":"The Avengers (2015).mp4","status":"paused","size":"1.9 GB","percentage":23,"eta":null,"downloaded":"437 MB","startDate":"2020-08-18T16:59:28.204Z","speed":null,"path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Cookie":[]}}],"queue":[{"filename":"Extraction (2020).mkv","status":"pending","size":"1.7 GB"},{"filename":"Train to Busan (2015).mp4","status":"pending","size":"1.2 GB"}],"downloaded":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"completed","percentage":80,"eta":"2020-08-18T20:29:28.204Z","size":"2.3 GB","downloaded":"800 MB","startDate":"2020-08-18T16:59:28.204Z","speed":"786 Kb/s","path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}}]},"previews":[]}`, dateTimeReviver);
+
+      context.commit('SET_DOWNLOADS', response.downloads);
+      
     }
   },
   getters: {
@@ -214,5 +238,6 @@ export default new Vuex.Store({
       return view;
     },
     rootDirectoryTree: state => state.rootDirectoryTree,
+    downloads: state => state.downloads,
   }
 })

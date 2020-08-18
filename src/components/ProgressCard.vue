@@ -10,7 +10,7 @@
     class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md flex flex-row flex-wrap justify-between p-5 leading-9"
   >
     <div
-      :class="(download.status == 'pending' ? 'w-4/5' : 'w-full') + ' text-left font-semibold break-all h-8 overflow-hidden'"
+      :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ' text-left font-semibold truncate h-8'"
     >
       {{ download.filename }}
     </div>
@@ -27,7 +27,7 @@
 
     
     <div
-      class="w-1/8 text-right h-8"
+      :class="(!progressBarStates.includes(download.status) ? 'w-1/4' : 'w-1/8') + ' text-right h-8'"
     >
       {{ statusString }}
     </div>
@@ -83,7 +83,7 @@ export default {
     return {
       progressBarStates: [`downloading`, `paused`],
       etaStates: [`downloading`],
-      sizeStates: [`pending`,`paused`],
+      sizeStates: [`pending`,`paused`, `completed`],
       pauseButtonStates: [`downloading`],
       cancelButtonStates: [`paused`],
       resumeButtonStates: [`paused`],
@@ -103,26 +103,6 @@ export default {
         }
       }
     }
-    // filename: {
-    //   type: String,
-    //   default: `Unknown Filename`,
-    // },
-    // status: {
-    //   type: String,
-    //   default: `Unknown`,
-    // },
-    // size: {
-    //   type: String,
-    //   default: `Unknown Size`,
-    // },
-    // percentage: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // eta: {
-    //   type: Date,
-    //   default: () => new Date(NaN),
-    // }
   },
   computed: {
     statusString: function() {
@@ -140,8 +120,10 @@ export default {
           statusString = `${this.download.percentage}%`;
           break;
         case `failed`:
-          // statusString = `Paused (${this.percentage}%)`;
           statusString = `(Failed)`;
+          break;
+        case `completed`:
+          statusString = `(Completed)`;
           break;
       
         default:
@@ -173,7 +155,6 @@ export default {
     etaString: function() {
       //TODO show date as designed in Figma
       return this.download.eta.toLocaleTimeString();
-      
     }
   }
 }
