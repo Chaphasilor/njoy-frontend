@@ -1,7 +1,30 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import API from '@/assets/js/api.js';
+import DownloadItem from '@/assets/js/download-item.js';
 
 Vue.use(Vuex)
+
+async function getApiBaseUrl() {
+
+  let response;
+  try {
+    response = await fetch(`https://web-services.chaphasilor.xyz/url?type=njoy`);
+    return await response.text();
+  } catch (err) {
+    console.error(`Failed to fetch base url:`, err);
+    return `https://web-services.chaphasilor.xyz/njoy/tunnel`;
+  }
+  
+}
+
+var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
+var api;
+(async () => {
+  baseUrl = await getApiBaseUrl();
+  console.log(`baseUrl:`, baseUrl);
+  api = new API(baseUrl);
+})()
 
 const VIEWS = {
   PROGRESS: 0,
@@ -200,20 +223,35 @@ export default new Vuex.Store({
       console.log(`newRootDirectoryTree:`, newRootDirectoryTree);
       context.commit('SET_ROOT_DIRECTORY_TREE', newRootDirectoryTree);
     },
-    fetchProgress(context) {
+    async fetchProgress(context) {
 
       //TODO call API endpoint
 
-      let dateTimeReviver = (key, value) => {
-        if (key === 'eta') {
-          return new Date(value);
-        }
-        return value;
-      }
+      let downloads;
       
-      let response = JSON.parse(`{"downloads":{"active":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"downloading","percentage":80,"eta":"2020-08-18T20:29:28.204Z","size":"2.3 GB","downloaded":"800 MB","startDate":"2020-08-18T16:59:28.204Z","speed":"786 Kb/s","path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}},{"filename":"The Avengers (2015).mp4","status":"paused","size":"1.9 GB","percentage":23,"eta":null,"downloaded":"437 MB","startDate":"2020-08-18T16:59:28.204Z","speed":null,"path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Cookie":[]}}],"queue":[{"filename":"Extraction (2020).mkv","status":"pending","size":"1.7 GB"},{"filename":"Train to Busan (2015).mp4","status":"pending","size":"1.2 GB"}],"downloaded":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"completed","percentage":80,"eta":"2020-08-18T20:29:28.204Z","size":"2.3 GB","downloaded":"800 MB","startDate":"2020-08-18T16:59:28.204Z","speed":"786 Kb/s","path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}}]},"previews":[]}`, dateTimeReviver);
+      try {
+        downloads = await api.loadProgress();
+      } catch (err) {
+        console.error(`Error while fetching progress from API:`, err);
+      }
 
-      context.commit('SET_DOWNLOADS', response.downloads);
+      downloads.queue.forEach(item => item.status = 'queued');
+
+      downloads = {...downloads.active,...downloads.queue, ...downloads.downloaded};
+      
+      downloads = downloads.map(item => new DownloadItem(item));
+
+      // let dateTimeReviver = (key, value) => {
+      //   if (['eta', 'startDate', 'endDate'].includes(key)) {
+      //     return new Date(value);
+      //   }
+      //   return value;
+      // }
+      
+      // let response = JSON.parse(`{"downloads":{"active":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"downloading","percentage":80,"eta":"2020-08-18T20:29:28.204Z","size":"2.3 GB","downloaded":"800 MB","startDate":"2020-08-18T16:59:28.204Z","speed":"786 Kb/s","path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}},{"filename":"The Avengers (2015).mp4","status":"paused","size":"1.9 GB","percentage":23,"eta":null,"downloaded":"437 MB","startDate":"2020-08-18T16:59:28.204Z","speed":null,"path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Cookie":[]}}],"queue":[{"filename":"Extraction (2020).mkv","status":"pending","size":"1.7 GB"},{"filename":"Train to Busan (2015).mp4","status":"pending","size":"1.2 GB"}],"downloaded":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"completed","percentage":80,"endDate":"2020-08-18T18:59:28.204Z","size":"2.3 GB","downloaded":"2.3 GB","startDate":"2020-08-18T16:59:28.204Z","speed":null,"path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}}]},"previews":[]}`, dateTimeReviver);
+
+      // context.commit('SET_DOWNLOADS', response.downloads);
+      context.commit('SET_DOWNLOADS', downloads);
       
     }
   },

@@ -15,6 +15,8 @@
       {{ download.filename }}
     </div>
 
+    <!-- TODO support missing/extra fields in paused/pending/failed/completed items -->
+
     <div
       v-if="showProgressbar"
       class="w-7/8 h-8 flex flex-col justify-center"
