@@ -60,7 +60,7 @@
           class=" w-full h-12"
           type="good"
           label="Confirm"
-          @click.native="$emit('confirmed')"
+          @click.native="$emit('show-dialog', {level: level, type: undefined})"
         />    
       </div>
     </div>
@@ -87,6 +87,14 @@ export default {
       default: function() {
         return [];
       },
+    },
+    level: {
+      type: Number,
+      required: true,
+    },
+    openedDialogs: {
+      type: Array,
+      required: true,
     },
   },
   data: function() {

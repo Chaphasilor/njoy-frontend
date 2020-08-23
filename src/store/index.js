@@ -19,7 +19,7 @@ async function getApiBaseUrl() {
 }
 
 var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
-var api;
+var api = new API(baseUrl);
 (async () => {
   baseUrl = await getApiBaseUrl();
   console.log(`baseUrl:`, baseUrl);

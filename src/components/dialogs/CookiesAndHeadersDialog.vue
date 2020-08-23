@@ -22,7 +22,7 @@
       </h4>
 
       <div
-        class="flex flex-row h-32 mb-2 px-4 justify-between"
+        class="flex flex-row h-24 mb-2 px-4 justify-between"
       >
         <ValuePairList
           class="w-full"
@@ -50,7 +50,7 @@
       </h4>
 
       <div
-        class="flex flex-row h-32 mb-2 px-4 justify-between"
+        class="flex flex-row h-24 mb-2 px-4 justify-between"
       >
         <ValuePairList
           class="w-full"
@@ -78,7 +78,7 @@
           class=" w-full h-12"
           type="good"
           label="Confirm"
-          @click.native="$emit('confirmed')"
+          @click.native="$emit('show-dialog', {level: level, type: undefined})"
         />    
       </div>
     </div>
@@ -103,6 +103,14 @@ export default {
       default: function() {
         return {};
       },
+    },
+    level: {
+      type: Number,
+      required: true,
+    },
+    openedDialogs: {
+      type: Array,
+      required: true,
     },
   },
   data: function() {
