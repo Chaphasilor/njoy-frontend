@@ -288,6 +288,22 @@ export default new Vuex.Store({
         
       }
 
+    },
+    async submitDownload(context, download) {
+
+      console.log(`download.path:`, download.path);
+      
+      let response;
+
+      try {
+        response = await api.submitDownload(download);
+      } catch (err) {
+        console.error(`Failed to submit download:`, err);
+        throw new Error(`Failed to submit download!`);
+      }
+
+      return response;
+      
     }
   },
   getters: {

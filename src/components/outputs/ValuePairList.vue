@@ -4,7 +4,7 @@
   >
 
     <div
-      class="h-8 mb-2 bg-gray-300 rounded-lg overflow-scroll"
+      class="h-8 mb-2 bg-gray-300 rounded-lg"
       :key="index"
       v-for="(pair, index) of pairs"
     >

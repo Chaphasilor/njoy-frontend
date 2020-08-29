@@ -95,10 +95,25 @@ export default class DownloadItem {
 
   }
 
-  // get status() {
+  toString() {
 
-
-  //   return status;
-  // }
+    return JSON.stringify({
+      id: this.id,
+      status: this.status,
+      url: this.url,
+      downloadUrl: this.downloadUrl,
+      filename: this.filename,
+      path: this.path.join(`/`), // convert path from array to string 
+      headers: this.headers,
+      percentage: this.percentage,
+      eta: this.eta,
+      size: this.size,
+      downloaded: this.downloaded,
+      startDate: this.startDate,
+      speed: this.speed,
+      retries: this.retries,
+    });
+    
+  }
     
 }

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="pb-64 bg-eggshell"
+    class="h-screen pb-32 bg-eggshell"
   >
     <h2
       class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"    
@@ -13,6 +13,17 @@
       v-for="(item, index) of allItems"
       :download="item"
     />
+
+    <div
+      v-if="allItems.length == 0"
+      class="w-full h-full flex flex-col justify-center"
+    >
+      <div
+        class="w-full h-8 text-gray-500 text-center"
+      >
+        Nothing downloaded yet
+      </div>
+    </div>
 
   </div>
 </template>

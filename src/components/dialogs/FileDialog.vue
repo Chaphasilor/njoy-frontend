@@ -66,7 +66,6 @@
 
       </div>
 
-
       <div
         class="w-full px-4 mb-6 flex flex-row justify-center"
       >
@@ -104,7 +103,7 @@
       :level="level+1"
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="$emit('show-dialog', $event)"
-      v-model="fileToDownload.headers"
+      v-model="fileToDownload.customHeaders"
       class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
     
@@ -146,12 +145,26 @@ export default {
         size: '',
         path: [],
         url: '',
-        headers: {
-          cookies: {
+        customHeaders: {
+          cookie: {
             'approve': 1,
           },
           'Authorization': 'Bearer t73485z235u9835498',
         },
+        export: function() {
+          return {
+            filename: this.filename,
+            url: this.url,
+            path: this.path.join(`/`),
+            customHeaders: Object.keys(this.customHeaders).filter(key => `cookie` != key).reduce((headerObject, key) => {
+              headerObject[key] = this.customHeaders[key];
+              return headerObject;
+            }, {}), // remove 'cookie' attribute
+            cookies: Object.keys(this.customHeaders[`cookie`]).map(cookieName => {
+              return `${cookieName}=${this.customHeaders[`cookie`][cookieName]}`;
+            })
+          }
+        }
       },
       // showPathDialog: false,
       // showCookiesAndHeadersDialog: false,
@@ -214,11 +227,26 @@ export default {
     },
     async submitDownload() {
 
+      let responseText;
+
+      try {
+
+        responseText = await this.$store.dispatch(`submitDownload`, this.fileToDownload.export());
+
+        this.$emit(`download-submitted`);
+        
+      } catch (err) {
+        console.error(err);
+      }
+
+      console.log(`responseText:`, responseText);
+
     }
   },
   mounted: function() {
 
     console.log(`this.fileToDownload:`, this.fileToDownload);
+    console.log(`this.fileToDownload.toString():`, this.fileToDownload.toString());
 
   }
 }

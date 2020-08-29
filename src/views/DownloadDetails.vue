@@ -94,14 +94,15 @@
 
       <div
         v-if="Object.keys(download.headers).length >= 0"
-        class="w-full h-12 overflow-y-scroll"
+        class="w-full h-8 text-center"
       >
-        <div
-          class="w-full h-4 text-center"
-        >
-          Headers
-        </div>
+        Headers
+      </div>
 
+      <div
+        v-if="Object.keys(download.headers).length >= 0"
+        class="w-full h-20 overflow-y-scroll"
+      >
         <HeaderLine
           :key="key"
           v-for="(header, key) in download.headers"
@@ -109,11 +110,10 @@
           :name="key"
           :value="header"
         />
-
       </div>
 
       <div
-        class="w-full h-12 mt-8 flex flex-row flex-wrap justify-between"
+        class="w-full h-12 mt-4 flex flex-row flex-wrap justify-between"
       >
         <CTAButton
           v-if="showCancelButton"

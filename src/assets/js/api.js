@@ -75,11 +75,32 @@ export default class API {
         },
         body: JSON.stringify(download)
       })
-      .then(response => {
-        return response.text();
+      .then(async response => {
+        
+        console.log(`response.status:`, response.status);
+        
+        return {
+          status: response.status,
+          text: await response.text(),
+        }
+        
       })
       .then(result => {
-        return resolve(result);
+
+        switch (result.status) {
+          case 200:
+            return resolve(result.text);
+          case 201:
+            return resolve(result.text);
+          case 400:
+            return reject(result.text);
+          case 500:
+            return reject(result.text);
+            
+          default:
+            return reject(result.text);
+        }
+        
       })
       .catch(err => {
         console.error(err);

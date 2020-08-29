@@ -24,8 +24,8 @@
       v-if="showSingleFileDialog"
       :level="0"
       :opened-dialogs="openedDialogs.slice(1)"
-      @dialog-dismissed="type = undefined"
-      @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type; log($event); log(openedDialogs.find(x => x.level == $event.level));"
+      @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
+      @download-submitted="handleDownloadSubmitted"
       class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
     <!-- @show-dialog="alert(JSON.stringify($event));openedDialogs.find(x => x.level = $event.level).type = $event.type" -->
@@ -73,6 +73,8 @@ export default {
 
       let level = this.openedDialogs.length - 1;
 
+      console.log(`this.openedDialogs[0].type:`, this.openedDialogs[0].type);
+
       while (level >= 0) {
 
         if (undefined != this.openedDialogs[level].type) {
@@ -89,8 +91,16 @@ export default {
       return next();
       
     },
-    log(payload) {
-      console.log(payload);
+    handleDownloadSubmitted() {
+
+      // close all dialogs
+      this.openedDialogs.forEach(x => x.type = undefined);
+      
+      // navigate back to progress overview
+      this.$router.push({
+        name: 'Progress',
+      })
+      
     }
   },
   mounted: function() {
@@ -99,6 +109,8 @@ export default {
     
   },
   beforeRouteLeave(to, from, next) {
+    console.log(`to:`, to);
+    console.log(`from:`, from);
     this.backHandler(next);
   },
 

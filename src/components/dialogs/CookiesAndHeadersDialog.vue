@@ -120,12 +120,12 @@ export default {
   },
   computed: {
     cookiePairs: function() {
-      return this.generatePairsFromObject(this.headers.cookies);
+      return this.generatePairsFromObject(this.headers[`cookie`]);
     },
     headerPairs: function() {
 
       let headersWithoutCookies = JSON.parse(JSON.stringify(this.headers));
-      delete headersWithoutCookies.cookies;
+      delete headersWithoutCookies[`cookie`];
 
       return this.generatePairsFromObject(headersWithoutCookies);
 
@@ -163,7 +163,7 @@ export default {
       
     },
     addCookie(name, value) {
-      this.$set(this.headers.cookies, name, value);
+      this.$set(this.headers[`cookie`], name, value);
     },
     addHeader(name, value) {
       this.$set(this.headers, name, value);

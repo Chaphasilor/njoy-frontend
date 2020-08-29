@@ -1,11 +1,11 @@
 
 <template>
   <div>
-    <!-- <div
-      @click="$emit('dialog-dismissed', true);"
+    <div
+      @click="$emit('show-dialog', {level: level, type: undefined});"
       class="fixed w-full h-full bg-dark bg-opacity-25"
     >
-    </div>   -->
+    </div>  
     <div
       class="relative bg-white w-full mx-6 my-16 text-dark rounded-xl shadow-xl"
     >
@@ -101,6 +101,7 @@ export default {
     return {
       currentPath: [],
       currentDirectory: {},
+      invalidPart: ``,
     }
   },
   computed: {
@@ -112,7 +113,8 @@ export default {
     currentPath: function() {
       this.$emit('input', this.currentPath);
       console.log(`this.currentPath:`, this.currentPath);
-      this.currentDirectory = this.findCurrentDirectory();
+      // this.currentDirectory = this.findCurrentDirectory();
+      this.currentDirectory = this.findCurrentDirectoryDummy(this.rootDirectoryTree);
     },
     invalidPart: function() {
       if (this.invalidPart.length != 0) {
@@ -121,7 +123,8 @@ export default {
       }
     },
     rootDirectoryTree: function() {
-      this.currentDirectory = this.findCurrentDirectory();
+      // this.currentDirectory = this.findCurrentDirectory();
+      this.currentDirectory = this.findCurrentDirectoryDummy(this.rootDirectoryTree);
     }
   },
   methods: {
@@ -175,6 +178,7 @@ export default {
       if (dir.exists === false) {
         console.warn(`The path specified couldn't be found!`);
         alert(`The path specified couldn't be found!`);
+        
         this.invalidPart = dir.invalidPart;
         return dir.closest;
       } else {
@@ -191,6 +195,7 @@ export default {
       this.currentPath.pop();
     },
     removeInvalidPath(specifiedPath, invalidPart) {
+      console.log(`specifiedPath.slice(0, specifiedPath.length - invalidPart.length):`, specifiedPath.slice(0, specifiedPath.length - invalidPart.length));
       return specifiedPath.slice(0, specifiedPath.length - invalidPart.length);
     },
     createNewDirectory(name) {
