@@ -19,8 +19,8 @@ Vue.use(VueRouter)
   },
   {
     //TODO enable paramized route once download IDs are available
-    // path: '/details/:downloadId',
-    path: '/details',
+    path: '/details/:downloadId',
+    // path: '/details',
     name: 'DownloadDetails',
     component: DownloadDetails
   },

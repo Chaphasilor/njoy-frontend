@@ -15,6 +15,9 @@ module.exports = {
         'eggshell': '#FFFAFA',
         'dark': '#3D3D3D',
         'accent': '#27E19E',
+        'cta-green': '#40D428',
+        'cta-yellow': '#D4C328',
+        'cta-red': '#D64C21',
       },
       backgroundColor: {
         // 'progress-gradient': 'linear-gradient(90deg, #E9E016 0%, #B1DC1C 92.97%, #40D428 124.83%);'

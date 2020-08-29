@@ -2,7 +2,7 @@
 <template>
   <div>
     <div
-      @click="$emit('dialog-dismissed', true);"
+      @click="$emit('show-dialog', {level: level, type: undefined});"
       class="fixed w-full h-full bg-dark bg-opacity-25"
     >
     </div>  
@@ -49,7 +49,7 @@
           class="w-20 h-12 ml-2"
           type="action"
           icon="folder"
-          @click.native="showPathDialog = true"
+          @click.native="$emit('show-dialog', {level: level+1, type: 'path'})"
         />
 
       </div>
@@ -74,6 +74,7 @@
           class=" w-full h-12"
           type="action"
           label="Manage Cookies & Headers"
+          @click.native="$emit('show-dialog', {level: level+1, type: 'cookiesAndHeaders'})"
         />    
       </div>
 
@@ -91,8 +92,19 @@
 
     <PathDialog
       v-if="showPathDialog"
-      v-on:confirmed="showPathDialog = false; pathString = stringifyPath(fileToDownload.path)"
+      :level="level+1"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @show-dialog="$emit('show-dialog', $event); pathString = stringifyPath(fileToDownload.path)"
       v-model="fileToDownload.path"
+      class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
+    />
+
+    <CookiesAndHeadersDialog
+      v-if="showCookiesAndHeadersDialog"
+      :level="level+1"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @show-dialog="$emit('show-dialog', $event)"
+      v-model="fileToDownload.headers"
       class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
     />
     
@@ -101,10 +113,11 @@
 
 <script>
 
-import CTAButton from '@/components/CTAButton';
-import SmallButton from '@/components/SmallButton';
-import TextField from '@/components/TextField';
-import PathDialog from  '@/components/PathDialog';
+import CTAButton from '@/components/buttons/CTAButton';
+import SmallButton from '@/components/buttons/SmallButton';
+import TextField from '@/components/inputs/TextField';
+import PathDialog from  '@/components/dialogs/PathDialog';
+import CookiesAndHeadersDialog from  '@/components/dialogs/CookiesAndHeadersDialog';
 
 export default {
   name: 'FileDialog',
@@ -113,6 +126,18 @@ export default {
     SmallButton,
     TextField,
     PathDialog,
+    CookiesAndHeadersDialog,
+  },
+  props: {
+    //TODO use object for v-ifs of dialogs, open dialogs by emitting an event to the view
+    level: {
+      type: Number,
+      required: true,
+    },
+    openedDialogs: {
+      type: Array,
+      required: true,
+    },
   },
   data: function() {
     return {
@@ -121,9 +146,15 @@ export default {
         size: '',
         path: [],
         url: '',
-        headers: {},
+        headers: {
+          cookies: {
+            'approve': 1,
+          },
+          'Authorization': 'Bearer t73485z235u9835498',
+        },
       },
-      showPathDialog: false,
+      // showPathDialog: false,
+      // showCookiesAndHeadersDialog: false,
       pathString: '',
     }
   },
@@ -131,6 +162,12 @@ export default {
     showSize: function() {
       return false;
     },
+    showPathDialog: function() {
+      return this.openedDialogs[0].type === 'path';
+    },
+    showCookiesAndHeadersDialog: function() {
+      return this.openedDialogs[0].type === 'cookiesAndHeaders';
+    }
   },
   watch: {
     pathString: function() {
@@ -142,6 +179,12 @@ export default {
         console.log(`this.fileToDownload:`, this.fileToDownload);
       }
     },
+    openedDialogs: {
+      deep: true,
+      handler: function() {
+        console.log(this.openedDialogs);
+      }
+    }
     //TODO update pathString when path array changes
   },
   methods: {
@@ -153,7 +196,7 @@ export default {
     },
     arrayifyPath(pathString) {
       return pathString.split('/').reduce((pathArray, folderName) => {
-        return [...pathArray, folderName];
+        return [...pathArray, folderName].filter(name => name.length > 0);
       }, []);
     },
     async pasteClipboard() {
