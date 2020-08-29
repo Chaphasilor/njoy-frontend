@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="h-screen"
+  >
     <h2
       class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"
     >
@@ -7,35 +9,44 @@
     </h2>
 
     <div
-      class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md flex flex-row flex-wrap justify-between p-5 leading-9"
+      class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md p-5 leading-9"
     >
+
       <div
-        :class="(download.status == 'pending' ? 'w-4/5' : 'w-full') + ' text-left font-semibold break-all h-8 overflow-hidden'"
+        class="w-full text-left mb-2 font-semibold break-all h-8 overflow-hidden"
       >
         {{ download.filename }}
       </div>
 
-      <div
-        class="w-full h-8 my-4 flex flex-row flex-wrap justify-between"
+      <!-- <div
+        v-if="!showProgressbar"
+        class="w-1/5 text-right h-8"
       >
-        <div
-          v-if="showProgressbar"
-          class="w-7/8 h-8 flex flex-col justify-center"
-        >
-          <ProgressBar
-            class="w-full h-6 overflow-hidden"
-            :percentage="download.percentage"
-          />
-        </div>
+        {{ statusString }}
+      </div> -->
 
-        <div
-          class="w-1/8 text-right h-8"
-        >
-          {{ statusString }}
-        </div>
+      <div
+        v-if="showProgressbar"
+        class="w-full h-8 my-2 flex flex-row flex-wrap justify-between"
+      >
+        <ProgressBar
+          class="w-full h-6 overflow-hidden"
+          :percentage="download.percentage"
+        />
       </div>
 
-      <br>
+      <InfoLine
+        class="w-full h-8"
+        name="Status"
+        :value="statusString"
+        :color="download.textColor"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Percentage"
+        :value="`${download.percentage} %`"
+      />
 
       <InfoLine
         class="w-full h-8"
@@ -68,7 +79,7 @@
       />
 
       <InfoLine
-        class="w-full h-8"
+        class="w-full h-8 overflow-hidden"
         name="URL"
         :value="download.url"
       />
@@ -81,19 +92,25 @@
 
       <!-- TODO collapse headers by default (also design in Figma) -->
 
-      <span
-        class="w-full h-8 text-center"
+      <div
+        v-if="Object.keys(download.headers).length >= 0"
+        class="w-full h-12 overflow-y-scroll"
       >
-        Headers
-      </span>
+        <div
+          class="w-full h-4 text-center"
+        >
+          Headers
+        </div>
 
-      <HeaderLine
-        :key="key"
-        v-for="(header, key) in download.headers"
-        class="w-full h-8"
-        :name="key"
-        :value="header"
-      />
+        <HeaderLine
+          :key="key"
+          v-for="(header, key) in download.headers"
+          class="w-full h-8"
+          :name="key"
+          :value="header"
+        />
+
+      </div>
 
       <div
         class="w-full h-12 mt-8 flex flex-row flex-wrap justify-between"
@@ -102,24 +119,43 @@
           v-if="showCancelButton"
           class="w-1/2 h-12"
           type="cancel"
+          @click.native="$store.dispatch(`modifyDownloadState`, {
+            id: download.id,
+            action: `stop`
+          })"
         />
         <CTAButton
           v-if="showPauseButton"
           class="w-1/2 h-full"
           type="pause"
+          @click.native="$store.dispatch(`modifyDownloadState`, {
+            id: download.id,
+            action: `pause`
+          })"
         />
         <CTAButton
           v-if="showResumeButton"
           class="w-1/2 h-full"
           type="resume"
+          @click.native="$store.dispatch(`modifyDownloadState`, {
+            id: download.id,
+            action: `resume`
+          })"
         />    
       </div>
 
-      <CTAButton
-        class="w-full h-12 mt-20"
-        type="good"
-        label="Back"
-      />    
+      <router-link
+        class="w-full"
+        :to="{
+          name: 'Progress',
+        }"
+      >
+        <CTAButton
+          class="w-full h-12 mt-6"
+          type="good"
+          label="Back"
+        />
+      </router-link>
     </div>
   </div>
 </template>
@@ -143,11 +179,11 @@ export default {
     return {
       progressBarStates: [`downloading`, `paused`],
       etaStates: [`downloading`],
-      sizeStates: [`pending`, `paused`],
+      sizeStates: [`pending`, `initializing`, `paused`],
       pauseButtonStates: [`downloading`],
       cancelButtonStates: [`downloading`, `paused`],
       resumeButtonStates: [`paused`],
-      download: {
+      unknownDownload: {
         filename: `Unknown Filename`,
         status: `Unknown`,
         percentage: 0,
@@ -160,57 +196,29 @@ export default {
         url: 'Unknown',
         retries: 'Unknown',
         headers: {},
-      },
+      }
     }
   },
-  // props: {
-  //   downloadId: {
-  //     type: String,
-  //     //TODO make this required once IDs are available
-  //     required: false,
-  //     default: '',
-  //   },
-  //   download: {
-  //     type: Object,
-  //     required: false,
-  //     default: function() {
-  //       return {
-  //         filename: `Unknown Filename`,
-  //         status: `Unknown`,
-  //         size: `Unknown Size`,
-  //         percentage: 0,
-  //         eta: new Date(NaN),
-  //       }
-  //     }
-  //   }
-  // },
   computed: {
-    statusString: function() {
+    download: function() {
 
-      let statusString = ``;
-      switch (this.download.status) {
-        case `pending`:
-          statusString = `(Pending)`;
-          break;
-        case `downloading`:
-          statusString = `${this.download.percentage}%`;
-          break;
-        case `paused`:
-          // statusString = `Paused (${this.percentage}%)`;
-          statusString = `${this.download.percentage}%`;
-          break;
-        case `failed`:
-          // statusString = `Paused (${this.percentage}%)`;
-          statusString = `(Failed)`;
-          break;
-      
-        default:
-          statusString = `Unknown Status`;
-          break;
+      if (undefined != this.$route.params.downloadId) {
+
+        let found = this.$store.getters.downloads.find(x => x.id == this.$route.params.downloadId);
+
+        if (found) {
+          return found;
+        } else {
+          return this.unknownDownload;
+        }
+
+      } else {
+        return this.unknownDownload;
       }
-
-      return statusString;
-
+      
+    },
+    statusString: function() {
+      return this.download.statusString;
     },
     showProgressbar: function() {
       return this.progressBarStates.includes(this.download.status);
@@ -245,15 +253,19 @@ export default {
     },
   },
   mounted: function() {
-    console.log(`this.download:`, this.download);
 
     this.$store.dispatch('navigate', { target: 'download-details' });
 
-    // if params are missing, this will cause errors because of missing nested objects
-    if (this.$route.params.download != undefined) {
-      this.download = this.$route.params.download;
-    } else {
-      // no params passed, use download id
+    this.$store.dispatch('fetchProgress');
+    this.pollingIntervalID = setInterval(() => {
+      this.$store.dispatch('fetchProgress');
+    }, 2000);
+
+  },
+  beforeDestroy: function() {
+
+    if (undefined != this.pollingIntervalID) {
+      clearInterval(this.pollingIntervalID);
     }
     
   }

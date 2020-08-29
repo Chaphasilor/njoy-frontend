@@ -1,71 +1,83 @@
 <template>
-  <router-link
-    :to="{
-      name: 'DownloadDetails',
-      params: {
-        downloadId: download.id,
-        download: download
-      }
-    }"
-    class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md flex flex-row flex-wrap justify-between p-5 leading-9"
-  >
-    <div
-      :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ' text-left font-semibold truncate h-8'"
+  <div>
+    <BetterRouterLink
+      :to="{
+        name: 'DownloadDetails',
+        params: {
+          downloadId: download.id,
+          download: download
+        }
+      }"
+      :class="`mx-4 my-2 bg-white rounded-xl shadow-md flex flex-row flex-wrap justify-between p-5 leading-9`"
     >
-      {{ download.filename }}
-    </div>
+      <div
+        :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8 text-${download.textColor}`"
+      >
+        {{ download.filename }}
+      </div>
 
-    <!-- TODO support missing/extra fields in paused/pending/failed/completed items -->
+      <div
+        v-if="showProgressbar"
+        class="w-7/8 h-8 flex flex-col justify-center"
+      >
+        <ProgressBar
+          class="w-full h-2 overflow-hidden"
+          :percentage="download.percentage"
+        />
+      </div>
 
-    <div
-      v-if="showProgressbar"
-      class="w-7/8 h-8 flex flex-col justify-center"
-    >
-      <ProgressBar
-        class="w-full h-2 overflow-hidden"
-        :percentage="download.percentage"
+      
+      <div
+        :class="(!progressBarStates.includes(download.status) ? 'w-1/4' : 'w-1/8') + ' text-right h-8'"
+      >
+        {{ statusString }}
+      </div>
+
+      <br>
+
+      <InfoLine
+        v-if="showETA"
+        class="w-full h-8"
+        name="ETA"
+        :value="etaString"
       />
-    </div>
 
-    
-    <div
-      :class="(!progressBarStates.includes(download.status) ? 'w-1/4' : 'w-1/8') + ' text-right h-8'"
-    >
-      {{ statusString }}
-    </div>
+      <InfoLine
+        v-if="showSize"
+        class="w-full h-8"
+        name="Size"
+        :value="download.size"
+      />
 
-    <br>
-
-    <InfoLine
-      v-if="showETA"
-      class="w-full h-8"
-      name="ETA"
-      :value="etaString"
-    />
-
-    <InfoLine
-      v-if="showSize"
-      class="w-full h-8"
-      name="Size"
-      :value="download.size"
-    />
-
-    <CTAButton
-      v-if="showPauseButton"
-      class="w-full h-8 my-2"
-      type="pause"
-    />
-    <CTAButton
-      v-if="showCancelButton"
-      class="w-1/2 h-8 my-2"
-      type="cancel"
-    />
-    <CTAButton
-      v-if="showResumeButton"
-      class="w-1/2 h-8 my-2"
-      type="resume"
-    />
-  </router-link>
+      <CTAButton
+        v-if="showPauseButton"
+        class="w-full h-8 my-2"
+        type="pause"
+        @click.stop.native="$store.dispatch(`modifyDownloadState`, {
+          id: download.id,
+          action: `pause`
+        })"
+      />
+      <CTAButton
+        v-if="showCancelButton"
+        class="w-1/2 h-8 my-2"
+        type="cancel"
+        @click.stop.native="$store.dispatch(`modifyDownloadState`, {
+          id: download.id,
+          action: `stop`
+        })"
+      />
+      <CTAButton
+        v-if="showResumeButton"
+        class="w-1/2 h-8 my-2"
+        type="resume"
+        @click.stop.native="$store.dispatch(`modifyDownloadState`, {
+          id: download.id,
+          action: `resume`
+        })"
+      />
+    </BetterRouterLink>
+  </div>
 </template>
 
 <script>
@@ -73,22 +85,25 @@
 import ProgressBar from '@/components/outputs/ProgressBar';
 import CTAButton from '@/components/buttons/CTAButton';
 import InfoLine from '@/components/outputs/InfoLine';
+import BetterRouterLink from '@/components/BetterRouterLink';
 
 export default {
   name: "ProgressCard",
   components: {
     ProgressBar,
     CTAButton,
-    InfoLine
+    InfoLine,
+    BetterRouterLink,
   },
   data: function() {
     return {
       progressBarStates: [`downloading`, `paused`],
       etaStates: [`downloading`],
-      sizeStates: [`pending`,`paused`, `completed`],
+      sizeStates: [`queued`, `paused`],
       pauseButtonStates: [`downloading`],
-      cancelButtonStates: [`paused`],
+      cancelButtonStates: [`paused`, `error`],
       resumeButtonStates: [`paused`],
+
     }
   },
   props: {
@@ -108,33 +123,7 @@ export default {
   },
   computed: {
     statusString: function() {
-
-      let statusString = ``;
-      switch (this.download.status) {
-        case `pending`:
-          statusString = `(Pending)`;
-          break;
-        case `downloading`:
-          statusString = `${this.download.percentage}%`;
-          break;
-        case `paused`:
-          // statusString = `Paused (${this.percentage}%)`;
-          statusString = `${this.download.percentage}%`;
-          break;
-        case `failed`:
-          statusString = `(Failed)`;
-          break;
-        case `completed`:
-          statusString = `(Completed)`;
-          break;
-      
-        default:
-          statusString = `Unknown Status`;
-          break;
-      }
-
-      return statusString;
-
+      return this.progressBarStates.includes(this.download.status) ? `${this.download.percentage.toFixed(0)}%` : this.download.statusString;
     },
     showProgressbar: function() {
       return this.progressBarStates.includes(this.download.status);
@@ -158,10 +147,15 @@ export default {
       //TODO show date as designed in Figma
       return this.download.eta.toLocaleTimeString();
     }
+  },
+  mounted() {
+
+    // console.log(`this.download:`, this.download);
+
   }
 }
 </script>
 
 <style>
 
-</style>
+</style>s

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="pb-64"
+    class="pb-64 bg-eggshell"
   >
     <h2
       class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"    
@@ -50,6 +50,14 @@ export default {
       return this.$store.getters.downloads.downloaded;
     },
   },
+  watch: {
+    allItems: {
+      deep: true,
+      handler: function() {
+        console.log(`this.allItems:`, this.allItems);
+      }
+    }
+  },
   mounted: function() {
 
     this.$store.dispatch('navigate', { target: 'progress' });
@@ -58,8 +66,6 @@ export default {
     this.pollingIntervalID = setInterval(() => {
       this.$store.dispatch('fetchProgress');
     }, 2000);
-
-    console.log(`this.allItems:`, this.allItems);
 
   },
   beforeDestroy: function() {

@@ -13,18 +13,24 @@ async function getApiBaseUrl() {
     return await response.text();
   } catch (err) {
     console.error(`Failed to fetch base url:`, err);
-    return `https://web-services.chaphasilor.xyz/njoy/tunnel`;
+    throw `Coulnd't fetch API base url, using the default one...`;
   }
   
 }
 
 var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
+baseUrl = `http://192.168.2.129:69/api`;
 var api = new API(baseUrl);
 (async () => {
-  baseUrl = await getApiBaseUrl();
-  console.log(`baseUrl:`, baseUrl);
-  api = new API(baseUrl);
-})()
+  try {
+    baseUrl = await getApiBaseUrl();
+    api = new API(baseUrl);
+  } catch (err) {
+    console.warn(err);
+  } finally {
+    console.log(`baseUrl:`, baseUrl);
+  }
+})
 
 const VIEWS = {
   PROGRESS: 0,
@@ -169,11 +175,7 @@ export default new Vuex.Store({
         },
       ]
     },
-    downloads: {
-      active: [],
-      queue: [],
-      downloaded: [],
-    },
+    downloads: [],
   },
   mutations: {
     SET_ACTIVE_VIEW(state, view) {
@@ -185,6 +187,15 @@ export default new Vuex.Store({
     SET_DOWNLOADS(state, newDownloads) {
       state.downloads = newDownloads;
     },
+    CHANGE_DOWNLOAD_STATUS(state, { downloadId, newDownloadStatus }) {
+
+      let download = state.downloads.find(x => x.id === downloadId);
+
+      if (download) {
+        download.status = newDownloadStatus;
+      }
+
+    }
   },
   actions: {
     navigate(context, { target }) {
@@ -231,28 +242,52 @@ export default new Vuex.Store({
       
       try {
         downloads = await api.loadProgress();
-      } catch (err) {
-        console.error(`Error while fetching progress from API:`, err);
+      } catch (emptyObject) {
+        console.warn(`Couldn't fetch data from API, using empty object...`);
+        downloads = emptyObject;
       }
 
-      downloads.queue.forEach(item => item.status = 'queued');
+      console.log(`downloads:`, downloads);
 
-      downloads = {...downloads.active,...downloads.queue, ...downloads.downloaded};
-      
+      downloads = [...downloads.active,...downloads.queued, ...downloads.finished, ...downloads.failed];
+
       downloads = downloads.map(item => new DownloadItem(item));
 
-      // let dateTimeReviver = (key, value) => {
-      //   if (['eta', 'startDate', 'endDate'].includes(key)) {
-      //     return new Date(value);
-      //   }
-      //   return value;
-      // }
-      
-      // let response = JSON.parse(`{"downloads":{"active":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"downloading","percentage":80,"eta":"2020-08-18T20:29:28.204Z","size":"2.3 GB","downloaded":"800 MB","startDate":"2020-08-18T16:59:28.204Z","speed":"786 Kb/s","path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}},{"filename":"The Avengers (2015).mp4","status":"paused","size":"1.9 GB","percentage":23,"eta":null,"downloaded":"437 MB","startDate":"2020-08-18T16:59:28.204Z","speed":null,"path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Cookie":[]}}],"queue":[{"filename":"Extraction (2020).mkv","status":"pending","size":"1.7 GB"},{"filename":"Train to Busan (2015).mp4","status":"pending","size":"1.2 GB"}],"downloaded":[{"filename":"Once Upon a Time ... in Hollywood (2019).mp4","status":"completed","percentage":80,"endDate":"2020-08-18T18:59:28.204Z","size":"2.3 GB","downloaded":"2.3 GB","startDate":"2020-08-18T16:59:28.204Z","speed":null,"path":"Storage / Media / Movies","url":"https://example.com/download","retries":0,"headers":{"Content-Type":"application/json","Authorization":"Bearer t73485z235u9835498","Cookie":["approve = 1","allow = true"]}}]},"previews":[]}`, dateTimeReviver);
-
-      // context.commit('SET_DOWNLOADS', response.downloads);
       context.commit('SET_DOWNLOADS', downloads);
       
+    },
+    async modifyDownloadState(context, { id, action }) {
+
+      let newStatus;
+      
+      try {
+
+        switch (action) {
+          case `pause`:
+            newStatus = await api.pauseDownload(id);
+            break;
+          case `resume`:
+            newStatus = await api.resumeDownload(id);
+            break;
+          case `stop`:
+            newStatus = await api.stopDownload(id);
+            break;
+        
+          default:
+            throw new Error(`Action '${action}' not supported!`);
+        }
+
+        context.commit(`CHANGE_DOWNLOAD_STATUS`, {
+          downloadId: id,
+          newDownloadStatus: newStatus,
+        })
+
+      } catch (err) {
+
+        console.error(`Couldn't ${action} download ${id}:`, err);
+        
+      }
+
     }
   },
   getters: {

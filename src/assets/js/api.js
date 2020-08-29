@@ -11,7 +11,7 @@ export default class API {
 
         fetch(this.baseUrl + `/progress`, {
           mode: 'cors',
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -23,8 +23,18 @@ export default class API {
           return resolve(result.downloads);
         })
         .catch(err => {
-          console.error(err);
-          return reject(`An error occured during the request!`);
+          console.warn(`Failed to fetch progress:`, err);
+          // respond with emtpy progress object
+          return reject({
+            active: [],
+            queued: [],
+            finished: [],
+            failed: [{
+              name: `Failed to load progress!`,
+              status: `failed`,
+            }],
+          })
+          // return reject(`Couldn't fetch progress!`);
         })
     
     })
@@ -33,7 +43,7 @@ export default class API {
   loadDownloadItem(id) {
     return new Promise((resolve, reject) => {
 
-      fetch(this.baseUrl + `/downloads/details/${id}`, {
+      fetch(this.baseUrl + `/downloads/${id}`, {
         mode: 'cors',
         method: 'GET',
         headers: {
@@ -67,6 +77,87 @@ export default class API {
       })
       .then(response => {
         return response.text();
+      })
+      .then(result => {
+        return resolve(result);
+      })
+      .catch(err => {
+        console.error(err);
+        return reject(`An error occured during the request!`);
+      })
+    
+    })
+  }
+
+  pauseDownload(id) {
+    return new Promise((resolve, reject) => {
+    
+      fetch(this.baseUrl + `/download/${id}`, {
+        mode: 'cors',
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'pause',
+        })
+      })
+      .then(response => {
+        return response.text();
+      })
+      .then(result => {
+        return resolve(result);
+      })
+      .catch(err => {
+        console.error(err);
+        return reject(`An error occured during the request!`);
+      })
+    
+    })
+  }
+
+  resumeDownload(id) {
+    return new Promise((resolve, reject) => {
+    
+      fetch(this.baseUrl + `/download/${id}`, {
+        mode: 'cors',
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'resume',
+        })
+      })
+      .then(response => {
+        return response.text();
+      })
+      .then(result => {
+        return resolve(result);
+      })
+      .catch(err => {
+        console.error(err);
+        return reject(`An error occured during the request!`);
+      })
+    
+    })
+  }
+
+  stopDownload(id) {
+    return new Promise((resolve, reject) => {
+    
+      fetch(this.baseUrl + `/download/${id}`, {
+        mode: 'cors',
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'stop',
+        })
+      })
+      .then(response => {
+        return Boolean(response.text());
       })
       .then(result => {
         return resolve(result);
