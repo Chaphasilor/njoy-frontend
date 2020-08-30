@@ -3,6 +3,7 @@
     <input
       class="inline-block w-full h-full rounded-lg border border-dark p-2 outline-none focus:border-accent"
       type="text"
+      ref="inputField"
       :disabled="disabled"
       :placeholder="placeholder"
       :value="`${prefix}${value}`"
@@ -39,6 +40,12 @@ export default {
         return false;
       }
     },
+    focus: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
   },
   watch: {
     value: function() {
@@ -53,6 +60,14 @@ export default {
     removePrefix(textWithPrefix) {
       return textWithPrefix.replace(this.prefix, '');
     }
-  }
+  },
+  mounted() {
+
+    console.log(`this.$refs:`, this.$refs);
+    if (this.focus) {
+      this.$refs.inputField.focus();
+    }
+    
+  },
 }
 </script>

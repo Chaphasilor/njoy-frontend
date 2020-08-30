@@ -53,6 +53,7 @@
 
 <script>
 export default {
+  //TODO listen to key presses (enter/return) and click the cta button
   name: 'CTAButton',
   data: function() {
     return {

@@ -1,34 +1,40 @@
 <template>
   <div>
+
     <h2
-      class="p-2 text-center text-3xl antialiased font-bold text-dark"    
+      class="p-2 text-center text-2xl antialiased font-bold text-dark"    
     >
       Start a Download
     </h2>
+
     <BigButton
       @click.native="openedDialogs[0].type = 'single'"
       class="h-56 mx-6 my-4"
       type="single"
     />
+
     <span
-      class="inline-block w-full text-center font-quicksand-bold tracking-tighter font-bold text-lg text-dark"
+      class="inline-block w-full text-center font-quicksand-bold tracking-tighter font-bold text-lg text-dark opacity-50"
     >
       OR
     </span>
+
     <BigButton
       @click.native="type = 'batch'"
       class="h-56 mx-6 my-4 opacity-50"
       type="batch"
     />
+
     <FileDialog
       v-if="showSingleFileDialog"
       :level="0"
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
       @download-submitted="handleDownloadSubmitted"
-      class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
+      class="fixed top-0 left-0 w-full h-full px-6 py-16 flex flex-row justify-center"
     />
     <!-- @show-dialog="alert(JSON.stringify($event));openedDialogs.find(x => x.level = $event.level).type = $event.type" -->
+
   </div>
 </template>
 
@@ -54,7 +60,11 @@ export default {
         {
           level: 1,
           type: undefined,
-        }
+        },
+        {
+          level: 2,
+          type: undefined,
+        },
       ]
     };
   },

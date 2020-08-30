@@ -218,9 +218,23 @@ export default new Vuex.Store({
     nativgateToDownload(context) {
       context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
     },
-    loadRootDirectoryTree(context) {
-      //TODO fetch from API
-      context.commit('SET_ROOT_DIRECTORY_TREE', context.getters.getRootDirectoryTree);
+    async loadRootDirectoryTree(context) {
+      let tree;
+      
+      try {
+        tree = await api.fetchRootDirectoryTree();
+      } catch (err) {
+
+        console.error(`Couldn't get root directory tree from API!`, err);
+        tree = {
+          name: `ROOT`,
+          subdirectories: [],
+        }
+        
+      }
+
+      context.commit('SET_ROOT_DIRECTORY_TREE', tree);
+
     },
     createNewDirectory(context, path, name) {
       //TODO create via API
@@ -235,8 +249,6 @@ export default new Vuex.Store({
       context.commit('SET_ROOT_DIRECTORY_TREE', newRootDirectoryTree);
     },
     async fetchProgress(context) {
-
-      //TODO call API endpoint
 
       let downloads;
       
@@ -303,6 +315,22 @@ export default new Vuex.Store({
       }
 
       return response;
+      
+    },
+    async getFileSize(context, url) {
+
+      let size;
+      
+      try {
+        size = await api.fetchFileSize(url);
+      } catch (err) {
+        
+        console.warn(`Couldn't fetch the file size for the given URL through the API:`, err);
+        size = `Unknown`;
+        
+      }
+
+      return size;
       
     }
   },

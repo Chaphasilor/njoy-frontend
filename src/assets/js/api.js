@@ -67,6 +67,8 @@ export default class API {
   submitDownload(download) {
     return new Promise((resolve, reject) => {
     
+      download.mkdir = true; // enable creation of new folders (directories are fetched from the API, so this shouldn't cause any issues)
+      
       fetch(this.baseUrl + `/download`, {
         mode: 'cors',
         method: 'POST',
@@ -189,6 +191,49 @@ export default class API {
       })
     
     })
+  }
+
+  async fetchRootDirectoryTree() {
+
+    let res;
+
+    try {
+      
+      res = await fetch(this.baseUrl + `/directoryListing`, {
+        mode: 'cors',
+        method: 'GET',
+      });
+
+    } catch (err) {
+      console.error(`Failed to fetch directory listing:`, err);
+    }
+
+    return res.json();
+    
+  }
+
+  async fetchFileSize(url) {
+
+    let res;
+
+    try {
+      
+      res = await fetch(this.baseUrl + `/fileSize/${encodeURIComponent(url)}`, {
+        mode: 'cors',
+        method: 'GET',
+      });
+
+    } catch (err) {
+      console.error(`Failed to fetch file size:`, err);
+    }
+
+    if (200 == res.status) {
+      return res.text();
+    } else {
+      throw new Error(`Failed to fetch file size, server responded with status ${res.status}`);
+    }
+    
+    
   }
   
 }

@@ -3,11 +3,11 @@
   <div>
     <div
       @click="$emit('show-dialog', {level: level, type: undefined});"
-      class="fixed w-full h-full bg-dark bg-opacity-25"
+      class="fixed top-0 left-0 w-screen h-screen bg-dark bg-opacity-25"
     >
     </div>  
     <div
-      class="relative bg-white w-full mx-6 my-16 text-dark rounded-xl shadow-xl"
+      class="relative bg-white w-full text-dark rounded-xl shadow-xl"
     >
       <h3
         class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark tracking-wide"
@@ -23,6 +23,7 @@
           class="w-full pl-4"
           placeholder="Download-URL"
           v-model="fileToDownload.url"
+          @input="loadFileSize($event)"
         />
 
         <SmallButton
@@ -82,9 +83,9 @@
       >
         <CTAButton
           class=" w-full h-12"
-          type="good"
-          label="Download!"
-          @click.native="submitDownload()"
+          :type="downloadButtonActive ? `good` : `action`"
+          :label="downloadButtonActive ? `Download!` : `Cancel`"
+          @click.native="handleDownloadButton"
         />    
       </div>
     </div>
@@ -95,7 +96,7 @@
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="$emit('show-dialog', $event); pathString = stringifyPath(fileToDownload.path)"
       v-model="fileToDownload.path"
-      class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
+      class="fixed top-0 left-0 w-full h-full px-6 py-16 flex flex-row justify-center"
     />
 
     <CookiesAndHeadersDialog
@@ -104,7 +105,7 @@
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="$emit('show-dialog', $event)"
       v-model="fileToDownload.customHeaders"
-      class="fixed top-0 left-0 w-full h-full flex flex-row justify-center"
+      class="fixed top-0 left-0 w-full h-full px-6 py-16 flex flex-row justify-center"
     />
     
   </div>
@@ -146,10 +147,10 @@ export default {
         path: [],
         url: '',
         customHeaders: {
-          cookie: {
-            'approve': 1,
-          },
-          'Authorization': 'Bearer t73485z235u9835498',
+          // cookie: {
+          //   'approve': 1,
+          // },
+          // 'Authorization': 'Bearer t73485z235u9835498',
         },
         export: function() {
           return {
@@ -160,9 +161,9 @@ export default {
               headerObject[key] = this.customHeaders[key];
               return headerObject;
             }, {}), // remove 'cookie' attribute
-            cookies: Object.keys(this.customHeaders[`cookie`]).map(cookieName => {
+            cookies: this.customHeaders[`cookie`] ? Object.keys(this.customHeaders[`cookie`]).map(cookieName => {
               return `${cookieName}=${this.customHeaders[`cookie`][cookieName]}`;
-            })
+            }) : [],
           }
         }
       },
@@ -180,6 +181,9 @@ export default {
     },
     showCookiesAndHeadersDialog: function() {
       return this.openedDialogs[0].type === 'cookiesAndHeaders';
+    },
+    downloadButtonActive: function() {
+      return this.fileToDownload.url.length > 0 && this.fileToDownload.filename.length > 0;
     }
   },
   watch: {
@@ -201,6 +205,32 @@ export default {
     //TODO update pathString when path array changes
   },
   methods: {
+    handleDownloadButton() {
+
+      if (this.downloadButtonActive) {
+        this.submitDownload();
+      } else {
+        this.$emit('show-dialog', {level: this.level, type: undefined});
+      }
+      
+    },
+    async submitDownload() {
+
+      let responseText;
+
+      try {
+
+        responseText = await this.$store.dispatch(`submitDownload`, this.fileToDownload.export());
+
+        this.$emit(`download-submitted`);
+        
+      } catch (err) {
+        console.error(err);
+      }
+
+      console.log(`responseText:`, responseText);
+
+    },
     stringifyPath(pathArray) {
       //TODO trailing slash causes 'invalid' path when trying to find currentDirectory
       return pathArray.reduce((pathString, folderName)  => {
@@ -223,30 +253,22 @@ export default {
       }
 
       this.fileToDownload.url = clipboard;
+      this.loadFileSize(this.fileToDownload.url);
         
     },
-    async submitDownload() {
+    async loadFileSize(url) {
 
-      let responseText;
+      let size = await this.$store.dispatch(`getFileSize`, url);
 
-      try {
-
-        responseText = await this.$store.dispatch(`submitDownload`, this.fileToDownload.export());
-
-        this.$emit(`download-submitted`);
-        
-      } catch (err) {
-        console.error(err);
-      }
-
-      console.log(`responseText:`, responseText);
-
+      console.log(`size:`, size);
+      
     }
   },
   mounted: function() {
 
     console.log(`this.fileToDownload:`, this.fileToDownload);
     console.log(`this.fileToDownload.toString():`, this.fileToDownload.toString());
+    this.$store.dispatch(`loadRootDirectoryTree`); // pre-fetch directories
 
   }
 }

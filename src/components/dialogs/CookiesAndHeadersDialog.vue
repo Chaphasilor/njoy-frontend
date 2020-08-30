@@ -1,13 +1,13 @@
 
 <template>
   <div>
-    <!-- <div
-      @click="$emit('dialog-dismissed', true);"
-      class="fixed w-full h-full bg-dark bg-opacity-25"
-    >
-    </div>   -->
     <div
-      class="relative bg-white w-full mx-6 my-16 text-dark rounded-xl shadow-xl"
+      @click="$emit('show-dialog', {level: level, type: undefined});"
+      class="fixed top-0 left-0 w-screen h-screen bg-dark bg-opacity-25"
+    >
+    </div>  
+    <div
+      class="relative bg-white w-full text-dark rounded-xl shadow-xl"
     >
       <h3
         class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark tracking-wide"
@@ -28,18 +28,20 @@
           class="w-full"
           :pairs="cookiePairs"
           separator=" = "
+          :removable="true"
+          @remove-pair="removeCookie($event.key, $event.value)"
         />
 
       </div>
 
       <div
-        class="w-full px-4 mb-4 flex flex-row justify-center"
+        class="w-full px-4 mb-6 flex flex-row justify-center"
       >
         <CTAButton
           class=" w-full h-12"
           type="action"
           label="Add a Cookie"
-          @click.native="addCookie('allow', 'true')"
+          @click.native="$emit('show-dialog', {level: level+1, type: 'new-cookie'})"
         />    
       </div>
 
@@ -56,6 +58,8 @@
           class="w-full"
           :pairs="headerPairs"
           separator=": "
+          :removable="true"
+          @remove-pair="removeHeader($event.key, $event.value)"
         />
 
       </div>
@@ -67,7 +71,7 @@
           class=" w-full h-12"
           type="action"
           label="Add a Header"
-          @click.native="addHeader('Content-Type', 'application/json')"
+          @click.native="$emit('show-dialog', {level: level+1, type: 'new-header'})"
         />    
       </div>
 
@@ -82,19 +86,46 @@
         />    
       </div>
     </div>
+
+    <KeyValueDialog
+      v-if="showNewCookieDialog"
+      class="fixed top-0 left-0 w-full h-full px-10 py-56 flex flex-row justify-center"
+      title="New Cookie"
+      keyPlaceholder="Cookie name"
+      valuePlaceholder="Value"
+      :level="level+1"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @show-dialog="$emit('show-dialog', $event)"
+      @confirm="addCookie($event.key, $event.value)"
+    />
+
+    <KeyValueDialog
+      v-if="showNewHeaderDialog"
+      class="fixed top-0 left-0 w-full h-full px-10 py-56 flex flex-row justify-center"
+      title="New Header"
+      keyPlaceholder="Header name"
+      valuePlaceholder="Value"
+      :level="level+1"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @show-dialog="$emit('show-dialog', $event)"
+      @confirm="addHeader($event.key, $event.value)"
+    />
+    
   </div>
 </template>
 
 <script>
 
 import CTAButton from '@/components/buttons/CTAButton';
-import ValuePairList from '@/components/outputs/ValuePairList';
+import ValuePairList from '@/components/inputs/ValuePairList';
+import KeyValueDialog from '@/components/dialogs/KeyValueDialog';
 
 export default {
   name: 'CookiesAndHeadersDialog',
   components: {
     CTAButton,
     ValuePairList,
+    KeyValueDialog,
   },
   props: {
     value: {
@@ -129,6 +160,12 @@ export default {
 
       return this.generatePairsFromObject(headersWithoutCookies);
 
+    },
+    showNewCookieDialog: function() {
+      return this.openedDialogs[0].type === 'new-cookie';
+    },
+    showNewHeaderDialog: function() {
+      return this.openedDialogs[0].type === 'new-header';
     }
   },
   watch: {
@@ -163,10 +200,26 @@ export default {
       
     },
     addCookie(name, value) {
-      this.$set(this.headers[`cookie`], name, value);
+
+      if (this.headers[`cookie`]) {
+        this.$set(this.headers[`cookie`], name, value);
+      } else {
+        
+        let obj = {};
+        obj[name] = value;
+        this.$set(this.headers, `cookie`, obj);
+        
+      }
+      
+    },
+    removeCookie(name, value) {
+      this.$delete(this.headers[`cookie`], name, value);
     },
     addHeader(name, value) {
       this.$set(this.headers, name, value);
+    },
+    removeHeader(name, value) {
+      this.$delete(this.headers, name, value);
     },
   },
   created: function() {
