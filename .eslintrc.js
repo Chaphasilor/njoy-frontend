@@ -21,6 +21,10 @@ module.exports = {
       },
       "svg": "always",
       "math": "always"
+    }],
+    "vue/multiline-html-element-content-newline": ["warn", {
+      "ignoreWhenEmpty": true,
+      "allowEmptyLines": true,
     }]
   }
 }

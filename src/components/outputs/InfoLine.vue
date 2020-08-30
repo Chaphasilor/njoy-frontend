@@ -3,12 +3,12 @@
     class="flex flex-row justify-between"
   >
     <div
-      class="w-1/3 text-left h-full whitespace-no-wrap"
+      :class="`w-1/3 text-left h-full whitespace-no-wrap`"
     >
       {{ name }}
     </div>
     <div
-      class="w-2/3 text-right h-full font-light"
+      :class="`w-2/3 text-right text-${color} h-full font-light`"
     >
       {{ value }}
     </div>
@@ -28,6 +28,13 @@ export default {
       required: false,
       default: function() {
         return 'Unknown';
+      },
+    },
+    color: {
+      type: String,
+      required: false,
+      default: function() {
+        return 'dark';
       },
     },
   }

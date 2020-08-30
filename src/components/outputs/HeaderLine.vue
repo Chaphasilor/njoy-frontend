@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'InfoLine',
+  name: 'HeaderLine',
   props: {
     name: {
       type: String,

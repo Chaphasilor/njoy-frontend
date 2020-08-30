@@ -37,7 +37,13 @@
       </div>
       <div
         v-if="type == 'good'"
-        class="w-full h-full bg-cta-green flex flex-col justify-center"
+        class="w-full h-full bg-cta-green flex flex-col justify-center font-semibold text-base"
+      >
+        {{ label }}
+      </div>
+      <div
+        v-if="type == 'action'"
+        class="w-full h-full bg-cta-yellow flex flex-col justify-center font-semibold text-base"
       >
         {{ label }}
       </div>
@@ -47,6 +53,7 @@
 
 <script>
 export default {
+  //TODO listen to key presses (enter/return) and click the cta button
   name: 'CTAButton',
   data: function() {
     return {

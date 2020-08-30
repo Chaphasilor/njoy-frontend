@@ -7,7 +7,6 @@
         name: 'Progress',
       }"
       :class="(currentView == 'progress' ? 'border-t-2 text-accent' : 'text-dark') + '  w-1/5 h-auto mx-10 my-1 border-accent flex flex-col justify-center'"
-      @click.native="currentView = 'progress'"
     >
       <svg
         :class="(currentView == 'progress' ? 'w-6 h-6' : 'w-4 h-4') + 'w-6 h-6 m-auto stroke-current'"
@@ -33,7 +32,6 @@
         name: 'Download',
       }"
       :class="(currentView == 'download' ? 'border-t-2 text-accent' : 'text-dark') + ' w-1/5 h-auto mx-10 my-1 border-accent flex flex-col justify-center'"
-      @click.native="currentView = 'download'"
     >
       <svg
         :class="(currentView == 'download' ? 'w-6 h-6' : 'w-4 h-4') + 'w-6 h-6 m-auto stroke-current'"
@@ -60,10 +58,10 @@
 <script>
 export default {
   name: 'Navbar',
-  data: function() {
-    return {
-      currentView: 'progress',
-    };
+  computed: {
+    currentView: function() {
+      return this.$store.getters.activeView;
+    }
   },
 }
 </script>
