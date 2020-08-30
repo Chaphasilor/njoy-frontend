@@ -5,7 +5,7 @@ import DownloadItem from '@/assets/js/download-item.js';
 
 Vue.use(Vuex)
 
-async function getApiBaseUrl() {
+async function getBaseUrl() {
 
   let response;
   try {
@@ -19,18 +19,18 @@ async function getApiBaseUrl() {
 }
 
 var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
-baseUrl = `http://192.168.2.129:69/api`;
+// baseUrl = `http://192.168.2.129:69/api`;
 var api = new API(baseUrl);
 (async () => {
   try {
-    baseUrl = await getApiBaseUrl();
-    api = new API(baseUrl);
+    baseUrl = await getBaseUrl();
+    api = new API(`${baseUrl}/api`);
   } catch (err) {
     console.warn(err);
   } finally {
     console.log(`baseUrl:`, baseUrl);
   }
-})
+})()
 
 const VIEWS = {
   PROGRESS: 0,
