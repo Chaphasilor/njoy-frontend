@@ -1,93 +1,98 @@
-
 <template>
   <div>
     <div
-      @click="$emit('show-dialog', {level: level, type: undefined});"
-      class="fixed top-0 left-0 w-screen h-screen bg-dark bg-opacity-25"
+      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl"
     >
-    </div>  
-    <div
-      class="relative bg-white w-full text-dark rounded-xl shadow-xl"
-    >
-      <h3
-        class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark tracking-wide"
-      >
-        Download a Single File
-      </h3>
-
+      <!-- fixed -->
       <div
-        class="flex flex-row h-12 mb-6 justify-between"
+        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md  font-quicksand text-dark flex flex-row justify-start"
       >
-        <TextField
-          name="url"
-          class="w-full pl-4"
-          placeholder="Download-URL"
-          v-model="fileToDownload.url"
-          @input="loadFileSize($event)"
-        />
+        <img
+          class="w-4 my-3 mr-3 ml-5"
+          src="@/assets/icons/close.svg"
+          alt="Remove"
+          @click="$emit('show-dialog', {level: level, type: undefined});"
+        >
 
-        <SmallButton
-          class="w-20 h-12 ml-2 mr-4"
-          type="action"
-          icon="clipboard"
-          @click.native="pasteClipboard()"
-        />
-
+        <h3
+          class="text-lg antialiased font-bold tracking-wide py-2"
+        >
+          Download a Single File
+        </h3>
       </div>
 
+      
+      <!-- scrollable -->
       <div
-        class="flex flex-row h-12 mb-6 px-4 justify-between"
+        class="flex flex-col flex-grow"
       >
-        <TextField
-          name="path"
-          class="w-full"
-          placeholder="Destination Path"
-          prefix="/"
-          v-model="pathString"
-        />
 
-        <SmallButton
-          class="w-20 h-12 ml-2"
-          type="action"
-          icon="folder"
-          @click.native="$emit('show-dialog', {level: level+1, type: 'path'})"
-        />
+        <div
+          class="flex flex-row h-12 mb-6 justify-between"
+        >
+          <TextField
+            name="url"
+            class="w-full pl-4"
+            placeholder="Download-URL"
+            v-model="fileToDownload.url"
+            @input="loadFileSize($event)"
+          />
 
-      </div>
+          <SmallButton
+            class="w-20 h-12 ml-2 mr-4"
+            type="action"
+            icon="clipboard"
+            @click.native="pasteClipboard()"
+          />
 
-      <div
-        class="flex flex-row h-12 mb-6 px-4 justify-between"
-      >
+        </div>
+
+        <div
+          class="flex flex-row h-12 mb-6 px-4 justify-between"
+        >
+          <TextField
+            name="path"
+            class="w-full"
+            placeholder="Destination Path"
+            prefix="/"
+            v-model="pathString"
+          />
+
+          <SmallButton
+            class="w-20 h-12 ml-2"
+            type="action"
+            icon="folder"
+            @click.native="$emit('show-dialog', {level: level+1, type: 'path'})"
+          />
+
+        </div>
+
         <TextField
           name="filename"
-          class="w-full"
+          class="w-full h-12 px-4 mb-6"
           placeholder="Filename"
           v-model="fileToDownload.filename"
         />
 
-      </div>
-
-      <div
-        class="w-full px-4 mb-6 flex flex-row justify-center"
-      >
         <CTAButton
-          class=" w-full h-12"
+          class="w-full px-4 h-12"
           type="action"
           label="Manage Cookies & Headers"
           @click.native="$emit('show-dialog', {level: level+1, type: 'cookiesAndHeaders'})"
         />    
-      </div>
 
-      <div
-        class="absolute bottom-0 w-full px-6 py-6 flex flex-row justify-center"
-      >
         <CTAButton
-          class=" w-full h-12"
+          class="w-full px-4 mt-16 h-12"
           :type="downloadButtonActive ? `good` : `action`"
           :label="downloadButtonActive ? `Download!` : `Cancel`"
           @click.native="handleDownloadButton"
         />    
       </div>
+      
+      <div
+        class="mb-10"
+      ></div>
+      
     </div>
 
     <PathDialog
@@ -96,7 +101,7 @@
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="$emit('show-dialog', $event); pathString = stringifyPath(fileToDownload.path)"
       v-model="fileToDownload.path"
-      class="fixed top-0 left-0 w-full h-full px-6 py-16 flex flex-row justify-center"
+      class="fixed bottom-0 left-0 w-full h-full"
     />
 
     <CookiesAndHeadersDialog
@@ -105,7 +110,7 @@
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="$emit('show-dialog', $event)"
       v-model="fileToDownload.customHeaders"
-      class="fixed top-0 left-0 w-full h-full px-6 py-16 flex flex-row justify-center"
+      class="fixed bottom-0 left-0 w-full h-full"
     />
     
   </div>

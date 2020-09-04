@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="w-full h-full"
+  >
 
     <h2
       class="p-2 text-center text-2xl antialiased font-bold text-dark"    
@@ -31,7 +33,7 @@
       :opened-dialogs="openedDialogs.slice(1)"
       @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
       @download-submitted="handleDownloadSubmitted"
-      class="fixed top-0 left-0 w-full h-full px-6 py-16 flex flex-row justify-center"
+      class="fixed bottom-0 left-0 w-full h-full"
     />
     <!-- @show-dialog="alert(JSON.stringify($event));openedDialogs.find(x => x.level = $event.level).type = $event.type" -->
 
@@ -59,10 +61,6 @@ export default {
         },
         {
           level: 1,
-          type: undefined,
-        },
-        {
-          level: 2,
           type: undefined,
         },
       ]

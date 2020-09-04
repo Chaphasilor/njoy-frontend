@@ -1,19 +1,26 @@
-
 <template>
   <div>
     <div
-      @click="$emit('show-dialog', {level: level, type: undefined});"
-      class="fixed top-0 left-0 w-screen h-screen bg-dark bg-opacity-25"
+      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl"
     >
-    </div>  
+      <!-- fixed -->
       <div
-        class="relative bg-white w-full text-dark rounded-xl shadow-xl"
+        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md  font-quicksand text-dark flex flex-row justify-start"
       >
-      <h3
-        class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark tracking-wide"
-      >
-        Specify the Destination Path
-      </h3>
+        <!-- TODO replace icon with 'back' -->
+        <img
+          class="w-4 my-3 mr-3 ml-5"
+          src="@/assets/icons/close.svg"
+          alt="Remove"
+          @click="$emit('show-dialog', {level: level, type: undefined});"
+        >
+
+        <h3
+          class="text-lg antialiased font-bold tracking-wide py-2"
+        >
+          Specify the Destination Path
+        </h3>
+      </div>
 
       <div
         class="flex flex-row h-12 mb-8 justify-between"
@@ -29,7 +36,7 @@
       </div>
 
       <div
-        class="flex flex-row h-48 mb-2 px-4 justify-between"
+        class="flex flex-row h-64 mb-2 px-4 justify-between"
       >
         <DirectoryBrowser
           class="w-full"
@@ -45,37 +52,47 @@
       <div
         class="w-full px-4 mb-6 flex flex-row justify-center"
       >
+
         <CTAButton
-          class=" w-full h-12"
+          v-if="!enableNewFolderInputs"
+          class="w-full h-12"
           type="action"
           label="New Folder"
-          @click.native="$emit('show-dialog', {level: level+1, type: 'new-folder'})"
-        />    
+          @click.native="enableNewFolderInputs = true"
+        />
+
+        <div
+          class="w-full flex flex-row justify-between"
+          v-else
+        >
+
+          <TextField
+            class="inline-block w-3/4 h-12 pr-2"    
+            name="new-folder-name"
+            :focus="true"
+            placeholder="Folder Name"
+            v-model="newFolderName"
+          />
+
+          <CTAButton
+            class="inline-block w-1/4 h-12"
+            :type="newFolderName.length > 0 ? `good` : `action`"
+            :label="newFolderName.length > 0 ? `Confirm` : `Cancel`"
+            @click.native="handleNewFolderClick"
+          />
+          
+        </div>
+        
       </div>
 
-      <div
-        class="absolute bottom-0 w-full px-6 py-6 flex flex-row justify-center"
-      >
-        <CTAButton
-          class=" w-full h-12"
-          type="good"
-          label="Confirm"
-          @click.native="$emit('show-dialog', {level: level, type: undefined})"
-        />    
-      </div>
+      <CTAButton
+        class="w-full px-4 mt-16 h-12"
+        type="good"
+        label="Confirm"
+        @click.native="$emit('show-dialog', {level: level, type: undefined})"
+      />    
     </div>
 
-    <ValueDialog
-      v-if="showNewFolderDialog"
-      class="fixed top-0 left-0 w-full h-full px-10 py-64 flex flex-row justify-center"
-      title="New Folder"
-      placeholder="Folder name"
-      :level="level+1"
-      :opened-dialogs="openedDialogs.slice(1)"
-      @show-dialog="$emit('show-dialog', $event)"
-      @confirm="createNewDirectory($event)"
-    />
-    
   </div>
 </template>
 
@@ -84,7 +101,6 @@
 import CTAButton from '@/components/buttons/CTAButton';
 import TextField from '@/components/inputs/TextField';
 import DirectoryBrowser from '@/components/inputs/DirectoryBrowser';
-import ValueDialog from '@/components/dialogs/ValueDialog';
 
 export default {
   name: 'PathDialog',
@@ -92,7 +108,6 @@ export default {
     CTAButton,
     TextField,
     DirectoryBrowser,
-    ValueDialog,
   },
   props: {
     value: {
@@ -116,6 +131,8 @@ export default {
       currentPath: [],
       currentDirectory: {},
       invalidPart: ``,
+      newFolderName: ``,
+      enableNewFolderInputs: false,
     }
   },
   computed: {
@@ -215,6 +232,19 @@ export default {
       console.log(`specifiedPath.slice(0, specifiedPath.length - invalidPart.length):`, specifiedPath.slice(0, specifiedPath.length - invalidPart.length));
       return specifiedPath.slice(0, specifiedPath.length - invalidPart.length);
     },
+    handleNewFolderClick() {
+
+      if (this.newFolderName.length > 0) {
+
+        this.createNewDirectory(this.newFolderName);
+        this.newFolderName = ``;
+        this.enableNewFolderInputs = false;
+
+      } else {
+        this.enableNewFolderInputs = false;
+      }
+      
+    },
     createNewDirectory(name) {
 
       if (0 == name.length) {
@@ -237,7 +267,8 @@ export default {
         path: this.currentPath,
         name: name,
         newRootDirectoryTree: rootDirectoryTreeCopy,
-      })
+      });
+
     }
   },
   created: function() {
