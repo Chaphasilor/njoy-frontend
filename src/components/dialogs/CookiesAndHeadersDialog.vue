@@ -7,10 +7,10 @@
       <div
         class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md  font-quicksand text-dark flex flex-row justify-start"
       >
-        <!-- TODO replace icon with 'back' -->
+      
         <img
-          class="w-4 my-3 mr-3 ml-5"
-          src="@/assets/icons/close.svg"
+          class="h-5 my-3 mr-4 ml-5"
+          src="@/assets/icons/back.svg"
           alt="Remove"
           @click="$emit('show-dialog', {level: level, type: undefined});"
         >

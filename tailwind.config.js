@@ -36,6 +36,7 @@ module.exports = {
       borderRadius: {
         'xl': '25px',
         't-xl': '25px 25px 0 0',
+        'parent': 'inherit',
       },
       spacing: {
         'xs': '.125rem',

@@ -27,15 +27,24 @@
       type="batch"
     />
 
-    <FileDialog
-      v-if="showSingleFileDialog"
-      :level="0"
-      :opened-dialogs="openedDialogs.slice(1)"
-      @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
-      @download-submitted="handleDownloadSubmitted"
-      class="fixed bottom-0 left-0 w-full h-full"
-    />
-    <!-- @show-dialog="alert(JSON.stringify($event));openedDialogs.find(x => x.level = $event.level).type = $event.type" -->
+    <transition
+      name="dialog-slide-up"
+      enter-active-class="transform transition-all duration-300 ease-in-out"
+      enter-class="translate-y-full rounded-t-xl scale-x-90"
+      enter-to-class="translate-y-0 rounded-t-none scale-100"
+      leave-active-class="transform transition-all duration-200 ease-in"
+      leave-class="translate-y-0 rounded-t-none scale-100"
+      leave-to-class="translate-y-full rounded-t-xl scale-x-90"
+    >
+      <FileDialog
+        v-if="showSingleFileDialog"
+        :level="0"
+        :opened-dialogs="openedDialogs.slice(1)"
+        @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
+        @download-submitted="handleDownloadSubmitted"
+        class="fixed bottom-0 left-0 w-full h-full"
+      />
+    </transition>
 
   </div>
 </template>

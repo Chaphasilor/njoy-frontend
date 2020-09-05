@@ -1,11 +1,11 @@
 <template>
   <div>
     <div
-      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl"
+      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl rounded-parent"
     >
       <!-- fixed -->
       <div
-        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md  font-quicksand text-dark flex flex-row justify-start"
+        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md font-quicksand text-dark flex flex-row justify-start"
       >
         <img
           class="w-4 my-3 mr-3 ml-5"
@@ -95,23 +95,43 @@
       
     </div>
 
-    <PathDialog
-      v-if="showPathDialog"
-      :level="level+1"
-      :opened-dialogs="openedDialogs.slice(1)"
-      @show-dialog="$emit('show-dialog', $event); pathString = stringifyPath(fileToDownload.path)"
-      v-model="fileToDownload.path"
-      class="fixed bottom-0 left-0 w-full h-full"
-    />
-
-    <CookiesAndHeadersDialog
-      v-if="showCookiesAndHeadersDialog"
-      :level="level+1"
-      :opened-dialogs="openedDialogs.slice(1)"
-      @show-dialog="$emit('show-dialog', $event)"
-      v-model="fileToDownload.customHeaders"
-      class="fixed bottom-0 left-0 w-full h-full"
-    />
+    <transition
+      name="dialog-slide-up"
+      enter-active-class="transform transition-all duration-300 ease-in-out"
+      enter-class="translate-y-full rounded-t-xl scale-x-90"
+      enter-to-class="translate-y-0 rounded-t-none scale-100"
+      leave-active-class="transform transition-all duration-200 ease-in"
+      leave-class="translate-y-0 rounded-t-none scale-100"
+      leave-to-class="translate-y-full rounded-t-xl scale-x-90"
+    >
+      <PathDialog
+        v-if="showPathDialog"
+        :level="level+1"
+        :opened-dialogs="openedDialogs.slice(1)"
+        @show-dialog="$emit('show-dialog', $event); pathString = stringifyPath(fileToDownload.path)"
+        v-model="fileToDownload.path"
+        class="fixed bottom-0 left-0 w-full h-full"
+      />
+    </transition>
+    
+    <transition
+      name="dialog-slide-up"
+      enter-active-class="transform transition-all duration-300 ease-in-out"
+      enter-class="translate-y-full rounded-t-xl scale-x-90"
+      enter-to-class="translate-y-0 rounded-t-none scale-100"
+      leave-active-class="transform transition-all duration-200 ease-in"
+      leave-class="translate-y-0 rounded-t-none scale-100"
+      leave-to-class="translate-y-full rounded-t-xl scale-x-90"
+    >
+      <CookiesAndHeadersDialog
+        v-if="showCookiesAndHeadersDialog"
+        :level="level+1"
+        :opened-dialogs="openedDialogs.slice(1)"
+        @show-dialog="$emit('show-dialog', $event)"
+        v-model="fileToDownload.customHeaders"
+        class="fixed bottom-0 left-0 w-full h-full"
+      />
+    </transition>
     
   </div>
 </template>
@@ -206,7 +226,7 @@ export default {
       handler: function() {
         console.log(this.openedDialogs);
       }
-    }
+    },
     //TODO update pathString when path array changes
   },
   methods: {
