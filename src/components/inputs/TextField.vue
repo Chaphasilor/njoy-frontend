@@ -2,7 +2,7 @@
   <div>
     <input
       class="inline-block w-full h-full rounded-lg border border-dark p-2 outline-none focus:border-accent"
-      type="text"
+      :type="isPassword ? `password` : `text`"
       ref="inputField"
       :disabled="disabled"
       :placeholder="placeholder"
@@ -41,6 +41,12 @@ export default {
       }
     },
     focus: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
+    isPassword: {
       type: Boolean,
       default: function() {
         return false;

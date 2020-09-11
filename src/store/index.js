@@ -19,23 +19,25 @@ async function getBaseUrl() {
 }
 
 var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
-// baseUrl = `http://192.168.2.129:69/api`;
+baseUrl = `http://192.168.2.129:69`;
 var api = new API(baseUrl);
 (async () => {
   try {
     baseUrl = await getBaseUrl();
-    api = new API(`${baseUrl}/api`);
+    api = new API(baseUrl);
   } catch (err) {
     console.warn(err);
   } finally {
     console.log(`baseUrl:`, baseUrl);
   }
-})()
+// })()
+})
 
 const VIEWS = {
   PROGRESS: 0,
   DOWNLOAD: 1,
   DOWNLOAD_DETAILS: 2,
+  LOGIN: 3,
 }
 
 export default new Vuex.Store({
@@ -176,6 +178,7 @@ export default new Vuex.Store({
       ]
     },
     downloads: [],
+    authenticated: false,
   },
   mutations: {
     SET_ACTIVE_VIEW(state, view) {
@@ -195,6 +198,9 @@ export default new Vuex.Store({
         download.status = newDownloadStatus;
       }
 
+    },
+    SET_AUTH_STATUS(state, newStatus) {
+      state.authenticated = newStatus;
     }
   },
   actions: {
@@ -209,6 +215,9 @@ export default new Vuex.Store({
         case 'download-details':
           context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD_DETAILS);
           break;
+        case 'login':
+          context.commit('SET_ACTIVE_VIEW', VIEWS.LOGIN);
+          break;
       
         default:
           context.commit('SET_ACTIVE_VIEW', VIEWS.PROGRESS);
@@ -217,6 +226,21 @@ export default new Vuex.Store({
     },
     nativgateToDownload(context) {
       context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
+    },
+    async authenticateApi(context, { username, password }) {
+
+      try {
+        api.authenticate(username, password);
+      } catch (err) {
+        console.warn(err);
+        context.commit('SET_AUTH_STATUS', false);
+        return err.message;
+      }
+
+      context.commit('SET_AUTH_STATUS', true);
+      
+      return `Success`;
+      
     },
     async loadRootDirectoryTree(context) {
       let tree;
@@ -347,6 +371,9 @@ export default new Vuex.Store({
         case VIEWS.DOWNLOAD_DETAILS:
           view = 'download-details';
           break;
+        case VIEWS.LOGIN:
+          view = 'login';
+          break;
       
         default:
           view = 'progress';
@@ -356,5 +383,6 @@ export default new Vuex.Store({
     },
     rootDirectoryTree: state => state.rootDirectoryTree,
     downloads: state => state.downloads,
+    authStatus: state => state.authenticated,
   }
 })

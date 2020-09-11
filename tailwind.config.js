@@ -40,6 +40,7 @@ module.exports = {
       },
       spacing: {
         'xs': '.125rem',
+        'navbar': '3.5rem',
       },
       width: {
         '1/10': '10%',

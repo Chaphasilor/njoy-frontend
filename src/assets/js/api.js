@@ -3,15 +3,56 @@ export default class API {
   constructor(baseUrl) {
 
     this.baseUrl = baseUrl;
+    this.apiEndpoint = `${this.baseUrl}/api`;
+    
+  }
+
+  async authenticate(username, password) {
+    
+    let res, result;
+    
+    try {
+      
+      res = await fetch(this.baseUrl + `/auth/local`, {
+        mode: 'cors',
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        })
+      })
+
+    } catch (err) {
+      console.error(`Something went wrong during authentication!`);
+      throw new Error(`Couldn't authenticate!`);
+    }
+
+    try {
+      result = await res.json();
+    } catch (err) {
+      console.error(`Something went wrong during authentication!`);
+      throw new Error(`Couldn't authenticate!`);
+    }
+
+    if (result.success) {
+      return true;
+    } else {
+      throw new Error(`Authentication failed! Maybe wrong password?`);
+    }
     
   }
 
   loadProgress() {
     return new Promise((resolve, reject) => {
 
-        fetch(this.baseUrl + `/progress`, {
+        fetch(this.apiEndpoint + `/progress`, {
           mode: 'cors',
           method: 'GET',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -43,9 +84,10 @@ export default class API {
   loadDownloadItem(id) {
     return new Promise((resolve, reject) => {
 
-      fetch(this.baseUrl + `/downloads/${id}`, {
+      fetch(this.apiEndpoint + `/downloads/${id}`, {
         mode: 'cors',
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,9 +111,10 @@ export default class API {
     
       download.mkdir = true; // enable creation of new folders (directories are fetched from the API, so this shouldn't cause any issues)
       
-      fetch(this.baseUrl + `/download`, {
+      fetch(this.apiEndpoint + `/download`, {
         mode: 'cors',
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -115,9 +158,10 @@ export default class API {
   pauseDownload(id) {
     return new Promise((resolve, reject) => {
     
-      fetch(this.baseUrl + `/download/${id}`, {
+      fetch(this.apiEndpoint + `/download/${id}`, {
         mode: 'cors',
         method: 'PATCH',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -142,9 +186,10 @@ export default class API {
   resumeDownload(id) {
     return new Promise((resolve, reject) => {
     
-      fetch(this.baseUrl + `/download/${id}`, {
+      fetch(this.apiEndpoint + `/download/${id}`, {
         mode: 'cors',
         method: 'PATCH',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -169,9 +214,10 @@ export default class API {
   stopDownload(id) {
     return new Promise((resolve, reject) => {
     
-      fetch(this.baseUrl + `/download/${id}`, {
+      fetch(this.apiEndpoint + `/download/${id}`, {
         mode: 'cors',
         method: 'PATCH',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -199,9 +245,10 @@ export default class API {
 
     try {
       
-      res = await fetch(this.baseUrl + `/directoryListing`, {
+      res = await fetch(this.apiEndpoint + `/directoryListing`, {
         mode: 'cors',
         method: 'GET',
+        credentials: 'include',
       });
 
     } catch (err) {
@@ -218,9 +265,10 @@ export default class API {
 
     try {
       
-      res = await fetch(this.baseUrl + `/fileSize/${encodeURIComponent(url)}`, {
+      res = await fetch(this.apiEndpoint + `/fileSize/${encodeURIComponent(url)}`, {
         mode: 'cors',
         method: 'GET',
+        credentials: 'include',
       });
 
     } catch (err) {
