@@ -30,8 +30,8 @@ var api = new API(baseUrl);
   } finally {
     console.log(`baseUrl:`, baseUrl);
   }
-// })()
-})
+})()
+// })
 
 const VIEWS = {
   PROGRESS: 0,
