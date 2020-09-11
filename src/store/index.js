@@ -19,7 +19,7 @@ async function getBaseUrl() {
 }
 
 var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
-baseUrl = `http://192.168.2.129:69`;
+// baseUrl = `http://192.168.2.129:69`;
 var api = new API(baseUrl);
 (async () => {
   try {
