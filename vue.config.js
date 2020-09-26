@@ -38,11 +38,11 @@ module.exports = {
       ],
     },
     // configure the workbox plugin
-    // workboxPluginMode: 'InjectManifest',
-    workboxPluginMode: 'GenerateSW',
+    workboxPluginMode: 'InjectManifest',
+    // workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      // swSrc: 'src/assets/sw.js',
+      swSrc: 'src/assets/sw.js',
       exclude: [
         '_redirects',
       ]
