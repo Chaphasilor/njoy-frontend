@@ -45,6 +45,7 @@ module.exports = {
       swSrc: 'src/assets/sw.js',
       exclude: [
         '_redirects',
+        'sw.js',
       ]
     },
     manifestPath: 'manifest.webmanifest'
