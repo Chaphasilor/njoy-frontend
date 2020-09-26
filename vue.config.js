@@ -36,10 +36,11 @@ module.exports = {
       ],
     },
     // configure the workbox plugin
-    workboxPluginMode: 'InjectManifest',
+    // workboxPluginMode: 'InjectManifest',
+    workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      swSrc: 'src/assets/sw.js',
+      // swSrc: 'src/assets/sw.js',
     },
     manifestPath: 'manifest.webmanifest'
   }
