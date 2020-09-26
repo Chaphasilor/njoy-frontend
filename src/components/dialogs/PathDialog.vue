@@ -40,9 +40,9 @@
       >
         <DirectoryBrowser
           class="w-full"
-          :rootDirectoryTree="rootDirectoryTree"
-          :currentDirectory="currentDirectory"
-          :currentPath="currentPath"
+          :root-directory-tree="rootDirectoryTree"
+          :current-directory="currentDirectory"
+          :current-path="currentPath"
           @directory-down="directoryDown"
           @directory-up="directoryUp"
         />

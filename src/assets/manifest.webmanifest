@@ -1,0 +1,39 @@
+{
+  "name": "njoy",
+  "short_name": "njoy",
+  "description": "A download manager for njoy",
+  "theme_color": "#27E19E",
+  "background_color": "#FFFAFA",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "Progress Overview",
+      "short_name": "Progress",
+      "description": "View the progress of all downloads",
+      "url": "/",
+      "icons": [{ "src": "/icons/progress.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "New Download",
+      "short_name": "Download",
+      "description": "Start a new download of one or more files",
+      "url": "/download",
+      "icons": [{ "src": "/icons/download.png", "sizes": "192x192" }]
+    }
+  ],
+  "icons": [
+    {
+      "src": "icons/test.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/test.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

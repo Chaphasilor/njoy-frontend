@@ -24,7 +24,7 @@
       <div
         class="p-2 text-center text-base leading-none"
       >
-      {{ dir.name }}
+        {{ dir.name }}
       </div>
     </div>
 

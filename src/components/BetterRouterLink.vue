@@ -2,7 +2,7 @@
 
   <!-- Behaves like a normal router link, but can be prevented from routing if click propagation is prevented -->
   <div
-    @click="$router.push(to)"
+    @click="navigate"
   >
 
     <slot></slot>
@@ -17,6 +17,13 @@ export default {
     to: {
       type: Object,
       required: true,
+    }
+  },
+  methods: {
+    navigate() {
+
+      this.$router.push(this.to);
+
     }
   }
 }
