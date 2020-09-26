@@ -7,6 +7,38 @@ export default class API {
     
   }
 
+  async checkAuthenticated() {
+
+    let res, result;
+    
+    try {
+      
+      res = await fetch(this.baseUrl + `/authenticated`, {
+        mode: 'cors',
+        method: 'GET',
+        credentials: 'include',
+      })
+
+    } catch (err) {
+      console.error(`Something went wrong during authentication!`);
+      throw new Error(`Couldn't authenticate!`);
+    }
+
+    try {
+      result = await res.json();
+    } catch (err) {
+      console.error(`Something went wrong during authentication!`);
+      throw new Error(`Couldn't authenticate!`);
+    }
+
+    if (result.success) {
+      return true;
+    } else {
+      throw new Error(`Authentication failed! Cookie seems to be missing...`);
+    }
+    
+  }
+  
   async authenticate(username, password) {
     
     let res, result;

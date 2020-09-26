@@ -38,7 +38,7 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 
   console.log(`to:`, to);
   console.log(`from:`, from);
@@ -47,10 +47,20 @@ router.beforeEach((to, from, next) => {
     if (store.getters.authStatus) {
       return next();
     } else {
-      console.warn(`Not authenticated with API, redirecting to login...`);
-      return next({
-        name: `Login`,
-      });
+
+      await store.dispatch(`checkAuthenticated`);
+
+      if (store.getters.authStatus) {
+        return next();
+      } else {
+
+        console.warn(`Not authenticated with API, redirecting to login...`);
+        return next({
+          name: `Login`,
+        });
+        
+      }
+      
     }
   } else {
     return next();

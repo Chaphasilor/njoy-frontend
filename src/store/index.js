@@ -235,10 +235,25 @@ export default new Vuex.Store({
     nativgateToDownload(context) {
       context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
     },
+    async checkAuthenticated(context) {
+      
+      try {
+        await api.checkAuthenticated();
+      } catch (err) {
+        console.warn(err);
+        context.commit('SET_AUTH_STATUS', false);
+        return err.message;
+      }
+
+      context.commit('SET_AUTH_STATUS', true);
+      
+      return `Success`;
+      
+    },
     async authenticateApi(context, { username, password }) {
 
       try {
-        api.authenticate(username, password);
+        await api.authenticate(username, password);
       } catch (err) {
         console.warn(err);
         context.commit('SET_AUTH_STATUS', false);
