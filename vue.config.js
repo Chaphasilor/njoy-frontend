@@ -12,7 +12,9 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'white',
     manifestOptions: {
       description: 'A download manager for njoy',
+      lang: 'en-US',
       background_color: '#FFFAFA',
+      url: 'https://deploy-preview-5--njoy-frontend.netlify.app/',
       start_url: '/',
       scope: '/',
       display: 'standalone',
@@ -32,7 +34,7 @@ module.exports = {
           description: 'Start a new download of one or more files',
           url: '/download',
           icons: [{ src: '/img/download.png', sizes: '512x512' }]
-        }
+        },
       ],
     },
     // configure the workbox plugin
