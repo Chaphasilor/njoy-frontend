@@ -41,6 +41,9 @@ module.exports = {
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
       // swSrc: 'src/assets/sw.js',
+      exclude: [
+        '_redirects',
+      ]
     },
     manifestPath: 'manifest.webmanifest'
   }
