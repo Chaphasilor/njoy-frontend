@@ -18,20 +18,28 @@ async function getBaseUrl() {
   
 }
 
+// set fallback url
 var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
-// baseUrl = `http://192.168.2.129:69`;
 var api = new API(baseUrl);
-(async () => {
-  try {
-    baseUrl = await getBaseUrl();
-    api = new API(baseUrl);
-  } catch (err) {
-    console.warn(err);
-  } finally {
-    console.log(`baseUrl:`, baseUrl);
-  }
-})()
-// })
+
+// set api urls depending on mode
+if (process.env.NODE_ENV === `production`) {
+
+  (async () => {
+    try {
+      baseUrl = await getBaseUrl();
+      api = new API(baseUrl);
+    } catch (err) {
+      console.warn(err);
+    } finally {
+      console.log(`baseUrl:`, baseUrl);
+    }
+  })()
+
+} else {
+  api = new API(`http://localhost:70`);
+}
+
 
 const VIEWS = {
   PROGRESS: 0,
