@@ -43,12 +43,18 @@ router.beforeEach(async (to, from, next) => {
   console.log(`to:`, to);
   console.log(`from:`, from);
 
+  if (!store.getters.api) {
+    await store.dispatch(`mountApi`);
+  }
+
+  if (store.getters.authStatus === undefined) {
+    await store.dispatch(`checkAuthenticated`);
+  }
+
   if (to.path != `/login`) {
     if (store.getters.authStatus) {
       return next();
     } else {
-
-      await store.dispatch(`checkAuthenticated`);
 
       if (store.getters.authStatus) {
         return next();
@@ -63,7 +69,13 @@ router.beforeEach(async (to, from, next) => {
       
     }
   } else {
-    return next();
+    if (store.getters.authStatus) {
+      return next({
+        name: `Progress`,
+      });
+    } else {
+      return next();
+    }
   }
   
 })

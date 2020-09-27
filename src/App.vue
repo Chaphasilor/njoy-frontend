@@ -32,8 +32,11 @@ export default {
   components: {
     Navbar,
   },
-  mounted() {
+  async mounted() {
 
+    if (!this.$store.getters.api) {
+      await this.$store.dispatch(`mountApi`);
+    }
     this.$store.dispatch(`checkAuthenticated`);
     
   }

@@ -5,41 +5,6 @@ import DownloadItem from '@/assets/js/download-item.js';
 
 Vue.use(Vuex)
 
-async function getBaseUrl() {
-
-  let response;
-  try {
-    response = await fetch(`https://web-services.chaphasilor.xyz/url?type=njoy`);
-    return await response.text();
-  } catch (err) {
-    console.error(`Failed to fetch base url:`, err);
-    throw `Coulnd't fetch API base url, using the default one...`;
-  }
-  
-}
-
-// set fallback url
-var baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
-var api = new API(baseUrl);
-
-// set api urls depending on mode
-if (process.env.NODE_ENV === `production`) {
-
-  (async () => {
-    try {
-      baseUrl = await getBaseUrl();
-      api = new API(baseUrl);
-    } catch (err) {
-      console.warn(err);
-    } finally {
-      console.log(`baseUrl:`, baseUrl);
-    }
-  })()
-
-} else {
-  api = new API(`http://localhost:70`);
-}
-
 
 const VIEWS = {
   PROGRESS: 0,
@@ -50,6 +15,7 @@ const VIEWS = {
 
 export default new Vuex.Store({
   state: {
+    api: undefined,
     activeView: VIEWS.PROGRESS,
     rootDirectoryTree: {
       name: 'ROOT',
@@ -186,9 +152,12 @@ export default new Vuex.Store({
       ]
     },
     downloads: [],
-    authenticated: false,
+    authenticated: undefined,
   },
   mutations: {
+    SET_API(state, newApi) {
+      state.api = newApi;
+    },
     SET_ACTIVE_VIEW(state, view) {
       state.activeView = view;
     },
@@ -209,9 +178,32 @@ export default new Vuex.Store({
     },
     SET_AUTH_STATUS(state, newStatus) {
       state.authenticated = newStatus;
-    }
+    },
   },
   actions: {
+    async mountApi(context) {
+
+      let response;
+      let baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
+      let api;
+
+      try {
+        response = await fetch(`https://web-services.chaphasilor.xyz/url?type=njoy`);
+        baseUrl = await response.text();
+      } catch (err) {
+        console.error(`Failed to fetch base url, using proxy:`, err);
+      }
+        
+      // set api urls depending on mode
+      if (process.env.NODE_ENV === `production`) {
+        api = new API(baseUrl);
+      } else {
+        api = new API(`http://localhost:70`);
+      }
+
+      context.commit(`SET_API`, api);
+      
+    },
     navigate(context, { target }) {
       switch (target) {
         case 'progress':
@@ -240,7 +232,7 @@ export default new Vuex.Store({
       console.log('checkAuthenticated called!');
       
       try {
-        let success = await api.checkAuthenticated();
+        let success = await context.getters.api.checkAuthenticated();
         console.log(`success:`, success);
       } catch (err) {
         console.warn(err);
@@ -256,7 +248,7 @@ export default new Vuex.Store({
     async authenticateApi(context, { username, password }) {
 
       try {
-        await api.authenticate(username, password);
+        await context.getters.api.authenticate(username, password);
       } catch (err) {
         console.warn(err);
         context.commit('SET_AUTH_STATUS', false);
@@ -272,7 +264,7 @@ export default new Vuex.Store({
       let tree;
       
       try {
-        tree = await api.fetchRootDirectoryTree();
+        tree = await context.getters.api.fetchRootDirectoryTree();
       } catch (err) {
 
         console.error(`Couldn't get root directory tree from API!`, err);
@@ -303,7 +295,7 @@ export default new Vuex.Store({
       let downloads;
       
       try {
-        downloads = await api.loadProgress();
+        downloads = await context.getters.api.loadProgress();
       } catch (emptyObject) {
         console.warn(`Couldn't fetch data from API, using empty object...`);
         downloads = emptyObject;
@@ -326,13 +318,13 @@ export default new Vuex.Store({
 
         switch (action) {
           case `pause`:
-            newStatus = await api.pauseDownload(id);
+            newStatus = await context.getters.api.pauseDownload(id);
             break;
           case `resume`:
-            newStatus = await api.resumeDownload(id);
+            newStatus = await context.getters.api.resumeDownload(id);
             break;
           case `stop`:
-            newStatus = await api.stopDownload(id);
+            newStatus = await context.getters.api.stopDownload(id);
             break;
         
           default:
@@ -358,7 +350,7 @@ export default new Vuex.Store({
       let response;
 
       try {
-        response = await api.submitDownload(download);
+        response = await context.getters.api.submitDownload(download);
       } catch (err) {
         console.error(`Failed to submit download:`, err);
         throw new Error(`Failed to submit download!`);
@@ -372,7 +364,7 @@ export default new Vuex.Store({
       let size;
       
       try {
-        size = await api.fetchFileSize(url);
+        size = await context.getters.api.fetchFileSize(url);
       } catch (err) {
         
         console.warn(`Couldn't fetch the file size for the given URL through the API:`, err);
@@ -385,6 +377,7 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    api: state => state.api,
     activeView: state => {
       let view;
       switch (state.activeView) {
