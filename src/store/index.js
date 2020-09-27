@@ -236,9 +236,12 @@ export default new Vuex.Store({
       context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
     },
     async checkAuthenticated(context) {
+
+      console.log('checkAuthenticated called!');
       
       try {
-        await api.checkAuthenticated();
+        let success = await api.checkAuthenticated();
+        console.log(`success:`, success);
       } catch (err) {
         console.warn(err);
         context.commit('SET_AUTH_STATUS', false);

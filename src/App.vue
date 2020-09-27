@@ -32,5 +32,10 @@ export default {
   components: {
     Navbar,
   },
+  mounted() {
+
+    this.$store.dispatch(`checkAuthenticated`);
+    
+  }
 }
 </script>

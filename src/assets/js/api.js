@@ -14,8 +14,8 @@ export default class API {
     try {
       
       res = await fetch(this.baseUrl + `/auth/check`, {
-        mode: 'cors',
         method: 'GET',
+        mode: 'cors',
         credentials: 'include',
       })
 
