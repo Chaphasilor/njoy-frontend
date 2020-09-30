@@ -38,22 +38,44 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 
   console.log(`to:`, to);
   console.log(`from:`, from);
+
+  if (!store.getters.api) {
+    await store.dispatch(`mountApi`);
+  }
+
+  if (store.getters.authStatus === undefined) {
+    await store.dispatch(`checkAuthenticated`);
+  }
 
   if (to.path != `/login`) {
     if (store.getters.authStatus) {
       return next();
     } else {
-      console.warn(`Not authenticated with API, redirecting to login...`);
-      return next({
-        name: `Login`,
-      });
+
+      if (store.getters.authStatus) {
+        return next();
+      } else {
+
+        console.warn(`Not authenticated with API, redirecting to login...`);
+        return next({
+          name: `Login`,
+        });
+        
+      }
+      
     }
   } else {
-    return next();
+    if (store.getters.authStatus) {
+      return next({
+        name: `Progress`,
+      });
+    } else {
+      return next();
+    }
   }
   
 })

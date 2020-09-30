@@ -22,7 +22,7 @@
 
         <TextField
           class="my-6"
-          :isPassword="true"
+          :is-password="true"
           placeholder="Password"
           v-model="password"
         />

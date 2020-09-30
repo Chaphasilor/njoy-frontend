@@ -3,6 +3,7 @@
     id="app"
     class="w-full h-full text-base bg-eggshell font-quicksand"
   >
+
     <!-- <div
       id="nav"
       class="fixed bottom-0 h-16 text-center w-full rounded-t-xl shadow-top "
@@ -30,6 +31,14 @@ export default {
   name: 'App',
   components: {
     Navbar,
+  },
+  async mounted() {
+
+    if (!this.$store.getters.api) {
+      await this.$store.dispatch(`mountApi`);
+    }
+    this.$store.dispatch(`checkAuthenticated`);
+    
   }
 }
 </script>

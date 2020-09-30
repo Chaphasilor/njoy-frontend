@@ -27,13 +27,16 @@
         class="flex flex-col flex-grow"
       >
 
+        <div class="ml-6 font-bold mb-2">
+          Download-URL:
+        </div>
         <div
-          class="flex flex-row h-12 mb-6 justify-between"
+          class="flex flex-row h-12 mb-2 justify-between"
         >
           <TextField
             name="url"
             class="w-full pl-4"
-            placeholder="Download-URL"
+            placeholder="e.g. https://example.com"
             v-model="fileToDownload.url"
             @input="loadFileSize($event)"
           />
@@ -46,9 +49,15 @@
           />
 
         </div>
+        <div class="h-6 ml-6 mb-6">
+          {{ sizeString }}
+        </div>
 
+        <div class="ml-6 font-bold mb-2">
+          Destination Path:
+        </div>
         <div
-          class="flex flex-row h-12 mb-6 px-4 justify-between"
+          class="flex flex-row h-12 mb-12 px-4 justify-between"
         >
           <TextField
             name="path"
@@ -67,10 +76,13 @@
 
         </div>
 
+        <div class="ml-6 font-bold mb-2">
+          Filename:
+        </div>
         <TextField
           name="filename"
-          class="w-full h-12 px-4 mb-6"
-          placeholder="Filename"
+          class="w-full h-12 px-4 mb-12"
+          placeholder="Extension can be omitted"
           v-model="fileToDownload.filename"
         />
 
@@ -163,6 +175,12 @@ export default {
       type: Array,
       required: true,
     },
+    downloadUrl: {
+      type: String,
+      default: function() {
+        return ``;
+      }
+    },
   },
   data: function() {
     return {
@@ -209,6 +227,9 @@ export default {
     },
     downloadButtonActive: function() {
       return this.fileToDownload.url.length > 0 && this.fileToDownload.filename.length > 0;
+    },
+    sizeString: function() {
+      return this.fileToDownload.size ? `Size: ${this.fileToDownload.size}` : ``;
     }
   },
   watch: {
@@ -283,9 +304,11 @@ export default {
     },
     async loadFileSize(url) {
 
+      this.fileToDownload.size = `Loading...`;
       let size = await this.$store.dispatch(`getFileSize`, url);
 
       console.log(`size:`, size);
+      this.fileToDownload.size = size;
       
     }
   },
@@ -293,6 +316,12 @@ export default {
 
     console.log(`this.fileToDownload:`, this.fileToDownload);
     console.log(`this.fileToDownload.toString():`, this.fileToDownload.toString());
+
+    if (this.downloadUrl.length > 0) {
+      this.fileToDownload.url = this.downloadUrl;
+      this.loadFileSize(this.fileToDownload.url);
+    }
+    
     this.$store.dispatch(`loadRootDirectoryTree`); // pre-fetch directories
 
   }
