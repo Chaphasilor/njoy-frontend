@@ -52,7 +52,7 @@ module.exports = {
     // workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      swSrc: 'src/assets/sw.js',
+      swSrc: './src/assets/sw.js',
       exclude: [
         '_redirects',
         'sw.js',

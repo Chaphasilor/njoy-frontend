@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 if (workbox) {
 
   console.log(`Workbox is active`);
@@ -8,6 +9,7 @@ if (workbox) {
   })
 
   // apply precaching. In the built version, the precacheManifest will be imported using importScripts (as is workbox itself) and we can precache this. This is all we need for precaching
+  // workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
   workbox.precaching.precacheAndRoute(self.__precacheManifest);
 
 } else {
