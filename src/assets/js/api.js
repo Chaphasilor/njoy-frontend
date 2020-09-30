@@ -297,7 +297,7 @@ export default class API {
 
     try {
       
-      res = await fetch(this.apiEndpoint + `/fileSize/${encodeURIComponent(url)}`, {
+      res = await fetch(this.apiEndpoint + `/fileSize/${encodeURIComponent(encodeURIComponent(url))}`, {
         mode: 'cors',
         method: 'GET',
         credentials: 'include',

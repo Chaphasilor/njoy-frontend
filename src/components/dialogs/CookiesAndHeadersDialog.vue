@@ -110,7 +110,7 @@
           v-if="!enableNewHeaderInputs"
           class="w-full h-12"
           type="action"
-          label="Add a Cookie"
+          label="Add a Header"
           @click.native="enableNewHeaderInputs = true"
         />
 
