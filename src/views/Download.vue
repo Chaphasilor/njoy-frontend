@@ -40,6 +40,7 @@
         v-if="showSingleFileDialog"
         :level="0"
         :opened-dialogs="openedDialogs.slice(1)"
+        :download-url="receivedUrl"
         @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
         @download-submitted="handleDownloadSubmitted"
         class="fixed bottom-0 left-0 w-full h-full"
@@ -84,6 +85,17 @@ export default {
       // return this.type === 'batch';
       return this.openedDialogs[0].type === 'batch';
     },
+    receivedUrl: function() {
+
+      if (this.isValidHttpUrl(this.$route.query.url)) {
+        return this.$route.query.url;
+      } else if (this.isValidHttpUrl(this.$route.query.text)) {
+        return this.$route.query.text;
+      } else {
+        return ``;
+      }
+      
+    }
   },
   methods: {
     backHandler(next) {
@@ -118,12 +130,33 @@ export default {
         name: 'Progress',
       })
       
+    },
+    isValidHttpUrl(string) {
+      
+      let url;
+      try {
+        url = new URL(string);
+      } catch (err) {
+        return false;  
+      }
+      return url.protocol === "http:" || url.protocol === "https:";
+
     }
   },
   mounted: function() {
     
     this.$store.dispatch('navigate', { target: 'download' });
-    
+
+    if (this.$route.query.text || this.$route.query.url) {
+
+      if (!(this.receivedUrl.length > 0)) {
+        alert(`No valid URL provided!`);
+      } else {
+        this.openedDialogs[0].type = `single`;
+      }
+      
+    }
+
   },
   beforeRouteLeave(to, from, next) {
     console.log(`to:`, to);

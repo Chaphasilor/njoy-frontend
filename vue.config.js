@@ -36,6 +36,16 @@ module.exports = {
           icons: [{ src: '/img/download.png', sizes: '512x512' }]
         },
       ],
+      share_target: {
+        action: '/download',
+        method: 'GET',
+        enctype: 'application/x-www-form-urlencoded',
+        params: {
+          title: 'title',
+          text: 'text',
+          url: 'url'
+        }
+      }
     },
     // configure the workbox plugin
     workboxPluginMode: 'InjectManifest',
