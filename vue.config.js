@@ -14,7 +14,7 @@ module.exports = {
       description: 'A download manager for njoy',
       lang: 'en-US',
       background_color: '#FFFAFA',
-      url: 'https://deploy-preview-5--njoy-frontend.netlify.app/',
+      url: 'https://download-manager.chaphasilor.xyz/',
       start_url: '/',
       scope: '/',
       display: 'standalone',
