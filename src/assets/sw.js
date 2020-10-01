@@ -25,7 +25,13 @@ self.addEventListener('push', function(event) {
     data = event.data.json();
   }
   event.waitUntil(self.registration.showNotification(data.title, {
-    body: data.body
+    body: data.body,
+    badge: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-maskable-192x192.png`,
+    icon: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-512x512.png`,
+    lang: `en-US`,
+    requireInteraction: false,
+    silent: false,
+    timestamp: data.timestamp || Date.now(),
   }));
 });
 
