@@ -181,6 +181,12 @@ export default {
         return ``;
       }
     },
+    filename: {
+      type: String,
+      default: function() {
+        return ``;
+      }
+    },
   },
   data: function() {
     return {
@@ -320,6 +326,10 @@ export default {
     if (this.downloadUrl.length > 0) {
       this.fileToDownload.url = this.downloadUrl;
       this.loadFileSize(this.fileToDownload.url);
+    }
+
+    if (this.filename.length > 0) {
+      this.fileToDownload.filename = this.filename;
     }
     
     this.$store.dispatch(`loadRootDirectoryTree`); // pre-fetch directories

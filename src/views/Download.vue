@@ -41,6 +41,7 @@
         :level="0"
         :opened-dialogs="openedDialogs.slice(1)"
         :download-url="receivedUrl"
+        :filename="$route.query.title"
         @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
         @download-submitted="handleDownloadSubmitted"
         class="fixed bottom-0 left-0 w-full h-full"

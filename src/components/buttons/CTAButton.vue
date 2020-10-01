@@ -3,7 +3,7 @@
     class="p-xs"
   >
     <div
-      class="w-full h-full rounded-lg overflow-hidden text-center text-lg text-white font-medium antialiased"
+      class="w-full h-full rounded-lg overflow-hidden text-center text-lg text-white font-medium antialiased cursor-pointer"
     >
       <div
         v-if="type == 'resume'"
