@@ -5,6 +5,22 @@ import DownloadItem from '@/assets/js/download-item.js';
 
 Vue.use(Vuex)
 
+// HELPER METHODS
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 const VIEWS = {
   PROGRESS: 0,
@@ -153,6 +169,7 @@ export default new Vuex.Store({
     },
     downloads: [],
     authenticated: undefined,
+    swRegistration: undefined,
   },
   mutations: {
     SET_API(state, newApi) {
@@ -179,6 +196,9 @@ export default new Vuex.Store({
     SET_AUTH_STATUS(state, newStatus) {
       state.authenticated = newStatus;
     },
+    SET_SERVICEWORKER_REGISTRATION(state, newRegistration) {
+      state.swRegistration = newRegistration;
+    }
   },
   actions: {
     async mountApi(context) {
@@ -193,7 +213,9 @@ export default new Vuex.Store({
       } catch (err) {
         console.error(`Failed to fetch base url, using proxy:`, err);
       }
-        
+
+      console.log(`baseUrl:`, baseUrl);
+      
       // set api urls depending on mode
       if (process.env.NODE_ENV === `production`) {
         api = new API(baseUrl);
@@ -374,6 +396,42 @@ export default new Vuex.Store({
 
       return size;
       
+    },
+    saveServiceWorkerRegistration(context, registration) {
+
+      context.commit(`SET_SERVICEWORKER_REGISTRATION`, registration);
+      console.log(`Received Service Worker registration:`, registration);
+      
+    },
+    async subscribeToPush(context) {
+
+      let vapidPublicKey;
+      try {
+        vapidPublicKey = await context.getters.api.retrieveVapidKey();
+      } catch (err) {
+        return false;
+      }
+      
+      console.log(vapidPublicKey);
+      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+      
+      try {
+        
+        let pushSubscription = await context.getters.sw.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidKey
+        })
+        console.log(pushSubscription.endpoint);
+  
+        let success = await context.getters.api.submitPushSubscription(pushSubscription);
+
+        return success;
+
+      } catch (err) {
+        console.error(`Couldn't subcribe client to push:`, err);
+        return false;
+      }
+      
     }
   },
   getters: {
@@ -403,5 +461,6 @@ export default new Vuex.Store({
     rootDirectoryTree: state => state.rootDirectoryTree,
     downloads: state => state.downloads,
     authStatus: state => state.authenticated,
+    sw: state => state.swRegistration,
   }
 })

@@ -4,6 +4,60 @@ export default class API {
 
     this.baseUrl = baseUrl;
     this.apiEndpoint = `${this.baseUrl}/api`;
+    this.pushEndpoint = `${this.baseUrl}/push`;
+    
+  }
+
+  async retrieveVapidKey() {
+
+    let res;
+    try {
+      
+      res = await fetch(`${this.pushEndpoint}/vapidPublicKey`, {
+        method: `GET`,
+        mode: `cors`,
+        credentials: `include`,
+      });
+
+    } catch (err) {
+      throw new Error(`Couldn't retrieve VAPID key!`);
+    }
+
+    try {
+      let vapidKey = await res.text();
+      return vapidKey
+    } catch (err) {
+      throw new Error(`Failed to parse VAPID key!`);
+    }
+
+  }
+
+  async submitPushSubscription(pushSubscription) {
+
+    let res;
+    try {
+      
+      res = await fetch(`${this.pushEndpoint}/register`, {
+        method: `post`,
+        mode: `cors`,
+        credentials: `include`,
+        headers: {
+          'Content-type': `application/json`
+        },
+        body: JSON.stringify({
+          subscription: pushSubscription,
+        })
+      })
+
+      return res.status === 201;
+      
+    } catch (err) {
+      
+      console.error(`Couldn't submit push subscription:`, err);
+      return false;
+      
+    }
+    
     
   }
 
@@ -14,9 +68,9 @@ export default class API {
     try {
       
       res = await fetch(this.baseUrl + `/auth/check`, {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
+        method: `GET`,
+        mode: `cors`,
+        credentials: `include`,
       })
 
     } catch (err) {
@@ -46,11 +100,11 @@ export default class API {
     try {
       
       res = await fetch(this.baseUrl + `/auth/local`, {
-        mode: 'cors',
-        method: 'POST',
-        credentials: 'include',
+        mode: `cors`,
+        method: `POST`,
+        credentials: `include`,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `application/json`,
         },
         body: JSON.stringify({
           username: username,
@@ -82,11 +136,11 @@ export default class API {
     return new Promise((resolve, reject) => {
 
         fetch(this.apiEndpoint + `/progress`, {
-          mode: 'cors',
-          method: 'GET',
-          credentials: 'include',
+          mode: `cors`,
+          method: `GET`,
+          credentials: `include`,
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': `application/json`,
           },
         })
         .then(response => {
@@ -107,7 +161,7 @@ export default class API {
               status: `failed`,
             }],
           })
-          // return reject(`Couldn't fetch progress!`);
+          // return reject(`Couldn`t fetch progress!`);
         })
     
     })
@@ -117,11 +171,11 @@ export default class API {
     return new Promise((resolve, reject) => {
 
       fetch(this.apiEndpoint + `/downloads/${id}`, {
-        mode: 'cors',
-        method: 'GET',
-        credentials: 'include',
+        mode: `cors`,
+        method: `GET`,
+        credentials: `include`,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `application/json`,
         },
       })
       .then(response => {
@@ -141,14 +195,14 @@ export default class API {
   submitDownload(download) {
     return new Promise((resolve, reject) => {
     
-      download.mkdir = true; // enable creation of new folders (directories are fetched from the API, so this shouldn't cause any issues)
+      download.mkdir = true; // enable creation of new folders (directories are fetched from the API, so this shouldn`t cause any issues)
       
       fetch(this.apiEndpoint + `/download`, {
-        mode: 'cors',
-        method: 'POST',
-        credentials: 'include',
+        mode: `cors`,
+        method: `POST`,
+        credentials: `include`,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `application/json`,
         },
         body: JSON.stringify(download)
       })
@@ -191,14 +245,14 @@ export default class API {
     return new Promise((resolve, reject) => {
     
       fetch(this.apiEndpoint + `/download/${id}`, {
-        mode: 'cors',
-        method: 'PATCH',
-        credentials: 'include',
+        mode: `cors`,
+        method: `PATCH`,
+        credentials: `include`,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `application/json`,
         },
         body: JSON.stringify({
-          action: 'pause',
+          action: `pause`,
         })
       })
       .then(response => {
@@ -219,14 +273,14 @@ export default class API {
     return new Promise((resolve, reject) => {
     
       fetch(this.apiEndpoint + `/download/${id}`, {
-        mode: 'cors',
-        method: 'PATCH',
-        credentials: 'include',
+        mode: `cors`,
+        method: `PATCH`,
+        credentials: `include`,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `application/json`,
         },
         body: JSON.stringify({
-          action: 'resume',
+          action: `resume`,
         })
       })
       .then(response => {
@@ -247,14 +301,14 @@ export default class API {
     return new Promise((resolve, reject) => {
     
       fetch(this.apiEndpoint + `/download/${id}`, {
-        mode: 'cors',
-        method: 'PATCH',
-        credentials: 'include',
+        mode: `cors`,
+        method: `PATCH`,
+        credentials: `include`,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `application/json`,
         },
         body: JSON.stringify({
-          action: 'stop',
+          action: `stop`,
         })
       })
       .then(response => {
@@ -278,9 +332,9 @@ export default class API {
     try {
       
       res = await fetch(this.apiEndpoint + `/directoryListing`, {
-        mode: 'cors',
-        method: 'GET',
-        credentials: 'include',
+        mode: `cors`,
+        method: `GET`,
+        credentials: `include`,
       });
 
     } catch (err) {
@@ -298,9 +352,9 @@ export default class API {
     try {
       
       res = await fetch(this.apiEndpoint + `/fileSize/${encodeURIComponent(encodeURIComponent(url))}`, {
-        mode: 'cors',
-        method: 'GET',
-        credentials: 'include',
+        mode: `cors`,
+        method: `GET`,
+        credentials: `include`,
       });
 
     } catch (err) {

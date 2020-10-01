@@ -8,6 +8,13 @@
       Progress Overview
     </h2>
 
+    <button
+      class="w-auto h-10 font-bold text-lg bg-green-300 rounded-lg"
+      @click="testPush"
+    >
+      <span class="p-4">{{ pushButtonText }}</span>
+    </button>
+
     <ProgressCard
       :key="index"
       v-for="(item, index) of allItems"
@@ -40,6 +47,7 @@ export default {
   data: function() {
     return {
       pollingIntervalID: undefined,
+      pushButtonText: `Subcribe to push!`,
     }
   },
   computed: {
@@ -67,6 +75,21 @@ export default {
       handler: function() {
         console.log(`this.allItems:`, this.allItems);
       }
+    }
+  },
+  methods: {
+    async testPush() {
+
+      let success = this.$store.dispatch(`subscribeToPush`);
+
+      this.pushButtonText = success ? `Successfully subscribed to push!` : `Couldn't subscribe to push :/`;
+
+      if (success) {
+        console.log(`Successfully subscribed to push!`);
+      } else {
+        console.warn(`Couldn't subscribe to push :/`);
+      }
+      
     }
   },
   mounted: function() {

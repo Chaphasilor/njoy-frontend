@@ -17,3 +17,33 @@ if (workbox) {
 }
 
 console.log(`Custom service worker running!`);
+
+self.addEventListener('push', function(event) {
+  let data = {};
+  console.log(event.data);
+  if (event.data) {
+    data = event.data.json();
+  }
+  event.waitUntil(self.registration.showNotification(data.title, {
+    body: data.body
+  }));
+});
+
+self.addEventListener('pushsubscriptionchange', function(event) {
+  console.log('Subscription expired');
+  event.waitUntil(
+    self.registration.pushManager.subscribe({ userVisibleOnly: true })
+    .then(function(subscription) {
+      console.log('Subscribed after expiration', subscription.endpoint);
+      return fetch('register', {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          endpoint: subscription.endpoint
+        })
+      });
+    })
+  );
+});
