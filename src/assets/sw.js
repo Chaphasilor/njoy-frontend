@@ -24,6 +24,7 @@ self.addEventListener('push', function(event) {
   if (event.data) {
     data = event.data.json();
   }
+  console.log(`Notification data:`, data);
   event.waitUntil(self.registration.showNotification(data.title, {
     body: data.body,
     badge: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-maskable-192x192.png`,
