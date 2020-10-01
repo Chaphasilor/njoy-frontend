@@ -12,12 +12,16 @@
       class="w-full h-full px-16 flex flex-col justify-center"
     >
 
-      <div>
+      <form
+        action="#"
+        @submit="submit"
+      >
 
         <TextField
           class="my-6"
           placeholder="Username"
           v-model="username"
+          @keypress.enter.native="submit"
         />
 
         <TextField
@@ -25,6 +29,7 @@
           :is-password="true"
           placeholder="Password"
           v-model="password"
+          @keypress.enter.native="submit"
         />
 
         <CTAButton
@@ -34,7 +39,7 @@
           @click.native="submit"
         />
 
-      </div>
+      </form>
 
     </div>
 
