@@ -88,7 +88,7 @@ export default {
   },
   mounted: function() {
 
-    this.$store.dispatch('navigate', { target: 'login' });
+    this.$store.dispatch('navigate', { target: this.$route.name });
 
   },
 }

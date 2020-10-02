@@ -228,16 +228,16 @@ export default new Vuex.Store({
     },
     navigate(context, { target }) {
       switch (target) {
-        case 'progress':
+        case 'Progress':
           context.commit('SET_ACTIVE_VIEW', VIEWS.PROGRESS);
           break;
-        case 'download':
+        case 'Download':
           context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
           break;
-        case 'download-details':
+        case 'DownloadDetails':
           context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD_DETAILS);
           break;
-        case 'login':
+        case 'Login':
           context.commit('SET_ACTIVE_VIEW', VIEWS.LOGIN);
           break;
       
@@ -440,20 +440,20 @@ export default new Vuex.Store({
       let view;
       switch (state.activeView) {
         case VIEWS.PROGRESS:
-          view = 'progress';
+          view = 'Progress';
           break;
         case VIEWS.DOWNLOAD:
-          view = 'download';
+          view = 'Download';
           break;
         case VIEWS.DOWNLOAD_DETAILS:
-          view = 'download-details';
+          view = 'DownloadDetails';
           break;
         case VIEWS.LOGIN:
-          view = 'login';
+          view = 'Login';
           break;
       
         default:
-          view = 'progress';
+          view = 'Progress';
           break;
       }
       return view;

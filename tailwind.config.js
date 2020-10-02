@@ -32,11 +32,17 @@ module.exports = {
       },
       boxShadow: {
         'top': '0 -2px 4px 0 rgba(0, 0, 0, 0.15)',
+        'top-bottom': ''
       },
       borderRadius: {
         'xl': '25px',
         't-xl': '25px 25px 0 0',
         'parent': 'inherit',
+      },
+      strokeWidth: {
+        'inherit': 'inherit',
+        '1.5': '1.5',
+        '2.5': '2.5',
       },
       spacing: {
         'xs': '.125rem',
@@ -49,10 +55,12 @@ module.exports = {
         '7/8': '87.5%',
       },
       height: {
-        'navbar': '3.5rem',
+        'navbar': '5rem',
       },
     }, 
   },
-  variants: {},
+  variants: {
+    strokeWidth: ({ after }) => after(['active', 'focus']),
+  },
   plugins: [],
 }

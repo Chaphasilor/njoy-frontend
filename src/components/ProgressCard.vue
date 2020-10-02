@@ -8,7 +8,7 @@
           download: download
         }
       }"
-      :class="`mx-4 my-2 bg-white rounded-xl shadow-md flex flex-row flex-wrap justify-between p-5 leading-9`"
+      :class="`mx-4 my-2 bg-white rounded-xl shadow-md border flex flex-row flex-wrap justify-between p-5 leading-9`"
     >
       <div
         :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8 text-${download.textColor}`"

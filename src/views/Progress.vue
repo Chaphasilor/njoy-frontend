@@ -2,18 +2,47 @@
   <div
     class="h-screen pb-32 bg-eggshell"
   >
-    <h2
-      class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"    
-    >
-      Progress Overview
-    </h2>
 
-    <button
+    <div
+      class="w-full h-16 p-4 flex flex-row justify-between"
+    >
+
+      <h2
+        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"    
+      >
+        Progress Overview
+      </h2>
+
+      <svg
+        class="w-8 h-8 text-dark stroke-current stroke-1.5 active:stroke-2 transition-colors duration-300"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>Settings</title>
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <circle cx="6" cy="10" r="2" />
+        <line x1="6" y1="4" x2="6" y2="8" />
+        <line x1="6" y1="12" x2="6" y2="20" />
+        <circle cx="12" cy="16" r="2" />
+        <line x1="12" y1="4" x2="12" y2="14" />
+        <line x1="12" y1="18" x2="12" y2="20" />
+        <circle cx="18" cy="7" r="2" />
+        <line x1="18" y1="4" x2="18" y2="5" />
+        <line x1="18" y1="9" x2="18" y2="20" />
+      </svg>
+      
+    </div>
+  
+
+    <!-- <button
       class="w-auto h-10 font-bold text-lg bg-green-300 rounded-lg"
       @click="testPush"
     >
       <span class="p-4">{{ pushButtonText }}</span>
-    </button>
+    </button> -->
 
     <ProgressCard
       :key="index"
@@ -94,7 +123,7 @@ export default {
   },
   mounted: function() {
 
-    this.$store.dispatch('navigate', { target: 'progress' });
+    this.$store.dispatch('navigate', { target: this.$route.name });
 
     this.$store.dispatch('fetchProgress');
     this.pollingIntervalID = setInterval(() => {

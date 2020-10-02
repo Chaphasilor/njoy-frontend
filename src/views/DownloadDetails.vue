@@ -254,7 +254,7 @@ export default {
   },
   mounted: function() {
 
-    this.$store.dispatch('navigate', { target: 'download-details' });
+    this.$store.dispatch('navigate', { target: this.$route.name });
 
     this.$store.dispatch('fetchProgress');
     this.pollingIntervalID = setInterval(() => {
