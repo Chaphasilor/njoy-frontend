@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen pb-32 bg-eggshell"
+    class="h-screen pb-32 bg-white"
   >
     <h2
       class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"    

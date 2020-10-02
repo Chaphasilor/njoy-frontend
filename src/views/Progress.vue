@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen pb-32 bg-eggshell"
+    class="h-screen pb-32 bg-white"
   >
 
     <div

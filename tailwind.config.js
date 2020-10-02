@@ -13,7 +13,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        'eggshell': '#FFFAFA',
         'dark': '#3D3D3D',
         'accent': '#27E19E',
         'cta-green': '#40D428',

@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="w-full h-full text-base bg-eggshell font-quicksand"
+    class="w-full h-full text-base bg-white font-quicksand"
   >
 
     <!-- <div
