@@ -22,17 +22,10 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-const VIEWS = {
-  PROGRESS: 0,
-  DOWNLOAD: 1,
-  DOWNLOAD_DETAILS: 2,
-  LOGIN: 3,
-}
-
 export default new Vuex.Store({
   state: {
     api: undefined,
-    activeView: VIEWS.PROGRESS,
+    activeView: undefined,
     rootDirectoryTree: {
       name: 'ROOT',
       subdirectories: [
@@ -170,6 +163,13 @@ export default new Vuex.Store({
     downloads: [],
     authenticated: undefined,
     swRegistration: undefined,
+    settings: {
+      notifications: {
+        text: `Push Notifications`,
+        value: false,
+        timeout: 350,
+      }
+    }
   },
   mutations: {
     SET_API(state, newApi) {
@@ -198,7 +198,10 @@ export default new Vuex.Store({
     },
     SET_SERVICEWORKER_REGISTRATION(state, newRegistration) {
       state.swRegistration = newRegistration;
-    }
+    },
+    SET_SETTINGS(state, newSettings) {
+      state.settings = newSettings;
+    },
   },
   actions: {
     async mountApi(context) {
@@ -227,27 +230,7 @@ export default new Vuex.Store({
       
     },
     navigate(context, { target }) {
-      switch (target) {
-        case 'Progress':
-          context.commit('SET_ACTIVE_VIEW', VIEWS.PROGRESS);
-          break;
-        case 'Download':
-          context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
-          break;
-        case 'DownloadDetails':
-          context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD_DETAILS);
-          break;
-        case 'Login':
-          context.commit('SET_ACTIVE_VIEW', VIEWS.LOGIN);
-          break;
-      
-        default:
-          context.commit('SET_ACTIVE_VIEW', VIEWS.PROGRESS);
-          break;
-      }
-    },
-    nativgateToDownload(context) {
-      context.commit('SET_ACTIVE_VIEW', VIEWS.DOWNLOAD);
+      context.commit('SET_ACTIVE_VIEW', target);
     },
     async checkAuthenticated(context) {
 
@@ -432,35 +415,47 @@ export default new Vuex.Store({
         return false;
       }
       
-    }
+    },
+    async unsubscribePush(context) {
+
+      let pushSubscription = await context.getters.sw.pushManager.getSubscription();
+      console.log(`pushSubscription:`, pushSubscription);
+
+      if (null === pushSubscription) {
+        return true;
+      } else {
+        return await pushSubscription.unsubscribe();
+      }
+      
+      
+    },
+    //TODO move to a separate store
+    updateSettings(context, { settingsName, value }) {
+
+      console.log(`settingsName:`, settingsName);
+      console.log(`newValue:`, value);
+
+      let settings = this.getters.settings;
+
+      switch (settingsName) {
+      
+        default:
+          settings[settingsName].value = value;
+          break;
+      }
+
+      context.commit(`SET_SETTINGS`, settings);
+      localStorage.setItem(`settings`, JSON.stringify(settings));
+      
+    },
   },
   getters: {
     api: state => state.api,
-    activeView: state => {
-      let view;
-      switch (state.activeView) {
-        case VIEWS.PROGRESS:
-          view = 'Progress';
-          break;
-        case VIEWS.DOWNLOAD:
-          view = 'Download';
-          break;
-        case VIEWS.DOWNLOAD_DETAILS:
-          view = 'DownloadDetails';
-          break;
-        case VIEWS.LOGIN:
-          view = 'Login';
-          break;
-      
-        default:
-          view = 'Progress';
-          break;
-      }
-      return view;
-    },
+    activeView: state => state.activeView,
     rootDirectoryTree: state => state.rootDirectoryTree,
     downloads: state => state.downloads,
     authStatus: state => state.authenticated,
     sw: state => state.swRegistration,
+    settings: state => state.settings,
   }
 })

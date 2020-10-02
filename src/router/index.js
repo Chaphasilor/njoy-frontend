@@ -6,6 +6,7 @@ import Progress from '../views/Progress.vue'
 import Download from '../views/Download.vue'
 import DownloadDetails from '../views/DownloadDetails.vue'
 import Login from '../views/Login.vue'
+import Settings from '../views/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings
   },
 ]
 

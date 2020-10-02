@@ -12,7 +12,7 @@
       :class="`${!navigationPossible ? `opacity-50 cursor-not-allowed` : ``} ${(currentView == view.routeName ? 'text-accent' : 'text-dark')} w-1/5 h-auto mx-10 border-accent pt-2 stroke-1.5 active:stroke-2`"
     >
       <svg
-        class="w-8 h-8 m-auto my-0 stroke-current stroke-inherit transition-colors duration-300"
+        class="w-8 h-8 m-auto my-0 stroke-current stroke-inherit"
         v-html="view.icon.paths"
         width="16"
         height="19"

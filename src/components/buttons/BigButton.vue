@@ -7,7 +7,7 @@
     >
       <div
         v-if="type == 'single'"
-        class="w-full h-full bg-bigbutton-green flex flex-col justify-center"
+        class="w-full h-full bg-gradient-to-br from-cta-green to-cta-green-stop flex flex-col justify-center"
       >
         <img
           src="@/assets/icons/file_single.svg"
@@ -22,7 +22,7 @@
       </div>
       <div
         v-if="type == 'batch'"
-        class="w-full h-full bg-bigbutton-yellow flex flex-col justify-center"
+        class="w-full h-full bg-gradient-to-br from-cta-yellow to-cta-yellow-stop flex flex-col justify-center"
       >
         <img
           src="@/assets/icons/file_batch.svg"
@@ -68,12 +68,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .bg-bigbutton-green {
-    background: linear-gradient(111.34deg, #40D428 0%, #5CE346 100%);
-  }
-  .bg-bigbutton-yellow {
-    background: linear-gradient(111.34deg, #D4C328 0%, #E3DD46 100%);
-  }
-</style>
