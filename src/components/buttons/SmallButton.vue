@@ -1,6 +1,7 @@
 <template>
   <div
     class="p-xs"
+    v-haptic
   >
     <div
       class="w-full h-full rounded-lg overflow-hidden text-center text-lg text-white font-bold antialiased shadow-md"
@@ -54,32 +55,23 @@ export default {
 
       switch (this.type) {
         case 'good':
-          color = 'bg-smallbutton-green';
+          color = 'bg-gradient-to-br from-cta-green to-cta-green-stop';
           break;
         case 'action':
-          color = 'bg-smallbutton-yellow';
+          color = 'bg-gradient-to-br from-cta-yellow to-cta-yellow-stop';
           break;
         case 'bad':
-          color = 'bg-smallbutton-red';
+          color = 'bg-gradient-to-br from-cta-red to-cta-red-stop';
           break;
       
         default:
-          color = 'bg-smallbutton-green';
+          color = 'bg-gradient-to-br from-cta-green to-cta-green-stop';
           break;
       }
 
       return color;
       
     }
-  }
+  },
 }
 </script>
-
-<style>
-  .bg-smallbutton-green {
-    background: linear-gradient(111.34deg, #40D428 0%, #5CE346 100%);
-  }
-  .bg-smallbutton-yellow {
-    background: linear-gradient(111.34deg, #D4C328 0%, #E3DD46 100%);
-  }
-</style>

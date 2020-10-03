@@ -1,5 +1,4 @@
 <template>
-
   <!-- Behaves like a normal router link, but can be prevented from routing if click propagation is prevented -->
   <div
     @click="navigate"
@@ -22,6 +21,7 @@ export default {
   methods: {
     navigate() {
 
+      this.$emit(`click`);
       this.$router.push(this.to);
 
     }

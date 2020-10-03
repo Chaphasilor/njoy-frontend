@@ -42,7 +42,23 @@
       :value="value"
       :timeout="timeout"
       @input="$emit(`change`, $event)"
+      v-haptic
+      @failed="log"
     />
+
+    <!-- <BasicToggle
+      class=""
+      :name="`toggle-${name}`"
+      :value="value"
+      :timeout="timeout"
+      @input="$emit(`change`, $event)"
+      This caueses the 'error' pattern to occur every time v-haptic would trigger. Removing v-haptic will remove vibration alltogether
+      v-haptic
+      v-haptic:error="{
+        trigger: `failed`,
+      }"
+      @failed="log"
+    /> -->
     
   </div>
 </template>
@@ -73,6 +89,12 @@ export default {
       type: Number,
       required: true,
     },
+  },
+  methods: {
+    log() {
+      // alert(`test`);
+      console.log(`test`);
+    }
   }
 }
 </script>

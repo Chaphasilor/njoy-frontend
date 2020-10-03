@@ -257,7 +257,7 @@ const store = new Vuex.Store({
       if (process.env.NODE_ENV === `production`) {
         api = new API(baseUrl);
       } else {
-        api = new API(`http://localhost:70`);
+        api = new API(`http://192.168.2.129:70`);
       }
 
       context.commit(`SET_API`, api);
@@ -414,9 +414,9 @@ const store = new Vuex.Store({
     },
     async subscribeToPush(context) {
 
-      if (process.env.NODE_ENV !== `production`) {
-        return true;
-      }
+      // if (process.env.NODE_ENV !== `production`) {
+      //   return true;
+      // }
 
       let vapidPublicKey;
       try {

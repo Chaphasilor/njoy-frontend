@@ -26,6 +26,8 @@ export default {
     return {
       id: this.makeId(16),
       checked: undefined,
+      // vibrationLength: 25,
+      // errorVibration: [50, 75, 50],
     }
   },
   props: {
@@ -67,10 +69,20 @@ export default {
       // emit the value that should be switched to
       this.checked = event.target.checked;
       this.$emit(`input`, event.target.checked);
+
+      // navigator.vibrate(this.vibrationLength);
+      
       // but keep the current settings value until the setting is updated in the store
       setTimeout(() => {
+
         console.log(`this.checked:`, this.checked);
+        if (this.checked !== this.value) {
+          // if, after the timeout, 'this.value' (which is loaded from the store) isn't the same as the current value, the settings couldn't be changed
+          // navigator.vibrate(this.errorVibration);
+          this.$emit(`failed`);
+        }
         this.checked = this.value;
+
       }, this.timeout)
 
       

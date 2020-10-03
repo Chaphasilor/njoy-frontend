@@ -18,6 +18,7 @@
         src="@/assets/icons/back.svg"
         alt="Back"
         @click="$router.go(-1);"
+        v-haptic
       >
       
     </div>
@@ -59,7 +60,7 @@ export default {
   name: 'Settings',
   components: {
     SettingsItem,
-    SimpleDialog
+    SimpleDialog,
   },
   data: function() {
     return {

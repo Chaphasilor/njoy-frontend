@@ -1,6 +1,7 @@
 <template>
   <div
     class="p-xs"
+    v-haptic
   >
     <div
       class="w-full h-full rounded-lg overflow-hidden text-center text-lg text-white font-medium antialiased cursor-pointer"
@@ -78,6 +79,6 @@ export default {
     // iconSource: function() {
     //   return this.iconSourceURLs[this.type];
     // }
-  }
+  },
 }
 </script>

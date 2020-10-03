@@ -1,11 +1,22 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import VueHaptic from 'vue-haptic';
 import "@/assets/css/tailwind.css";
-import './registerServiceWorker'
+
+import './registerServiceWorker';
 
 Vue.config.productionTip = false
+
+Vue.use(VueHaptic, {
+  patterns: {
+    success: 25,
+    error: [50, 75, 50],
+    blip: 10,
+    default: 25,
+  }
+})
 
 new Vue({
   router,

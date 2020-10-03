@@ -21,6 +21,7 @@
         stroke-linejoin="round"
         xmlns="http://www.w3.org/2000/svg"
         @click="$router.push({name: `Settings`})"
+        v-haptic
       >
         <title>Settings</title>
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -44,15 +45,16 @@
     />
 
     <span
-      class="inline-block w-full text-center font-quicksand-bold tracking-tighter font-bold text-lg text-dark opacity-50"
+      class="inline-block w-full text-center font-quicksand-bold tracking-tighter font-bold text-lg text-dark opacity-25"
     >
       OR
     </span>
 
     <BigButton
       @click.native="type = 'batch'"
-      class="h-56 mx-6 my-4 opacity-50"
+      class="h-56 mx-6 my-4 opacity-25"
       type="batch"
+      v-haptic="0"
     />
 
     <transition
@@ -72,9 +74,13 @@
         :filename="$route.query.title"
         @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
         @download-submitted="handleDownloadSubmitted"
-        class="fixed bottom-0 left-0 w-full h-full"
+        class="fixed bottom-0 left-0 w-full h-full z-10"
       />
     </transition>
+
+    <Navbar
+      class="fixed bottom-0"
+    />
 
   </div>
 </template>
@@ -83,12 +89,14 @@
 
 import BigButton from '@/components/buttons/BigButton';
 import FileDialog from '@/components/dialogs/FileDialog';
+import Navbar from '@/components/Navbar';
 
 export default {
   name: 'Download',
   components: {
     BigButton,
     FileDialog,
+    Navbar,
   },
   data: function() {
     return {

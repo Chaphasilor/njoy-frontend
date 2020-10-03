@@ -21,6 +21,7 @@
         stroke-linejoin="round"
         xmlns="http://www.w3.org/2000/svg"
         @click="$router.push({name: `Settings`})"
+        v-haptic
       >
         <title>Settings</title>
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -62,17 +63,23 @@
       </div>
     </div>
 
+    <Navbar
+      class="fixed bottom-0"
+    />
+
   </div>
 </template>
 
 <script>
 
 import ProgressCard from '@/components/ProgressCard';
+import Navbar from '@/components/Navbar';
 
 export default {
   name: 'Progress',
   components: {
     ProgressCard,
+    Navbar,
   },
   data: function() {
     return {
