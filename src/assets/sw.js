@@ -25,15 +25,33 @@ self.addEventListener('push', function(event) {
     data = event.data.json();
   }
   console.log(`Notification data:`, data);
-  event.waitUntil(self.registration.showNotification(data.title, {
-    body: data.body,
-    badge: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-maskable-192x192.png`,
-    icon: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-512x512.png`,
-    lang: `en-US`,
-    requireInteraction: false,
-    silent: false,
-    timestamp: data.timestamp || Date.now(),
-  }));
+  
+  event.waitUntil(
+    clients.matchAll({
+      includeUncontrolled: true,
+      type: `window`,
+    }).then(clients => {
+
+      console.log(`clients:`, clients);
+
+      let clientsThatCanSeeProgress = clients.filter(client => [`/`, `/progress`].includes((new URL(client.url)).pathname));
+      
+      if (clientsThatCanSeeProgress.length === 0) {
+
+        self.registration.showNotification(data.title, {
+          body: data.body,
+          badge: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-maskable-192x192.png`,
+          icon: `https://download-manager.chaphasilor.xyz/img/icons/android-chrome-512x512.png`,
+          lang: `en-US`,
+          requireInteraction: false,
+          silent: false,
+          timestamp: data.timestamp || Date.now(),
+        })
+        
+      }
+
+    })
+  );
 });
 
 self.addEventListener('pushsubscriptionchange', function(event) {

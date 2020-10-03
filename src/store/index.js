@@ -174,7 +174,7 @@ const store = new Vuex.Store({
         title: `Push Notifications`,
         description: `Receive push notifications when a download is finished or there is a problem downloading a file`,
         value: false,
-        timeout: 350,
+        timeout: 500,
         onChange: async (newSetting) => {
 
           if (newSetting.value) {

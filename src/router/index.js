@@ -13,6 +13,7 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
+    alias: ['/progress'],
     name: 'Progress',
     component: Progress
   },
