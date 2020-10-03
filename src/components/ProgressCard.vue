@@ -9,10 +9,14 @@
         }
       }"
       :class="`mx-4 my-2 bg-white rounded-xl shadow-md border flex flex-row flex-wrap justify-between p-5 leading-9`"
+      v-shared-element:[download.id]
     >
 
       <div
-        :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8 text-${download.textColor}`"
+        :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8 ${download.textColor.red.includes(download.status) ? `text-cta-red` : download.textColor.yellow.includes(download.status) ? `text-cta-yellow` : download.textColor.green.includes(download.status) ? `text-cta-green` : `text-dark` }`"
+        v-shared-element:[`${download.id}-title`]="{
+          zIndex: 2,
+        }"
       >
         {{ download.filename }}
       </div>
@@ -29,7 +33,6 @@
 
       <div
         :class="(!progressBarStates.includes(download.status) ? 'w-1/4' : 'w-1/8') + ' text-right h-8'"
-        v-shared-element:[`${download.id}-statusString`]
       >
         {{ statusString }}
       </div>

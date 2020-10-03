@@ -23,34 +23,40 @@ export default class DownloadItem {
 
   get textColor() {
 
-    let color = `dark`;
-    
-    switch (this.status) {
-      case `paused`:
-        color = `cta-yellow`
-        break;
-      case `error`:
-        color = `cta-red`
-        break;
-      case `failed`:
-        color = `cta-red`
-        break;
-      case `incomplete`:
-        color = `cta-red`
-        break;
-      case `completed`:
-        color = `cta-green`
-        break;
-      case `duplicate`:
-        color = `cta-yellow`
-        break;
-    
-      default:
-        color = `dark`;
-        break;
-    }
+    // let color = `dark`;
 
-    return color;
+    return {
+      red: ['error', 'failed', 'incomplete'],
+      yellow: ['paused', 'duplicate'],
+      green: ['completed'],
+    }
+    
+    // switch (this.status) {
+    //   case `paused`:
+    //     color = `cta-yellow`
+    //     break;
+    //   case `error`:
+    //     color = `cta-red`
+    //     break;
+    //   case `failed`:
+    //     color = `cta-red`
+    //     break;
+    //   case `incomplete`:
+    //     color = `cta-red`
+    //     break;
+    //   case `completed`:
+    //     color = `cta-green`
+    //     break;
+    //   case `duplicate`:
+    //     color = `cta-yellow`
+    //     break;
+    
+    //   default:
+    //     color = `dark`;
+    //     break;
+    // }
+
+    // return color;
     
   }
   

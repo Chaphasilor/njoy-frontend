@@ -21,6 +21,9 @@
 
       <div
         class="w-full text-left mb-2 font-semibold break-all h-8 overflow-hidden"
+        v-shared-element:[`${download.id}-title`]="{
+          zIndex: 2,
+        }"
       >
         {{ download.filename }}
       </div>
