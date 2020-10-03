@@ -39,6 +39,9 @@ module.exports = {
         't-xl': '25px 25px 0 0',
         'parent': 'inherit',
       },
+      borderWidth: {
+        '1': '1px',
+      },
       strokeWidth: {
         'inherit': 'inherit',
         '1.5': '1.5',

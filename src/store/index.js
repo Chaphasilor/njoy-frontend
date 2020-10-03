@@ -171,7 +171,8 @@ const store = new Vuex.Store({
     swRegistration: undefined,
     settings: {
       notifications: {
-        text: `Push Notifications`,
+        title: `Push Notifications`,
+        description: `Receive push notifications when a download is finished or there is a problem downloading a file`,
         value: false,
         timeout: 350,
         onChange: async (newSetting) => {
@@ -187,7 +188,7 @@ const store = new Vuex.Store({
         }
       },
       test: {
-        text: `Test Setting`,
+        title: `Test Setting`,
         value: true,
         timeout: 350,
         onChange: (newSetting) => {
@@ -195,7 +196,7 @@ const store = new Vuex.Store({
         }
       },
       test2: {
-        text: `Test Setting 2`,
+        title: `Test Setting 2`,
         value: false,
         timeout: 600,
         onChange: (newSetting) => {
@@ -315,12 +316,7 @@ const store = new Vuex.Store({
       context.commit('SET_ROOT_DIRECTORY_TREE', tree);
 
     },
-    createNewDirectory(context, path, name) {
-      //TODO create via API
-      console.log(`path:`, path);
-      console.log(`name:`, name);
-      context.actions.loadRootDirectoryTree();
-    },
+    //TODO rename
     createNewDummyDirectory(context, { path, name, newRootDirectoryTree }) {
       console.log(`path:`, path);
       console.log(`name:`, name);
@@ -469,7 +465,7 @@ const store = new Vuex.Store({
     updateSetting(context, { settingName, value }) {
 
       context.commit(`SET_SETTING`, { settingName, value});
-      context.actions.persistSettings();
+      context.dispatch(`persistSettings`);
       
     },
     persistSettings(context) {
@@ -496,7 +492,7 @@ const store = new Vuex.Store({
 
           // overwrite any settings that was saved with the saved value
           resurrectedSettings.forEach(resurrectedSetting => {
-            context.actions.updateSetting({
+            context.dispatch(`updateSetting`, {
               settingName: resurrectedSetting.name,
               value: resurrectedSetting.value,
             });

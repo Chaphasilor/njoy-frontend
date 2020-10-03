@@ -25,7 +25,7 @@
     <SettingsItem
       v-for="([settingName, settingValue]) of Object.entries(settings)"
       :key="settingName"
-      :text="settingValue.text"
+      :title="settingValue.title"
       :name="settingName"
       :value="settingValue.value"
       :timeout="settingValue.timeout"
@@ -33,6 +33,18 @@
         settingName,
         value: $event,
       })"
+      @show-description="openDescription(settingValue.title, settingValue.description)"
+    />
+
+    <SimpleDialog
+      v-if="showDescription"
+      class="fixed top-0 left-0 w-full h-full p-4"
+      :title="description.title"
+      :text="description.text"
+      button-label="Got It!"
+      :level="0"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
     />
 
   </div>
@@ -41,49 +53,66 @@
 <script>
 
 import SettingsItem from '@/components/SettingsItem.vue';
+import SimpleDialog from '@/components/dialogs/SimpleDialog.vue';
 
 export default {
   name: 'Settings',
   components: {
     SettingsItem,
+    SimpleDialog
+  },
+  data: function() {
+    return {
+      description: {
+        title: ``,
+        text: ``,
+      },
+      openedDialogs: [
+        {
+          level: 0,
+          type: undefined,
+        },
+      ]
+    }
   },
   computed: {
     settings() {
       return this.$store.getters.settings;
     },
+    showDescription() {
+      return this.openedDialogs[0].type === `description`;
+    },
   },
   methods: {
-    // settingsHandler({ settingName, newValue }) {
+    backHandler(next) {
 
-    //   switch (settingName) {
-    //     case `notifications`:
-          
-    //       break;
-      
-    //     default:
-    //       break;
-    //   }
+      let level = this.openedDialogs.length - 1;
 
-    // },
-    async notificationSettingsChanged({ settingName, value }) {
+      console.log(`this.openedDialogs[0].type:`, this.openedDialogs[0].type);
 
-      if (this.settings[settingName].value !== value) {
+      while (level >= 0) {
 
-        if (value) {
+        if (undefined != this.openedDialogs[level].type) {
 
-          // if subscribing doesn't work (i.e. user declines permission, the setting is disabled)
-          value = await this.$store.dispatch(`subscribeToPush`);
-          
+          this.openedDialogs[level].type = undefined;
+          return next(false);
+
         } else {
-          value = !await this.$store.dispatch(`unsubscribePush`);
+          level--;
         }
 
-        this.$store.dispatch(`updateSetting`, {
-          settingName,
-          value,
-        })
-        
       }
+
+      return next();
+      
+    },
+    openDescription(title, text) {
+
+      this.description = {
+        title,
+        text,
+      }
+      this.openedDialogs[0].type = `description`;
 
     }
   },
@@ -91,6 +120,11 @@ export default {
 
     this.$store.dispatch('navigate', { target: this.$route.name });
     
+  },
+  beforeRouteLeave(to, from, next) {
+    console.log(`to:`, to);
+    console.log(`from:`, from);
+    this.backHandler(next);
   },
   beforeDestroy: function() {
 
