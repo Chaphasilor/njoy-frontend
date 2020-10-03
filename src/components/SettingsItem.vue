@@ -9,12 +9,12 @@
       {{ text }}
     </span>
 
-    <Toggle
+    <BasicToggle
       class=""
       :name="`toggle-${name}`"
       :value="value"
       :timeout="timeout"
-      @input="$emit(`change`, {settingsName: name, value: $event})"
+      @input="$emit(`change`, $event)"
     />
     
   </div>
@@ -22,12 +22,12 @@
 
 <script>
 
-import Toggle from '@/components/inputs/Toggle.vue'
+import BasicToggle from '@/components/inputs/BasicToggle.vue'
 
 export default {
   name: `SettingsItem`,
   components: {
-    Toggle,
+    BasicToggle,
   },
   props: {
     text: {

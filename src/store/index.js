@@ -7,6 +7,11 @@ Vue.use(Vuex)
 
 // HELPER METHODS
 
+// eslint-disable-next-line no-unused-vars
+function detachedCopy(reactiveObject) {
+  return JSON.parse(JSON.stringify(reactiveObject));
+}
+
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)
@@ -22,7 +27,8 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
+  strict: true,
   state: {
     api: undefined,
     activeView: undefined,
@@ -168,7 +174,34 @@ export default new Vuex.Store({
         text: `Push Notifications`,
         value: false,
         timeout: 350,
-      }
+        onChange: async (newSetting) => {
+
+          if (newSetting.value) {
+            // if subscribing doesn't work (i.e. user declines permission, the setting is disabled)
+            newSetting.value = await store.dispatch(`subscribeToPush`);
+          } else {
+            newSetting.value = !await store.dispatch(`unsubscribePush`);
+          }
+          store.dispatch(`updateSetting`, newSetting)
+          
+        }
+      },
+      test: {
+        text: `Test Setting`,
+        value: true,
+        timeout: 350,
+        onChange: (newSetting) => {
+          store.dispatch(`updateSetting`, newSetting);
+        }
+      },
+      test2: {
+        text: `Test Setting 2`,
+        value: false,
+        timeout: 600,
+        onChange: (newSetting) => {
+          store.dispatch(`updateSetting`, newSetting);
+        }
+      },
     }
   },
   mutations: {
@@ -199,8 +232,8 @@ export default new Vuex.Store({
     SET_SERVICEWORKER_REGISTRATION(state, newRegistration) {
       state.swRegistration = newRegistration;
     },
-    SET_SETTINGS(state, newSettings) {
-      state.settings = newSettings;
+    SET_SETTING(state, { settingName, value }) {
+      state.settings[settingName].value = value;
     },
   },
   actions: {
@@ -237,8 +270,7 @@ export default new Vuex.Store({
       console.log('checkAuthenticated called!');
       
       try {
-        let success = await context.getters.api.checkAuthenticated();
-        console.log(`success:`, success);
+        await context.getters.api.checkAuthenticated();
       } catch (err) {
         console.warn(err);
         context.commit('SET_AUTH_STATUS', false);
@@ -305,8 +337,6 @@ export default new Vuex.Store({
         console.warn(`Couldn't fetch data from API, using empty object...`);
         downloads = emptyObject;
       }
-
-      console.log(`downloads:`, downloads);
 
       downloads = [...downloads.active,...downloads.queued, ...downloads.finished, ...downloads.failed];
 
@@ -388,6 +418,10 @@ export default new Vuex.Store({
     },
     async subscribeToPush(context) {
 
+      if (process.env.NODE_ENV !== `production`) {
+        return true;
+      }
+
       let vapidPublicKey;
       try {
         vapidPublicKey = await context.getters.api.retrieveVapidKey();
@@ -395,7 +429,6 @@ export default new Vuex.Store({
         return false;
       }
       
-      console.log(vapidPublicKey);
       const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
       
       try {
@@ -418,8 +451,11 @@ export default new Vuex.Store({
     },
     async unsubscribePush(context) {
 
+      if (process.env.NODE_ENV !== `production`) {
+        return true;
+      }
+
       let pushSubscription = await context.getters.sw.pushManager.getSubscription();
-      console.log(`pushSubscription:`, pushSubscription);
 
       if (null === pushSubscription) {
         return true;
@@ -430,22 +466,46 @@ export default new Vuex.Store({
       
     },
     //TODO move to a separate store
-    updateSettings(context, { settingsName, value }) {
+    updateSetting(context, { settingName, value }) {
 
-      console.log(`settingsName:`, settingsName);
-      console.log(`newValue:`, value);
-
-      let settings = this.getters.settings;
-
-      switch (settingsName) {
+      context.commit(`SET_SETTING`, { settingName, value});
+      context.actions.persistSettings();
       
-        default:
-          settings[settingsName].value = value;
-          break;
-      }
+    },
+    persistSettings(context) {
 
-      context.commit(`SET_SETTINGS`, settings);
+      let settings = JSON.parse(JSON.stringify(context.getters.settings));
+      settings = Object.entries(settings);
+      settings = settings.map(([key, value]) => {
+        return {
+          name: key,
+          value: value.value,
+        }
+      })
+
       localStorage.setItem(`settings`, JSON.stringify(settings));
+      
+    },
+    resurrectSettings(context) {
+
+      let resurrectedSettings = localStorage.getItem(`settings`);
+      if (resurrectedSettings) {
+        try {
+
+          resurrectedSettings = JSON.parse(resurrectedSettings);
+
+          // overwrite any settings that was saved with the saved value
+          resurrectedSettings.forEach(resurrectedSetting => {
+            context.actions.updateSetting({
+              settingName: resurrectedSetting.name,
+              value: resurrectedSetting.value,
+            });
+          });
+
+        } catch (err) {
+          console.warn(`Couldn't resurrect settings!`);
+        }
+      }
       
     },
   },
@@ -459,3 +519,4 @@ export default new Vuex.Store({
     settings: state => state.settings,
   }
 })
+export default store;

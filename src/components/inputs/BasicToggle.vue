@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: `Toggle`,
+  name: `BasicToggle`,
   data: function() {
     return {
       id: this.makeId(16),

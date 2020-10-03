@@ -23,11 +23,16 @@
     </div>
   
     <SettingsItem
-      :text="settings.notifications.text"
-      name="notifications"
-      :value="settings.notifications.value"
-      :timeout="settings.notifications.timeout"
-      @change="notificationSettingsChanged"
+      v-for="([settingName, settingValue]) of Object.entries(settings)"
+      :key="settingName"
+      :text="settingValue.text"
+      :name="settingName"
+      :value="settingValue.value"
+      :timeout="settingValue.timeout"
+      @change="settingValue.onChange({
+        settingName,
+        value: $event,
+      })"
     />
 
   </div>
@@ -48,22 +53,21 @@ export default {
     },
   },
   methods: {
-    async testPush() {
+    // settingsHandler({ settingName, newValue }) {
 
-      let success = this.$store.dispatch(`subscribeToPush`);
-
-      this.pushButtonText = success ? `Successfully subscribed to push!` : `Couldn't subscribe to push :/`;
-
-      if (success) {
-        console.log(`Successfully subscribed to push!`);
-      } else {
-        console.warn(`Couldn't subscribe to push :/`);
-      }
+    //   switch (settingName) {
+    //     case `notifications`:
+          
+    //       break;
       
-    },
-    async notificationSettingsChanged({ settingsName, value }) {
+    //     default:
+    //       break;
+    //   }
 
-      if (this.settings[settingsName].value !== value) {
+    // },
+    async notificationSettingsChanged({ settingName, value }) {
+
+      if (this.settings[settingName].value !== value) {
 
         if (value) {
 
@@ -74,8 +78,8 @@ export default {
           value = !await this.$store.dispatch(`unsubscribePush`);
         }
 
-        this.$store.dispatch(`updateSettings`, {
-          settingsName,
+        this.$store.dispatch(`updateSetting`, {
+          settingName,
           value,
         })
         
