@@ -12,6 +12,7 @@ Vue.config.productionTip = false
 
 Vue.use(SharedElementDirective, {
   includeChildren: true,
+  restrictToViewport: true,
 });
 
 Vue.use(VueHaptic, {
