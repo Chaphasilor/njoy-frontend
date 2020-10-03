@@ -47,9 +47,10 @@
     </button> -->
 
     <ProgressCard
-      :key="index"
-      v-for="(item, index) of allItems"
+      :key="item.id"
+      v-for="item of allItems"
       :download="item"
+      v-shared-element:[item.id]
     />
 
     <div

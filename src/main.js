@@ -3,11 +3,16 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueHaptic from 'vue-haptic';
+import { SharedElementDirective } from 'v-shared-element';
 import "@/assets/css/tailwind.css";
 
 import './registerServiceWorker';
 
 Vue.config.productionTip = false
+
+Vue.use(SharedElementDirective, {
+  includeChildren: true,
+});
 
 Vue.use(VueHaptic, {
   patterns: {
@@ -16,7 +21,7 @@ Vue.use(VueHaptic, {
     blip: 10,
     default: 25,
   }
-})
+});
 
 new Vue({
   router,

@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { SharedElementRouteGuard } from 'v-shared-element';
+
 import store from '../store/index'
 
 import Progress from '../views/Progress.vue'
@@ -44,6 +46,8 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach(SharedElementRouteGuard);
 
 router.beforeEach(async (to, from, next) => {
 

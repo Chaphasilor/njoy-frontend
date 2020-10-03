@@ -2,14 +2,21 @@
   <div
     class="h-screen"
   >
-    <h2
-      class="p-2 text-center text-2xl antialiased font-semibold text-dark tracking-wide"
+    <div
+      class="w-full h-16 p-4 flex flex-row justify-between"
     >
-      Download Details
-    </h2>
+
+      <h2
+        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"    
+      >
+        Download Details
+      </h2>
+
+    </div>
 
     <div
       class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md p-5 leading-9"
+      v-shared-element:[download.id]
     >
 
       <div
