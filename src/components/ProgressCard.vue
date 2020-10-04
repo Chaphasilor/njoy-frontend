@@ -23,7 +23,7 @@
       <div
         v-if="showProgressbar"
         class="w-7/8 h-8 flex flex-col justify-center"
-        v-shared-element:progress-bar="{
+        v-shared-element:[`${download.id}-progress-bar`]="{
           zIndex: 3,
         }"
       >

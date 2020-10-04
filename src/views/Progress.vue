@@ -136,17 +136,17 @@ export default {
 
     this.$store.dispatch('navigate', { target: this.$route.name });
 
-    this.$store.dispatch('fetchProgress');
-    this.pollingIntervalID = setInterval(() => {
-      this.$store.dispatch('fetchProgress');
-    }, 2000);
+    // this.$store.dispatch('fetchProgress');
+    // this.pollingIntervalID = setInterval(() => {
+    //   this.$store.dispatch('fetchProgress');
+    // }, 2000);
 
   },
   beforeDestroy: function() {
 
-    if (undefined != this.pollingIntervalID) {
-      clearInterval(this.pollingIntervalID);
-    }
+    // if (undefined != this.pollingIntervalID) {
+    //   clearInterval(this.pollingIntervalID);
+    // }
     
   }
 }

@@ -46,7 +46,7 @@
       <div
         v-if="showProgressbar"
         class="w-full h-8 my-2 flex flex-row flex-wrap justify-between"
-        v-shared-element:progress-bar="{
+        v-shared-element:[`${download.id}-progress-bar`]="{
           zIndex: 3,
         }"
       >
@@ -280,10 +280,10 @@ export default {
 
     this.$store.dispatch('navigate', { target: this.$route.name });
 
-    this.$store.dispatch('fetchProgress');
-    this.pollingIntervalID = setInterval(() => {
-      this.$store.dispatch('fetchProgress');
-    }, 2000);
+    // this.$store.dispatch('fetchProgress');
+    // this.pollingIntervalID = setInterval(() => {
+    //   this.$store.dispatch('fetchProgress');
+    // }, 2000);
 
   },
   beforeDestroy: function() {
