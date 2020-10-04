@@ -217,6 +217,7 @@ const store = new Vuex.Store({
     },
     SET_DOWNLOADS(state, newDownloads) {
       state.downloads = newDownloads;
+      console.log(`newDownloads:`, newDownloads);
     },
     CHANGE_DOWNLOAD_STATUS(state, { downloadId, newDownloadStatus }) {
 

@@ -8,7 +8,7 @@
       {{ name }}
     </div>
     <div
-      :class="`w-2/3 text-right text-${color} h-full font-light`"
+      :class="`w-2/3 text-right ${color} h-full font-light`"
     >
       {{ value }}
     </div>
@@ -34,7 +34,7 @@ export default {
       type: String,
       required: false,
       default: function() {
-        return 'dark';
+        return 'text-dark';
       },
     },
   }

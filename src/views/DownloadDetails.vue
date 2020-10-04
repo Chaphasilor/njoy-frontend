@@ -49,7 +49,10 @@
         class="w-full h-8"
         name="Status"
         :value="statusString"
-        :color="download.textColor"
+        :color="download.textColors.red.includes(download.status) ? `text-cta-red` : download.textColors.yellow.includes(download.status) ? `text-cta-yellow` : download.textColors.green.includes(download.status) ? `text-cta-green` : `text-dark`"
+        v-shared-element:[`${download.id}-status`]="{
+          zIndex: 2,
+        }"
       />
 
       <InfoLine

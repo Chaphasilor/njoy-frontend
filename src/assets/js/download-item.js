@@ -17,46 +17,46 @@ export default class DownloadItem {
     this.speed = properties.speed;
     this.retries = parseInt(properties.retries);
 
+    this.textColors = {
+      red: ['error', 'failed', 'incomplete'],
+      yellow: ['paused', 'duplicate'],
+      green: ['completed'],
+    }
+
     // this.id = Math.random().toString(36).substring(7); // TEMPORARY solution for identifying download items
     
   }
 
   get textColor() {
 
-    // let color = `dark`;
+    let color = `dark`;
 
-    return {
-      red: ['error', 'failed', 'incomplete'],
-      yellow: ['paused', 'duplicate'],
-      green: ['completed'],
+    switch (this.status) {
+      case `paused`:
+        color = `cta-yellow`
+        break;
+      case `error`:
+        color = `cta-red`
+        break;
+      case `failed`:
+        color = `cta-red`
+        break;
+      case `incomplete`:
+        color = `cta-red`
+        break;
+      case `completed`:
+        color = `cta-green`
+        break;
+      case `duplicate`:
+        color = `cta-yellow`
+        break;
+    
+      default:
+        color = `dark`;
+        break;
     }
-    
-    // switch (this.status) {
-    //   case `paused`:
-    //     color = `cta-yellow`
-    //     break;
-    //   case `error`:
-    //     color = `cta-red`
-    //     break;
-    //   case `failed`:
-    //     color = `cta-red`
-    //     break;
-    //   case `incomplete`:
-    //     color = `cta-red`
-    //     break;
-    //   case `completed`:
-    //     color = `cta-green`
-    //     break;
-    //   case `duplicate`:
-    //     color = `cta-yellow`
-    //     break;
-    
-    //   default:
-    //     color = `dark`;
-    //     break;
-    // }
 
-    // return color;
+    return color;
     
   }
   
