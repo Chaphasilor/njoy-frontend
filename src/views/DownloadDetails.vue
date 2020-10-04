@@ -7,10 +7,18 @@
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"    
+        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
+        v-shared-element:page-title    
       >
         Download Details
       </h2>
+
+      <div
+        v-shared-element:settings-icon
+        class="w-8 h-8 text-dark stroke-current stroke-1.5 active:stroke-2 transition-colors duration-300"
+      >
+      <!-- Dummy element used for fading out the settings icon -->
+      </div>
 
     </div>
 
@@ -38,6 +46,9 @@
       <div
         v-if="showProgressbar"
         class="w-full h-8 my-2 flex flex-row flex-wrap justify-between"
+        v-shared-element:progress-bar="{
+          zIndex: 3,
+        }"
       >
         <ProgressBar
           class="w-full h-6 overflow-hidden"

@@ -8,7 +8,8 @@
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"    
+        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
+        v-shared-element:page-title   
       >
         Settings
       </h2>
@@ -19,6 +20,7 @@
         alt="Back"
         @click="$router.go(-1);"
         v-haptic
+        v-shared-element:settings-icon
       >
       
     </div>

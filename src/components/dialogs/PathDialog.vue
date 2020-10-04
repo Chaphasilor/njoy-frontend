@@ -53,35 +53,45 @@
         class="w-full px-4 mb-6 flex flex-row justify-center"
       >
 
-        <CTAButton
-          v-if="!enableNewFolderInputs"
-          class="w-full h-12"
-          type="action"
-          label="New Folder"
-          @click.native="enableNewFolderInputs = true"
-        />
-
-        <div
-          class="w-full flex flex-row justify-between"
-          v-else
+        <transition
+          mode="out-in"
+          enter-active-class="transform transition-all duration-200"
+          enter-class="opacity-0 scale-0"
+          enter-to-class="opacity-100 scale-100"
+          leave-active-class="transform transition-all duration-200"
+          leave-class="opacity-100 scale-100"
+          leave-to-class="opacity-0 scale-0"
         >
-
-          <TextField
-            class="inline-block w-3/4 h-12 pr-2"    
-            name="new-folder-name"
-            :focus="true"
-            placeholder="Folder Name"
-            v-model="newFolderName"
-          />
-
           <CTAButton
-            class="inline-block w-1/4 h-12"
-            :type="newFolderName.length > 0 ? `good` : `action`"
-            :label="newFolderName.length > 0 ? `Confirm` : `Cancel`"
-            @click.native="handleNewFolderClick"
+            v-if="!enableNewFolderInputs"
+            class="w-full h-12"
+            type="action"
+            label="New Folder"
+            @click.native="enableNewFolderInputs = true"
           />
-          
-        </div>
+
+          <div
+            class="w-full flex flex-row justify-between"
+            v-else
+          >
+
+            <TextField
+              class="inline-block w-3/4 h-12 pr-2"    
+              name="new-folder-name"
+              :focus="true"
+              placeholder="Folder Name"
+              v-model="newFolderName"
+            />
+
+            <CTAButton
+              class="inline-block w-1/4 h-12"
+              :type="newFolderName.length > 0 ? `good` : `action`"
+              :label="newFolderName.length > 0 ? `Confirm` : `Cancel`"
+              @click.native="handleNewFolderClick"
+            />
+            
+          </div>
+        </transition>
         
       </div>
 

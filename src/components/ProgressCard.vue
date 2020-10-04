@@ -23,6 +23,9 @@
       <div
         v-if="showProgressbar"
         class="w-7/8 h-8 flex flex-col justify-center"
+        v-shared-element:progress-bar="{
+          zIndex: 3,
+        }"
       >
         <ProgressBar
           class="w-full h-2 overflow-hidden"
