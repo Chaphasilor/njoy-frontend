@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 Vue.use(SharedElementDirective, {
   includeChildren: true,
   restrictToViewport: true,
-  duration: `300ms`,
+  duration: `3000ms`,
 });
 
 Vue.use(VueHaptic, {

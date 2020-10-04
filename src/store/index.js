@@ -269,19 +269,22 @@ const store = new Vuex.Store({
     },
     async checkAuthenticated(context) {
 
-      console.log('checkAuthenticated called!');
-      
-      try {
-        await context.getters.api.checkAuthenticated();
-      } catch (err) {
-        console.warn(err);
-        context.commit('SET_AUTH_STATUS', false);
-        return err.message;
-      }
-
       context.commit('SET_AUTH_STATUS', true);
+      return;
       
-      return `Success`;
+      // console.log('checkAuthenticated called!');
+      
+      // try {
+      //   await context.getters.api.checkAuthenticated();
+      // } catch (err) {
+      //   console.warn(err);
+      //   context.commit('SET_AUTH_STATUS', false);
+      //   return err.message;
+      // }
+
+      // context.commit('SET_AUTH_STATUS', true);
+      
+      // return `Success`;
       
     },
     async authenticateApi(context, { username, password }) {
