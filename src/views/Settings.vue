@@ -47,6 +47,7 @@
       :key="settingName"
       :title="settingValue.title"
       :name="settingName"
+      :icon="settingValue.icon"
       :value="settingValue.value"
       :timeout="settingValue.timeout"
       @change="settingValue.onChange({

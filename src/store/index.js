@@ -234,10 +234,17 @@ const store = new Vuex.Store({
       notifications: {
         title: `Push Notifications`,
         description: `Receive push notifications when a download is finished or there is a problem downloading a file`,
+        icon: {
+          paths: `
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+          <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+          `
+        },
         value: false,
         timeout: 500,
         onChange: async (newSetting) => {
-
+          
           if (newSetting.value) {
             // if subscribing doesn't work (i.e. user declines permission, the setting is disabled)
             newSetting.value = await store.dispatch(`subscribeToPush`);
@@ -251,15 +258,15 @@ const store = new Vuex.Store({
       test: {
         title: `Test Setting`,
         value: true,
+        description: `This is just a test setting, nothing to see here...`,
+        icon: {
+          paths: `
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M20 12l-2 .5a6 6 0 0 1 -6.5 -6.5l.5 -2l8 8" />
+          <path d="M20 12a8 8 0 1 1 -8 -8" />
+          `
+        },
         timeout: 350,
-        onChange: (newSetting) => {
-          store.dispatch(`updateSetting`, newSetting);
-        }
-      },
-      test2: {
-        title: `Test Setting 2`,
-        value: false,
-        timeout: 600,
         onChange: (newSetting) => {
           store.dispatch(`updateSetting`, newSetting);
         }
