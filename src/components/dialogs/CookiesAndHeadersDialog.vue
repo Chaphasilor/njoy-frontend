@@ -37,50 +37,57 @@
           separator=" = "
           :removable="true"
           @remove-pair="removeCookie($event.key, $event.value)"
+          @pair-added="animateNewPair($refs[`illusory-source-cookies`], $event);hideNewCookieInput();log('Cookies have been recomputed');"
         />
 
       </div>
 
       <div
-        class="w-full px-4 mb-6 flex flex-row justify-center"
+        class="w-full px-4 mb-6"
       >
-        <CTAButton
-          v-if="!enableNewCookieInputs"
-          class="w-full h-12"
-          type="action"
-          label="Add a Cookie"
-          @click.native="enableNewCookieInputs = true"
-        />
 
-        <div
-          class="w-full flex flex-row flex-wrap justify-between"
-          v-else
+        <transition
+          enter-active-class="transition-all duration-1000 ease-in-out"
+          enter-class="h-0 mb-0"
+          enter-to-class="h-12"
+          leave-active-class="transition-all duration-1000 ease-in-out"
+          leave-class="h-12"
+          leave-to-class="h-0 mb-0"
         >
+          <div
+            class="w-full my-2 overflow-hidden"
+            v-if="enableNewCookieInputs"
+          >
+            <div
+              ref="illusory-source-cookies"
+            >
 
-          <TextField
-            class="inline-block w-1/2 h-12 pr-2"    
-            name="new-cookie-name"
-            :focus="true"
-            placeholder="Cookie Name"
-            v-model="newCookie.key"
-          />
+              <TextField
+                class="inline-block w-1/2 h-12 pr-1"    
+                name="new-cookie-name"
+                :focus="true"
+                placeholder="Cookie Name"
+                v-model="newCookie.key"
+              />
 
-          <TextField
-            class="inline-block w-1/2 h-12"    
-            name="new-cookie-value"
-            :focus="false"
-            placeholder="Cookie Value"
-            v-model="newCookie.value"
-          />
+              <TextField
+                class="inline-block w-1/2 h-12 pl-1"
+                name="new-cookie-value"
+                :focus="false"
+                placeholder="Cookie Value"
+                v-model="newCookie.value"
+              />
 
-          <CTAButton
-            class="inline-block w-full h-12 mt-2"
-            :type="newCookieInputValid ? `good` : `action`"
-            :label="newCookieInputValid ? `Confirm` : `Cancel`"
-            @click.native="handleNewCookieClick"
-          />
-          
-        </div>
+            </div>
+          </div>
+        </transition>
+
+        <CTAButton
+          class="w-full h-12"
+          :type="(enableNewCookieInputs && newCookieInputValid) ? `good` : `action`"
+          :label="!enableNewCookieInputs ? `Add a Cookie` : newCookieInputValid ? `Confirm` : `Cancel`"
+          @click.native="enableNewCookieInputs ? handleNewCookieClick() : enableNewCookieInputs = true"
+        />
         
       </div>
 
@@ -96,56 +103,63 @@
         <ValuePairList
           class="w-full"
           :pairs="headerPairs"
-          separator=" = "
+          separator=": "
           :removable="true"
           @remove-pair="removeHeader($event.key, $event.value)"
+          @pair-added="animateNewPair($refs[`illusory-source-headers`], $event);hideNewHeaderInput();"
         />
 
       </div>
 
       <div
-        class="w-full px-4 mb-16 flex flex-row justify-center"
+        class="w-full px-4 mb-16"
       >
-        <CTAButton
-          v-if="!enableNewHeaderInputs"
-          class="w-full h-12"
-          type="action"
-          label="Add a Header"
-          @click.native="enableNewHeaderInputs = true"
-        />
 
-        <div
-          class="w-full flex flex-row flex-wrap justify-between"
-          v-else
+        <transition
+          enter-active-class="transition-all duration-1000 ease-in-out"
+          enter-class="h-0 mb-0"
+          enter-to-class="h-12"
+          leave-active-class="transition-all duration-1000 ease-in-out"
+          leave-class="h-12"
+          leave-to-class="h-0 mb-0"
         >
+          <div
+            class="w-full my-2 overflow-hidden"
+            v-if="enableNewHeaderInputs"
+          >
+            <div
+              ref="illusory-source-headers"
+            >
 
-          <TextField
-            class="inline-block w-1/2 h-12 pr-2"    
-            name="new-header-name"
-            :focus="true"
-            placeholder="Header Name"
-            v-model="newHeader.key"
-          />
+              <TextField
+                class="inline-block w-1/2 h-12 pr-2"    
+                name="new-header-name"
+                :focus="true"
+                placeholder="Header Name"
+                v-model="newHeader.key"
+              />
 
-          <TextField
-            class="inline-block w-1/2 h-12"    
-            name="new-header-value"
-            :focus="false"
-            placeholder="Header Value"
-            v-model="newHeader.value"
-          />
+              <TextField
+                class="inline-block w-1/2 h-12"    
+                name="new-header-value"
+                :focus="false"
+                placeholder="Header Value"
+                v-model="newHeader.value"
+              />
 
-          <!-- TODO use two buttons, one for 'Cancel' and one for 'Confirm', and disable the 'Confirm' button as long as the input isn't valid. 'Cancel' should work at all times  -->
+            <!-- TODO use two buttons, one for 'Cancel' and one for 'Confirm', and disable the 'Confirm' button as long as the input isn't valid. 'Cancel' should work at all times  -->
 
-          <CTAButton
-            class="inline-block w-full h-12 mt-2"
-            :type="newHeaderInputValid ? `good` : `action`"
-            :label="newHeaderInputValid ? `Confirm` : `Cancel`"
-            @click.native="handleNewHeaderClick"
-          />
+            </div>
+          </div>
+        </transition>
+
+        <CTAButton
+          class="w-full h-12"
+          :type="(enableNewHeaderInputs && newHeaderInputValid) ? `good` : `action`"
+          :label="!enableNewHeaderInputs ? `Add a Header` : newHeaderInputValid ? `Confirm` : `Cancel`"
+          @click.native="enableNewHeaderInputs ? handleNewHeaderClick() : enableNewHeaderInputs = true"
+        />
           
-        </div>
-        
       </div>
 
       <CTAButton
@@ -261,31 +275,30 @@ export default {
       
     },
     handleNewCookieClick() {
-
       if (this.newCookieInputValid) {
         this.addCookie(this.newCookie.key, this.newCookie.value);
-        this.newCookie.key = ``;
-        this.newCookie.value = ``;
-        this.enableNewCookieInputs = false;
       } else {
         this.enableNewCookieInputs = false;
       }
-      
+    },
+    hideNewCookieInput() {
+      this.newCookie.key = ``;
+      this.newCookie.value = ``;
+      this.enableNewCookieInputs = false;
     },
     handleNewHeaderClick() {
-
       if (this.newHeaderInputValid) {
         this.addHeader(this.newHeader.key, this.newHeader.value);
-        this.newHeader.key = ``;
-        this.newHeader.value = ``;
-        this.enableNewHeaderInputs = false;
       } else {
         this.enableNewHeaderInputs = false;
       }
-      
+    },
+    hideNewHeaderInput() {
+      this.newHeader.key = ``;
+      this.newHeader.value = ``;
+      this.enableNewHeaderInputs = false;
     },
     addCookie(name, value) {
-
       if (this.headers[`cookie`]) {
         this.$set(this.headers[`cookie`], name, value);
       } else {
@@ -295,7 +308,6 @@ export default {
         this.$set(this.headers, `cookie`, obj);
         
       }
-      
     },
     removeCookie(name, value) {
       this.$delete(this.headers[`cookie`], name, value);
@@ -306,6 +318,29 @@ export default {
     removeHeader(name, value) {
       this.$delete(this.headers, name, value);
     },
+    log(value) {
+      console.log(`value:`, value);
+    },
+    animateNewPair(source, pairElement) {
+
+      console.log(`source:`, source);
+
+      if (pairElement) {
+        this.$illusory(source, pairElement, {
+          duration: '1000ms',
+          easing: 'ease-in-out',
+          zIndex: 30,
+          beforeAnimate(from) {
+            // Show the natural element and hide the clone
+            // because by default the clone has already
+            // replaced the natural element
+            from.showNatural()
+            from.hide()
+          },
+        });
+      }
+      
+    }
   },
   created: function() {
 
