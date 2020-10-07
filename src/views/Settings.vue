@@ -98,6 +98,7 @@ export default {
         if (undefined != this.openedDialogs[level].type) {
 
           this.openedDialogs[level].type = undefined;
+          navigator.vibrate(25);
           return next(false);
 
         } else {

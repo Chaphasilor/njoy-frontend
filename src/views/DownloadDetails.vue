@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen"
+    class="h-full"
   >
     <div
       class="w-full h-16 p-4 flex flex-row justify-between"
@@ -60,58 +60,67 @@
         class="w-full h-8"
         name="Status"
         :value="statusString"
+        :shared-id-base="download.id"
         :color="download.textColors.red.includes(download.status) ? `text-cta-red` : download.textColors.yellow.includes(download.status) ? `text-cta-yellow` : download.textColors.green.includes(download.status) ? `text-cta-green` : `text-dark`"
-        v-shared-element:[`${download.id}-status`]="{
-          zIndex: 2,
-        }"
       />
+      <!-- v-shared-element:[`${download.id}-status2`]="{
+        zIndex: 2,
+      }" -->
 
       <InfoLine
         class="w-full h-8"
         name="Percentage"
         :value="`${download.percentage} %`"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8"
         name="ETA"
         :value="etaString"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8"
         name="Download Speed"
         :value="download.speed"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8"
         name="Progress"
         :value="progressSizeString"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8"
         name="Elapsed"
         :value="elapsedString"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8"
         name="Destination"
         :value="download.path"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8 overflow-hidden"
         name="URL"
         :value="download.url"
+        :shared-id-base="download.id"
       />
 
       <InfoLine
         class="w-full h-8"
         name="Retries"
         :value="download.retries.toString()"
+        :shared-id-base="download.id"
       />
 
       <!-- TODO collapse headers by default (also design in Figma) -->
@@ -147,6 +156,9 @@
             id: download.id,
             action: `stop`
           })"
+          v-shared-element:[`${download.id}-cta-cancel`]="{
+            zIndex: 2,
+          }"
         />
         <CTAButton
           v-if="showPauseButton"
@@ -156,6 +168,9 @@
             id: download.id,
             action: `pause`
           })"
+          v-shared-element:[`${download.id}-cta-pause`]="{
+            zIndex: 2,
+          }"
         />
         <CTAButton
           v-if="showResumeButton"
@@ -165,6 +180,9 @@
             id: download.id,
             action: `resume`
           })"
+          v-shared-element:[`${download.id}-cta-resume`]="{
+            zIndex: 2,
+          }"
         />    
       </div>
 
@@ -280,10 +298,10 @@ export default {
 
     this.$store.dispatch('navigate', { target: this.$route.name });
 
-    // this.$store.dispatch('fetchProgress');
-    // this.pollingIntervalID = setInterval(() => {
-    //   this.$store.dispatch('fetchProgress');
-    // }, 2000);
+    this.$store.dispatch('fetchProgress');
+    this.pollingIntervalID = setInterval(() => {
+      this.$store.dispatch('fetchProgress');
+    }, 2000);
 
   },
   beforeDestroy: function() {
