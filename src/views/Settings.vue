@@ -11,7 +11,6 @@
       <h2
         class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
       >
-        <!-- v-shared-element:page-title -->
         Settings
       </h2>
 
@@ -25,20 +24,11 @@
         @click="$router.go(-1);" 
         v-haptic
       >
-        <!-- v-shared-element:settings-icon -->
         <title>Back</title>
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
         <polyline points="15 6 9 12 15 18" />
       </svg>
 
-      <!-- <img
-        class="w-6 h-6 mt-1 mr-1"
-        src="@/assets/icons/back.svg"
-        alt="Back"
-        @click="$router.go(-1);"
-        v-haptic
-        
-      > -->
       
     </div>
   
