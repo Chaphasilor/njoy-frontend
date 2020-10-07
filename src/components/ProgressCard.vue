@@ -1,92 +1,106 @@
 <template>
-  <div>
-    <BetterRouterLink
-      :to="{
-        name: 'DownloadDetails',
-        params: {
-          downloadId: download.id,
-          download: download
-        }
+  <BetterRouterLink
+    :to="{
+      name: 'DownloadDetails',
+      params: {
+        downloadId: download.id,
+        download: download
+      }
+    }"
+    :class="`mx-4 my-2 bg-white rounded-xl shadow-md border flex flex-row flex-wrap justify-between p-5 leading-9`"
+  >
+
+    <div
+      :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8`"
+      v-shared-element:[`${download.id}-title`]="{
+        zIndex: 2,
       }"
-      :class="`mx-4 my-2 bg-white rounded-xl shadow-md border flex flex-row flex-wrap justify-between p-5 leading-9`"
     >
+      {{ download.filename }}
+    </div>
 
-      <div
-        :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8`"
-        v-shared-element:[`${download.id}-title`]="{
-          zIndex: 2,
-        }"
-      >
-        {{ download.filename }}
-      </div>
+    <div
+      v-if="showProgressbar"
+      class="w-7/8 h-8 flex flex-col justify-center"
+      v-shared-element:[`${download.id}-progress-bar`]="{
+        zIndex: 3,
+      }"
+    >
+      <ProgressBar
+        class="w-full h-2 overflow-hidden"
+        :percentage="download.percentage"
+      />
+    </div>
 
-      <div
-        v-if="showProgressbar"
-        class="w-7/8 h-8 flex flex-col justify-center"
-        v-shared-element:progress-bar="{
-          zIndex: 3,
-        }"
-      >
-        <ProgressBar
-          class="w-full h-2 overflow-hidden"
-          :percentage="download.percentage"
-        />
-      </div>
-
-      <div
-        :class="`${(!progressBarStates.includes(download.status) ? `w-1/4` : `w-1/8`)} text-right h-8 ${download.textColors.red.includes(download.status) ? `text-cta-red` : download.textColors.yellow.includes(download.status) ? `text-cta-yellow` : download.textColors.green.includes(download.status) ? `text-cta-green` : `text-dark` }`"
-        v-shared-element:[`${download.id}-status`]="{
+    <div
+      :class="`${(!progressBarStates.includes(download.status) ? `w-1/4` : `w-1/8`)} text-right h-8 ${download.textColors.red.includes(download.status) ? `text-cta-red` : download.textColors.yellow.includes(download.status) ? `text-cta-yellow` : download.textColors.green.includes(download.status) ? `text-cta-green` : `text-dark` } `"
+    >
+      <!-- Similar thing happens if you remove the span and put the directive on the parent div -->
+      <span
+        class="inline-block"
+        v-shared-element:[`${download.id}-${statusOrPercentage}-value`]="{
           zIndex: 2,
         }"
       >
         {{ statusString }}
-      </div>
+      </span>
+    </div>
 
-      <br>
+    <br>
 
-      <InfoLine
-        v-if="showETA"
-        class="w-full h-8"
-        name="ETA"
-        :value="etaString"
-      />
+    <InfoLine
+      v-if="showETA"
+      class="w-full h-8"
+      name="ETA"
+      :value="etaString"
+      :shared-id-base="download.id"
+    />
 
-      <InfoLine
-        v-if="showSize"
-        class="w-full h-8"
-        name="Size"
-        :value="download.size"
-      />
+    <InfoLine
+      v-if="showSize"
+      class="w-full h-8"
+      name="Progress"
+      :value="progressSizeString"
+      :shared-id-base="download.id"
+    />
 
-      <CTAButton
-        v-if="showPauseButton"
-        class="w-full h-8 my-2"
-        type="pause"
-        @click.stop.native="$store.dispatch(`modifyDownloadState`, {
-          id: download.id,
-          action: `pause`
-        })"
-      />
-      <CTAButton
-        v-if="showCancelButton"
-        class="w-1/2 h-8 my-2"
-        type="cancel"
-        @click.stop.native="$store.dispatch(`modifyDownloadState`, {
-          id: download.id,
-          action: `stop`
-        })"
-      />
-      <CTAButton
-        v-if="showResumeButton"
-        class="w-1/2 h-8 my-2"
-        type="resume"
-        @click.stop.native="$store.dispatch(`modifyDownloadState`, {
-          id: download.id,
-          action: `resume`
-        })"
-      />
-    </BetterRouterLink>
-  </div>
+    <CTAButton
+      v-if="showPauseButton"
+      class="w-full h-8 mt-2"
+      type="pause"
+      @click.stop.native="$store.dispatch(`modifyDownloadState`, {
+        id: download.id,
+        action: `pause`
+      })"
+      v-shared-element:[`${download.id}-cta-pause`]="{
+        zIndex: 2,
+      }"
+    />
+    <CTAButton
+      v-if="showCancelButton"
+      class="w-1/2 h-8 mt-2"
+      type="cancel"
+      @click.stop.native="$store.dispatch(`modifyDownloadState`, {
+        id: download.id,
+        action: `stop`
+      })"
+      v-shared-element:[`${download.id}-cta-cancel`]="{
+        zIndex: 2,
+      }"
+    />
+    <CTAButton
+      v-if="showResumeButton"
+      class="w-1/2 h-8 mt-2"
+      type="resume"
+      @click.stop.native="$store.dispatch(`modifyDownloadState`, {
+        id: download.id,
+        action: `resume`
+      })"
+      v-shared-element:[`${download.id}-cta-resume`]="{
+        zIndex: 2,
+      }"
+    />
+  </BetterRouterLink>
 </template>
 
 <script>
@@ -134,6 +148,9 @@ export default {
     statusString: function() {
       return this.progressBarStates.includes(this.download.status) ? `${this.download.percentage.toFixed(0)}%` : this.download.statusString;
     },
+    statusOrPercentage: function() {
+      return this.progressBarStates.includes(this.download.status) ? `percentage` : `status`;
+    },
     showProgressbar: function() {
       return this.progressBarStates.includes(this.download.status);
     },
@@ -155,7 +172,10 @@ export default {
     etaString: function() {
       //TODO show date as designed in Figma
       return this.download.eta.toLocaleTimeString();
-    }
+    },
+    progressSizeString: function() {
+      return `${this.download.downloaded} / ${this.download.size}`;
+    },
   },
   mounted() {
 

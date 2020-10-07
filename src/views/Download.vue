@@ -5,11 +5,11 @@
 
     <div
       class="w-full h-16 p-4 flex flex-row justify-between"
+      v-shared-element:page-header
     >
 
       <h2
         class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
-        v-shared-element:page-title    
       >
         Start a Download
       </h2>
@@ -148,6 +148,7 @@ export default {
         if (undefined != this.openedDialogs[level].type) {
 
           this.openedDialogs[level].type = undefined;
+          navigator.vibrate(25);
           return next(false);
 
         } else {
