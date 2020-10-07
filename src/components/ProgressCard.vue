@@ -66,7 +66,7 @@
 
     <CTAButton
       v-if="showPauseButton"
-      class="w-full h-8 my-2"
+      class="w-full h-8 mt-2"
       type="pause"
       @click.stop.native="$store.dispatch(`modifyDownloadState`, {
         id: download.id,
@@ -78,7 +78,7 @@
     />
     <CTAButton
       v-if="showCancelButton"
-      class="w-1/2 h-8 my-2"
+      class="w-1/2 h-8 mt-2"
       type="cancel"
       @click.stop.native="$store.dispatch(`modifyDownloadState`, {
         id: download.id,
@@ -90,7 +90,7 @@
     />
     <CTAButton
       v-if="showResumeButton"
-      class="w-1/2 h-8 my-2"
+      class="w-1/2 h-8 mt-2"
       type="resume"
       @click.stop.native="$store.dispatch(`modifyDownloadState`, {
         id: download.id,

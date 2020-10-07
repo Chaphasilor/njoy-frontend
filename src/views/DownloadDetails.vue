@@ -4,17 +4,16 @@
   >
     <div
       class="w-full h-16 p-4 flex flex-row justify-between"
+      v-shared-element:page-header
     >
 
       <h2
         class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
-        v-shared-element:page-title    
       >
         Download Details
       </h2>
 
       <div
-        v-shared-element:settings-icon
         class="w-8 h-8 text-dark stroke-current stroke-1.5 active:stroke-2 transition-colors duration-300"
       >
       <!-- Dummy element used for fading out the settings icon -->
