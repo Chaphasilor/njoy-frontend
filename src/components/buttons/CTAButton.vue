@@ -4,49 +4,23 @@
     v-haptic
   >
     <div
-      class="w-full h-full rounded-lg overflow-hidden text-center text-lg text-white font-medium antialiased cursor-pointer"
+      class="w-full h-full rounded-lg overflow-hidden text-center font-bold text-lg text-white antialiased cursor-pointer"
     >
+      <!-- TODO transition not happening from 'pause' to 'resume' button state. maybe the state changes in-between (maybe to 'unknown'?), causing the transition to abort -->
       <div
-        v-if="type == 'resume'"
-        class="w-full h-full bg-gradient-to-br from-cta-green to-cta-green-stop flex flex-col justify-center"
+        :class="`w-full h-full ${(type === `resume` || type === `good`) ? `bg-cta-green` : type === `cancel` ? `bg-cta-red` : `bg-cta-yellow`} flex flex-col justify-center transition-colors duration-300`"
       >
-        <img
-          src="@/assets/icons/resume.svg"
-          alt="Resume"
-          class="w-5 m-auto"
-        >
-      </div>
-      <div
-        v-if="type == 'pause'"
-        class="w-full h-full bg-gradient-to-br from-cta-yellow to-cta-yellow-stop flex flex-col justify-center"
-      >
-        <img
-          src="@/assets/icons/pause.svg"
-          alt="Pause"
-          class="w-5 m-auto"
-        >
-      </div>
-      <div
-        v-if="type == 'cancel'"
-        class="w-full h-full bg-gradient-to-br from-cta-red to-cta-red-stop flex flex-col justify-center"
-      >
-        <img
-          src="@/assets/icons/cancel.svg"
-          alt="Cancel"
-          class="w-5 m-auto"
-        >
-      </div>
-      <div
-        v-if="type == 'good'"
-        class="w-full h-full bg-gradient-to-br from-cta-green to-cta-green-stop flex flex-col justify-center font-semibold text-base"
-      >
-        {{ label }}
-      </div>
-      <div
-        v-if="type == 'action'"
-        class="w-full h-full bg-gradient-to-br from-cta-yellow to-cta-yellow-stop flex flex-col justify-center font-semibold text-base"
-      >
-        {{ label }}
+        <svg
+          v-if="types[type].icon"
+          class="w-6 h-6 m-auto stroke-current stroke-2 text-white"
+          v-html="types[type].icon.paths"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        />
+        <span
+          v-else
+        >{{ label }}</span>
       </div>
     </div>
   </div>
@@ -58,11 +32,38 @@ export default {
   name: 'CTAButton',
   data: function() {
     return {
-      // iconSourceURLs: {
-      //   resume: "@/assets/icons/resume.svg",
-      //   pause: "@/assets/icons/pause.svg",
-      //   cancel: "@/assets/icons/cancel.svg"
-      // },
+      types: {
+        resume: {
+          icon: {
+            paths: `
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M7 4v16l13 -8z" />
+            `
+          }
+        },
+        pause: {
+          icon: {
+            paths: `
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <rect x="6" y="5" width="4" height="14" rx="1" />
+            <rect x="14" y="5" width="4" height="14" rx="1" />
+            `
+          }
+        },
+        cancel: {
+          icon: {
+            paths: `
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <rect x="5" y="5" width="14" height="14" rx="2" />
+            `
+          }
+        },
+        good: {
+        },
+        action: {
+
+        }
+      }
     }
   },
   props: {
@@ -80,5 +81,8 @@ export default {
     //   return this.iconSourceURLs[this.type];
     // }
   },
+  mounted() {
+    console.log(`test`);
+  }
 }
 </script>

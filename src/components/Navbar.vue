@@ -4,21 +4,22 @@
   >
 
     <BetterRouterLink
-      v-for="(view, index) in views"
-      :key="index"
+      v-for="view of views"
+      :key="view.routeName"
       :to="{
         name: view.routeName,
       }"
       style="-webkit-tap-highlight-color: transparent;"
-      :class="`${!navigationPossible ? `opacity-50 cursor-not-allowed` : `active:stroke-2`} ${(currentView == view.routeName ? 'text-accent' : 'text-dark')} w-1/5 h-auto mx-10 border-accent pt-2 stroke-1.5`"
+      :class="`${!navigationPossible ? `opacity-50 cursor-not-allowed` : `active:stroke-2`} ${(currentView == view.routeName ? 'text-accent' : 'text-dark')} w-1/5 h-auto mx-10 pt-2 stroke-1.5 transition-colors duration-300 ease-out`"
       v-haptic
     >
+      <!-- v-shared-element:[`navbar-${view.routeName}`] -->
       <svg
         class="w-8 h-8 m-auto my-0 stroke-current stroke-inherit"
         v-html="view.icon.paths"
         width="16"
         height="19"
-        viewBox="0 0 16 19"
+        viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       />
@@ -45,11 +46,9 @@ export default {
           routeName: `Progress`,
           icon: {
             paths: `
-            <path
-              d="M1 17.875H15.1661L1 1H15.1661L1 17.875Z"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="4" y1="19" x2="20" y2="19" />
+            <polyline points="4 15 8 9 12 11 16 6 20 10" />
             `
           }
         },
@@ -58,11 +57,10 @@ export default {
           routeName: `Download`,
           icon: {
             paths: `
-            <path
-              d="M8.72859 1C8.72859 1 8.72859 2.80295 8.72859 10.8725M3.76021 8.57654L8.72859 15.4643L13.697 8.57654M1 14.0179V17.875H16.4572V14.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+            <polyline points="7 11 12 16 17 11" />
+            <line x1="12" y1="4" x2="12" y2="16" />
             `
           }
         },

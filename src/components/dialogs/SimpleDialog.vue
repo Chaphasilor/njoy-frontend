@@ -12,7 +12,6 @@
       <div
         v-if="!initialState"
         class="fixed top-0 left-0 w-screen h-screen bg-dark bg-opacity-25"
-        @click="$emit('show-dialog', {level: level, type: undefined});"
       >
       </div>
     </transition>
@@ -30,10 +29,12 @@
       <div
         v-if="!initialState"
         class="relative w-full h-full flex flex-col justify-center text-dark"
+        @click="$emit('show-dialog', {level: level, type: undefined});"
       >
 
         <div
           class="bg-white rounded-xl shadow-xl"
+          @click.stop
         >
 
           <h4

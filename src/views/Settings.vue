@@ -5,21 +5,40 @@
 
     <div
       class="w-full h-16 p-4 flex flex-row justify-between mb-10"
+      v-shared-element:page-header
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"    
+        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
       >
+        <!-- v-shared-element:page-title -->
         Settings
       </h2>
 
-      <img
-        class="h-5 my-3 mr-4 ml-5"
+      <svg
+        class="w-8 h-8 stroke-current stroke-2 mr-px"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        xmlns="http://www.w3.org/2000/svg"
+        @click="$router.go(-1);" 
+        v-haptic
+      >
+        <!-- v-shared-element:settings-icon -->
+        <title>Back</title>
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <polyline points="15 6 9 12 15 18" />
+      </svg>
+
+      <!-- <img
+        class="w-6 h-6 mt-1 mr-1"
         src="@/assets/icons/back.svg"
         alt="Back"
         @click="$router.go(-1);"
         v-haptic
-      >
+        
+      > -->
       
     </div>
   
@@ -28,6 +47,7 @@
       :key="settingName"
       :title="settingValue.title"
       :name="settingName"
+      :icon="settingValue.icon"
       :value="settingValue.value"
       :timeout="settingValue.timeout"
       @change="settingValue.onChange({
@@ -96,6 +116,7 @@ export default {
         if (undefined != this.openedDialogs[level].type) {
 
           this.openedDialogs[level].type = undefined;
+          navigator.vibrate(25);
           return next(false);
 
         } else {

@@ -5,10 +5,11 @@
 
     <div
       class="w-full h-16 p-4 flex flex-row justify-between"
+      v-shared-element:page-header
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"    
+        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
       >
         Progress Overview
       </h2>
@@ -37,6 +38,8 @@
       </svg>
       
     </div>
+
+    <div v-shared-element:big-buttons></div>
   
 
     <!-- <button
@@ -50,7 +53,10 @@
       :key="item.id"
       v-for="item of allItems"
       :download="item"
-      v-shared-element:[item.id]
+      v-shared-element:[item.id]="{
+        compositeOnly: true,
+      }"
+      v-haptic
     />
 
     <div
