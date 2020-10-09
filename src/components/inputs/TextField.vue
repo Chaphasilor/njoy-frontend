@@ -69,7 +69,6 @@ export default {
   },
   mounted() {
 
-    console.log(`this.$refs:`, this.$refs);
     if (this.focus) {
       this.$refs.inputField.focus();
     }
