@@ -48,6 +48,7 @@ export default {
     value() {
       console.log(`this.value:`, this.value);
       this.$refs[this.name].checked = this.value;
+      this.checked = this.value;
     },
     checked() {
       console.log(`this.checked:`, this.checked);

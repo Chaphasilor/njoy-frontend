@@ -242,7 +242,7 @@ const store = new Vuex.Store({
           `
         },
         value: false,
-        timeout: 500,
+        timeout: 750,
         onChange: async (newSetting) => {
           
           if (newSetting.value) {
