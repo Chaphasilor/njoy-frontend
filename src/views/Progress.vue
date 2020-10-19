@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen pb-32 bg-white"
+    class="h-screen bg-white"
   >
 
     <div
@@ -69,6 +69,13 @@
       >
         Nothing downloaded yet
       </div>
+    </div>
+
+    <div
+      v-else
+      class="h-navbar py-24"
+    >
+      <!-- Used to add bottom padding to the download list -->
     </div>
 
     <Navbar
