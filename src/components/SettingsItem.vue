@@ -49,6 +49,9 @@
       :timeout="timeout"
       @input="$emit(`change`, $event)"
       v-haptic
+      v-haptic:error="{
+        trigger: `failed`,
+      }"
       @failed="log"
     />
 

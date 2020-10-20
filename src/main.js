@@ -22,7 +22,8 @@ Vue.use(VueHaptic, {
     error: [50, 75, 50],
     blip: 10,
     default: 25,
-  }
+  },
+  defaultHapticTrigger: 'click',
 });
 
 new Vue({
