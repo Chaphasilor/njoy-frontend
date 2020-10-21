@@ -309,25 +309,25 @@ const store = new Vuex.Store({
   actions: {
     async mountApi(context) {
 
-      let response;
-      let baseUrl = `https://web-services.chaphasilor.xyz/njoy/tunnel`;
+      // let response;
+      let baseUrl = `https://njoy.chaphasilor.xyz`;
       let api;
 
-      try {
-        response = await fetch(`https://web-services.chaphasilor.xyz/url?type=njoy`);
-        baseUrl = await response.text();
-      } catch (err) {
-        console.error(`Failed to fetch base url, using proxy:`, err);
-      }
+      // try {
+      //   response = await fetch(`https://web-services.chaphasilor.xyz/url?type=njoy`);
+      //   baseUrl = await response.text();
+      // } catch (err) {
+      //   console.error(`Failed to fetch base url, using proxy:`, err);
+      // }
 
-      console.log(`baseUrl:`, baseUrl);
+      // console.log(`baseUrl:`, baseUrl);
       
       // set api urls depending on mode
-      if (process.env.NODE_ENV === `production`) {
+      // if (process.env.NODE_ENV === `production`) {
         api = new API(baseUrl);
-      } else {
-        api = new API(`http://192.168.2.129:70`);
-      }
+      // } else {
+      //   api = new API(`http://192.168.2.129:70`);
+      // }
 
       context.commit(`SET_API`, api);
       
