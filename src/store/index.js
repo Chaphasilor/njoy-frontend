@@ -167,66 +167,106 @@ const store = new Vuex.Store({
       ]
     },
     downloads: [
-      // new DownloadItem({
-      //   id: "9f1f5063-f916-4abb-810b-6e31da4b446e",
-      //   status: "downloading",
-      //   url: "https://example.com",
-      //   downloadUrl: "https://example.com",
-      //   name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
-      //   dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
-      //   customHeaders: {
-      //   referer: "hashhackers.com",
-      //   cookie: ""
-      //   },
-      //   percentage: "70.00",
-      //   eta: "10/1/2020, 11:22:10 PM",
-      //   size: "168.43 MB",
-      //   downloaded: "168.43 MB",
-      //   startDate: "2020-10-01T21:19:59.959Z",
-      //   speed: "4.32 MB/s",
-      //   retries: 0,
-      //   resumable: false
-      // }),
-      // new DownloadItem({
-      //   id: "9f1f5063-f916-4abb-810b-6e31da4jdsoen",
-      //   status: "completed",
-      //   url: "https://example.com",
-      //   downloadUrl: "https://example.com",
-      //   name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
-      //   dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
-      //   customHeaders: {
-      //   referer: "hashhackers.com",
-      //   cookie: ""
-      //   },
-      //   percentage: "70.00",
-      //   eta: "10/1/2020, 11:22:10 PM",
-      //   size: "168.43 MB",
-      //   downloaded: "168.43 MB",
-      //   startDate: "2020-10-01T21:19:59.959Z",
-      //   speed: null,
-      //   retries: 0,
-      //   resumable: false
-      // }),
-      // new DownloadItem({
-      //   id: "9f1f5063-f916-4abb-810b-6e31da4naztn",
-      //   status: "paused",
-      //   url: "https://example.com",
-      //   downloadUrl: "https://example.com",
-      //   name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
-      //   dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
-      //   customHeaders: {
-      //   referer: "hashhackers.com",
-      //   cookie: ""
-      //   },
-      //   percentage: "70.00",
-      //   eta: "10/1/2020, 11:22:10 PM",
-      //   size: "168.43 MB",
-      //   downloaded: "168.43 MB",
-      //   startDate: "2020-10-01T21:19:59.959Z",
-      //   speed: null,
-      //   retries: 0,
-      //   resumable: false
-      // }),
+      new DownloadItem({
+        id: "9f1f5063-f916-4abb-810b-6e31da4b446e",
+        status: "downloading",
+        url: "https://example.com",
+        downloadUrl: "https://example.com",
+        name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
+        dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
+        customHeaders: {
+        referer: "hashhackers.com",
+        cookie: ""
+        },
+        percentage: "70.00",
+        eta: "10/1/2020, 11:22:10 PM",
+        size: "168.43 MB",
+        downloaded: "168.43 MB",
+        startDate: "2020-10-01T21:19:59.959Z",
+        speed: "4.32 MB/s",
+        retries: 0,
+        resumable: false
+      }),
+      new DownloadItem({
+        id: "9f1f5063-f916-4abb-810b-6e31da4jdsoen",
+        status: "completed",
+        url: "https://example.com",
+        downloadUrl: "https://example.com",
+        name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
+        dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
+        customHeaders: {
+        referer: "hashhackers.com",
+        cookie: ""
+        },
+        percentage: "70.00",
+        eta: "10/1/2020, 11:22:10 PM",
+        size: "168.43 MB",
+        downloaded: "168.43 MB",
+        startDate: "2020-10-01T21:19:59.959Z",
+        speed: null,
+        retries: 0,
+        resumable: false
+      }),
+      new DownloadItem({
+        id: "9f1f5063-f916-4abb-810b-6e31da4naztn",
+        status: "paused",
+        url: "https://example.com",
+        downloadUrl: "https://example.com",
+        name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
+        dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
+        customHeaders: {
+        referer: "hashhackers.com",
+        cookie: ""
+        },
+        percentage: "70.00",
+        eta: "10/1/2020, 11:22:10 PM",
+        size: "168.43 MB",
+        downloaded: "168.43 MB",
+        startDate: "2020-10-01T21:19:59.959Z",
+        speed: null,
+        retries: 0,
+        resumable: false
+      }),
+      new DownloadItem({
+        id: "9f1f5063-f916-4abb-4967-6e31da4naztn",
+        status: "paused",
+        url: "https://example.com",
+        downloadUrl: "https://example.com",
+        name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
+        dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
+        customHeaders: {
+        referer: "hashhackers.com",
+        cookie: ""
+        },
+        percentage: "70.00",
+        eta: "10/1/2020, 11:22:10 PM",
+        size: "168.43 MB",
+        downloaded: "168.43 MB",
+        startDate: "2020-10-01T21:19:59.959Z",
+        speed: null,
+        retries: 0,
+        resumable: false
+      }),
+      new DownloadItem({
+        id: "9f1f5063-f916-4abb-2048-6e31da4naztn",
+        status: "paused",
+        url: "https://example.com",
+        downloadUrl: "https://example.com",
+        name: "Star.Wars.Resistance.S01E09.720p.HEVC.x265-MeGusta.mkv",
+        dest: "Media/TV Shows/Star Wars - Resistance (2018)/Season 1/",
+        customHeaders: {
+        referer: "hashhackers.com",
+        cookie: ""
+        },
+        percentage: "70.00",
+        eta: "10/1/2020, 11:22:10 PM",
+        size: "168.43 MB",
+        downloaded: "168.43 MB",
+        startDate: "2020-10-01T21:19:59.959Z",
+        speed: null,
+        retries: 0,
+        resumable: false
+      }),
     ],
     authenticated: undefined,
     swRegistration: undefined,
@@ -337,22 +377,22 @@ const store = new Vuex.Store({
     },
     async checkAuthenticated(context) {
 
-      // context.commit('SET_AUTH_STATUS', true);
-      // return;
-      
-      console.log('checkAuthenticated called!');
-      
-      try {
-        await context.getters.api.checkAuthenticated();
-      } catch (err) {
-        console.warn(err);
-        context.commit('SET_AUTH_STATUS', false);
-        return err.message;
-      }
-
       context.commit('SET_AUTH_STATUS', true);
+      return;
       
-      return `Success`;
+      // console.log('checkAuthenticated called!');
+      
+      // try {
+      //   await context.getters.api.checkAuthenticated();
+      // } catch (err) {
+      //   console.warn(err);
+      //   context.commit('SET_AUTH_STATUS', false);
+      //   return err.message;
+      // }
+
+      // context.commit('SET_AUTH_STATUS', true);
+      
+      // return `Success`;
       
     },
     async authenticateApi(context, { username, password }) {

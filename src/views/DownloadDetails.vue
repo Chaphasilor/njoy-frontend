@@ -185,18 +185,13 @@
         />    
       </div>
 
-      <router-link
-        class="w-full"
-        :to="{
-          name: 'Progress',
-        }"
-      >
-        <CTAButton
-          class="w-full h-12 mt-6"
-          type="good"
-          label="Back"
-        />
-      </router-link>
+      <CTAButton
+        class="w-full h-12 mt-6"
+        type="good"
+        label="Back"
+        @click.native="$router.go(-1)"
+      />
+      
     </div>
   </div>
 </template>
@@ -297,10 +292,10 @@ export default {
 
     this.$store.dispatch('navigate', { target: this.$route.name });
 
-    this.$store.dispatch('fetchProgress');
-    this.pollingIntervalID = setInterval(() => {
-      this.$store.dispatch('fetchProgress');
-    }, 2000);
+    // this.$store.dispatch('fetchProgress');
+    // this.pollingIntervalID = setInterval(() => {
+    //   this.$store.dispatch('fetchProgress');
+    // }, 2000);
 
   },
   beforeDestroy: function() {

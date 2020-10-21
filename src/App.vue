@@ -33,6 +33,10 @@ export default {
       await this.$store.dispatch(`mountApi`);
     }
     this.$store.dispatch(`checkAuthenticated`);
+
+    // setInterval(() => {
+    //   console.log(Date.now());
+    // }, 50)
     
   }
 }
