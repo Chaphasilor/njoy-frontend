@@ -9,6 +9,7 @@
         class="inline-block"
         v-shared-element:[`${sharedIdBase}-${name.toLowerCase()}-name`]="{
           zIndex: 2,
+          restrictToRoutes: restrictionFunction,
         }"
       >
         {{ name }}
@@ -21,6 +22,7 @@
         class="inline-block"
         v-shared-element:[`${sharedIdBase}-${name.toLowerCase()}-value`]="{
           zIndex: 2,
+          restrictToRoutes: restrictionFunction,
         }"
       >
         {{ value }}
@@ -58,10 +60,18 @@ export default {
         return String(Math.random(500));
       },
     },
+    restrictionFunction: {
+      type: Function,
+      required: false,
+      default: function() {
+        return () => {return true};
+      },
+    },
+  },
+  mounted() {
+
+    console.log(`this.restrictionFunction:`, this.restrictionFunction);
+    
   }
 }
 </script>
-
-<style>
-
-</style>

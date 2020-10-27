@@ -23,13 +23,20 @@
 
     <div
       class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md p-5 leading-9"
-      v-shared-element:[download.id]
+      v-shared-element:[download.id]="{
+        restrictToRoutes: (to, from) => {
+          return from.params.downloadId === download.id;
+        }
+      }"
     >
 
       <div
         class="w-full text-left mb-2 font-semibold break-all h-8 overflow-hidden"
         v-shared-element:[`${download.id}-title`]="{
           zIndex: 2,
+          restrictToRoutes: (to, from) => {
+            return from.params.downloadId === download.id;
+          }
         }"
       >
         {{ download.filename }}
@@ -45,13 +52,16 @@
       <div
         v-if="showProgressbar"
         class="w-full h-8 my-2 flex flex-row flex-wrap justify-between"
-        v-shared-element:[`${download.id}-progress-bar`]="{
-          zIndex: 3,
-        }"
       >
         <ProgressBar
           class="w-full h-6 overflow-hidden"
           :percentage="download.percentage"
+          v-shared-element:[`${download.id}-progress-bar`]="{
+            zIndex: 3,
+            restrictToRoutes: (to, from) => {
+              return from.params.downloadId === download.id;
+            }
+          }"
         />
       </div>
 
@@ -60,17 +70,16 @@
         name="Status"
         :value="statusString"
         :shared-id-base="download.id"
+        :restriction-function="(to, from) => {return from.params.downloadId === download.id;}"
         :color="download.textColors.red.includes(download.status) ? `text-cta-red` : download.textColors.yellow.includes(download.status) ? `text-cta-yellow` : download.textColors.green.includes(download.status) ? `text-cta-green` : `text-dark`"
       />
-      <!-- v-shared-element:[`${download.id}-status2`]="{
-        zIndex: 2,
-      }" -->
 
       <InfoLine
         class="w-full h-8"
         name="Percentage"
         :value="`${download.percentage} %`"
         :shared-id-base="download.id"
+        :restriction-function="(to, from) => {return from.params.downloadId === download.id;}"
       />
 
       <InfoLine
@@ -78,6 +87,7 @@
         name="ETA"
         :value="etaString"
         :shared-id-base="download.id"
+        :restriction-function="(to, from) => {return from.params.downloadId === download.id;}"
       />
 
       <InfoLine
@@ -85,6 +95,7 @@
         name="Download Speed"
         :value="download.speed"
         :shared-id-base="download.id"
+        :restriction-function="() => {return false;}"
       />
 
       <InfoLine
@@ -92,6 +103,7 @@
         name="Progress"
         :value="progressSizeString"
         :shared-id-base="download.id"
+        :restriction-function="(to, from) => {return from.params.downloadId === download.id;}"
       />
 
       <InfoLine
@@ -99,6 +111,7 @@
         name="Elapsed"
         :value="elapsedString"
         :shared-id-base="download.id"
+        :restriction-function="() => {return false;}"
       />
 
       <InfoLine
@@ -106,6 +119,7 @@
         name="Destination"
         :value="download.path"
         :shared-id-base="download.id"
+        :restriction-function="() => {return false;}"
       />
 
       <InfoLine
@@ -113,6 +127,7 @@
         name="URL"
         :value="download.url"
         :shared-id-base="download.id"
+        :restriction-function="() => {return false;}"
       />
 
       <InfoLine
@@ -120,6 +135,7 @@
         name="Retries"
         :value="download.retries.toString()"
         :shared-id-base="download.id"
+        :restriction-function="() => {return false;}"
       />
 
       <!-- TODO collapse headers by default (also design in Figma) -->
@@ -157,6 +173,9 @@
           })"
           v-shared-element:[`${download.id}-cta-cancel`]="{
             zIndex: 2,
+            restrictToRoutes: (to, from) => {
+              return from.params.downloadId === download.id;
+            }
           }"
         />
         <CTAButton
@@ -169,6 +188,9 @@
           })"
           v-shared-element:[`${download.id}-cta-pause`]="{
             zIndex: 2,
+            restrictToRoutes: (to, from) => {
+              return from.params.downloadId === download.id;
+            }
           }"
         />
         <CTAButton
@@ -181,6 +203,9 @@
           })"
           v-shared-element:[`${download.id}-cta-resume`]="{
             zIndex: 2,
+            restrictToRoutes: (to, from) => {
+              return from.params.downloadId === download.id;
+            }
           }"
         />    
       </div>

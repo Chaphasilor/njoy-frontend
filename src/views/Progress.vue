@@ -55,7 +55,9 @@
       v-for="item of allItems"
       :download="item"
       v-shared-element:[item.id]="{
-        compositeOnly: true,
+        restrictToRoutes: to => {
+          return to.params.downloadId === item.id;
+        }
       }"
       v-haptic
     />

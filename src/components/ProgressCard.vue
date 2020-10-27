@@ -14,6 +14,9 @@
       :class="(!progressBarStates.includes(download.status) ? 'w-3/4' : 'w-full') + ` text-left font-semibold truncate h-8`"
       v-shared-element:[`${download.id}-title`]="{
         zIndex: 2,
+        restrictToRoutes: to => {
+          return to.params.downloadId === download.id;
+        }
       }"
     >
       {{ download.filename }}
@@ -22,13 +25,16 @@
     <div
       v-if="showProgressbar"
       class="w-7/8 h-8 flex flex-col justify-center"
-      v-shared-element:[`${download.id}-progress-bar`]="{
-        zIndex: 3,
-      }"
     >
       <ProgressBar
         class="w-full h-2 overflow-hidden"
         :percentage="download.percentage"
+        v-shared-element:[`${download.id}-progress-bar`]="{
+          zIndex: 3,
+          restrictToRoutes: to => {
+            return to.params.downloadId === download.id;
+          }
+        }"
       />
     </div>
 
@@ -40,6 +46,9 @@
         class="inline-block"
         v-shared-element:[`${download.id}-${statusOrPercentage}-value`]="{
           zIndex: 2,
+          restrictToRoutes: to => {
+            return to.params.downloadId === download.id;
+          }
         }"
       >
         {{ statusString }}
@@ -54,6 +63,7 @@
       name="ETA"
       :value="etaString"
       :shared-id-base="download.id"
+      :restriction-function="to => {return to.params.downloadId === download.id;}"
     />
 
     <InfoLine
@@ -62,6 +72,7 @@
       name="Progress"
       :value="progressSizeString"
       :shared-id-base="download.id"
+      :restriction-function="to => {return to.params.downloadId === download.id;}"
     />
 
     <CTAButton
@@ -74,6 +85,9 @@
       })"
       v-shared-element:[`${download.id}-cta-pause`]="{
         zIndex: 2,
+        restrictToRoutes: to => {
+          return to.params.downloadId === download.id;
+        }
       }"
     />
     <CTAButton
@@ -98,6 +112,9 @@
       })"
       v-shared-element:[`${download.id}-cta-resume`]="{
         zIndex: 2,
+        restrictToRoutes: to => {
+          return to.params.downloadId === download.id;
+        }
       }"
     />
   </BetterRouterLink>
