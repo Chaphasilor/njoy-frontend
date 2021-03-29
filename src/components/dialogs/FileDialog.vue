@@ -1,21 +1,21 @@
 <template>
   <div>
     <div
-      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl rounded-parent"
+      class="relative w-full h-full overflow-y-auto bg-white shadow-xl text-dark rounded-parent"
     >
       <!-- fixed -->
       <div
-        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md font-quicksand text-dark flex flex-row justify-start"
+        class="sticky top-0 flex flex-row justify-start h-auto pt-0 mb-4 bg-white shadow-md font-quicksand text-dark"
       >
         <img
-          class="w-4 my-3 mr-3 ml-5"
+          class="w-4 my-3 ml-5 mr-3"
           src="@/assets/icons/close.svg"
           alt="Remove"
           @click="$emit('show-dialog', {level: level, type: undefined});"
         >
 
         <h3
-          class="text-lg antialiased font-bold tracking-wide py-2"
+          class="py-2 text-lg antialiased font-bold tracking-wide"
         >
           Download a Single File
         </h3>
@@ -27,18 +27,18 @@
         class="flex flex-col flex-grow"
       >
 
-        <div class="ml-6 font-bold mb-2">
+        <div class="mb-2 ml-6 font-bold">
           Download-URL:
         </div>
         <div
-          class="flex flex-row h-12 mb-2 justify-between"
+          class="flex flex-row justify-between h-12 mb-2"
         >
           <TextField
             name="url"
             class="w-full pl-4"
             placeholder="e.g. https://example.com"
             v-model="fileToDownload.url"
-            @input="loadFileSize($event)"
+            @input="loadFileInfo($event)"
           />
 
           <SmallButton
@@ -49,15 +49,15 @@
           />
 
         </div>
-        <div class="h-6 ml-6 mb-6">
+        <div class="h-6 mb-6 ml-6">
           {{ sizeString }}
         </div>
 
-        <div class="ml-6 font-bold mb-2">
+        <div class="mb-2 ml-6 font-bold">
           Destination Path:
         </div>
         <div
-          class="flex flex-row h-12 mb-12 px-4 justify-between"
+          class="flex flex-row justify-between h-12 px-4 mb-12"
         >
           <TextField
             name="path"
@@ -76,7 +76,7 @@
 
         </div>
 
-        <div class="ml-6 font-bold mb-2">
+        <div class="mb-2 ml-6 font-bold">
           Filename:
         </div>
         <TextField
@@ -87,14 +87,14 @@
         />
 
         <CTAButton
-          class="w-full px-4 h-12"
+          class="w-full h-12 px-4"
           type="action"
           label="Manage Cookies & Headers"
           @click.native="$emit('show-dialog', {level: level+1, type: 'cookiesAndHeaders'})"
         />    
 
         <CTAButton
-          class="w-full px-4 mt-16 h-12"
+          class="w-full h-12 px-4 mt-16"
           :type="downloadButtonActive ? `good` : `action`"
           :label="downloadButtonActive ? `Download!` : `Cancel`"
           @click.native="handleDownloadButton"
@@ -109,12 +109,12 @@
 
     <transition
       name="dialog-slide-up"
-      enter-active-class="transform transition-all duration-300 ease-in-out"
-      enter-class="translate-y-full rounded-t-xl scale-x-90"
-      enter-to-class="translate-y-0 rounded-t-none scale-100"
-      leave-active-class="transform transition-all duration-200 ease-in"
-      leave-class="translate-y-0 rounded-t-none scale-100"
-      leave-to-class="translate-y-full rounded-t-xl scale-x-90"
+      enter-active-class="transition-all duration-300 ease-in-out transform"
+      enter-class="scale-x-90 translate-y-full rounded-t-xl"
+      enter-to-class="scale-100 translate-y-0 rounded-t-none"
+      leave-active-class="transition-all duration-200 ease-in transform"
+      leave-class="scale-100 translate-y-0 rounded-t-none"
+      leave-to-class="scale-x-90 translate-y-full rounded-t-xl"
     >
       <PathDialog
         v-if="showPathDialog"
@@ -128,12 +128,12 @@
     
     <transition
       name="dialog-slide-up"
-      enter-active-class="transform transition-all duration-300 ease-in-out"
-      enter-class="translate-y-full rounded-t-xl scale-x-90"
-      enter-to-class="translate-y-0 rounded-t-none scale-100"
-      leave-active-class="transform transition-all duration-200 ease-in"
-      leave-class="translate-y-0 rounded-t-none scale-100"
-      leave-to-class="translate-y-full rounded-t-xl scale-x-90"
+      enter-active-class="transition-all duration-300 ease-in-out transform"
+      enter-class="scale-x-90 translate-y-full rounded-t-xl"
+      enter-to-class="scale-100 translate-y-0 rounded-t-none"
+      leave-active-class="transition-all duration-200 ease-in transform"
+      leave-class="scale-100 translate-y-0 rounded-t-none"
+      leave-to-class="scale-x-90 translate-y-full rounded-t-xl"
     >
       <CookiesAndHeadersDialog
         v-if="showCookiesAndHeadersDialog"
@@ -305,16 +305,17 @@ export default {
       }
 
       this.fileToDownload.url = clipboard;
-      this.loadFileSize(this.fileToDownload.url);
+      this.loadFileInfo(this.fileToDownload.url);
         
     },
-    async loadFileSize(url) {
+    async loadFileInfo(url) {
 
       this.fileToDownload.size = `Loading...`;
-      let size = await this.$store.dispatch(`getFileSize`, url);
+      let fileInfo = await this.$store.dispatch(`getFileInfo`, url);
 
-      console.log(`size:`, size);
-      this.fileToDownload.size = size;
+      console.log(`fileInfo:`, fileInfo);
+      this.fileToDownload.size = fileInfo.size;
+      this.fileToDownload.filename = fileInfo.name;
       
     }
   },
@@ -325,7 +326,7 @@ export default {
 
     if (this.downloadUrl.length > 0) {
       this.fileToDownload.url = this.downloadUrl;
-      this.loadFileSize(this.fileToDownload.url);
+      this.loadFileInfo(this.fileToDownload.url);
     }
 
     if (this.filename.length > 0) {

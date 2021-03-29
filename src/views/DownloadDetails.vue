@@ -3,12 +3,12 @@
     class="h-full"
   >
     <div
-      class="w-full h-16 p-4 flex flex-row justify-between"
+      class="flex flex-row justify-between w-full h-16 p-4"
       v-shared-element:page-header
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
+        class="flex-shrink-0 w-5/6 text-2xl antialiased font-semibold tracking-wide text-left text-dark"
       >
         Download Details
       </h2>
@@ -22,12 +22,12 @@
     </div>
 
     <div
-      class="mx-4 my-2 bg-white text-dark rounded-xl shadow-md p-5 leading-9"
+      class="p-5 mx-4 my-2 leading-9 bg-white shadow-md text-dark rounded-xl"
       v-shared-element:[download.id]
     >
 
       <div
-        class="w-full text-left mb-2 font-semibold break-all h-8 overflow-hidden"
+        class="w-full h-8 mb-2 overflow-hidden font-semibold text-left break-all"
         v-shared-element:[`${download.id}-title`]="{
           zIndex: 2,
         }"
@@ -37,14 +37,14 @@
 
       <!-- <div
         v-if="!showProgressbar"
-        class="w-1/5 text-right h-8"
+        class="w-1/5 h-8 text-right"
       >
         {{ statusString }}
       </div> -->
 
       <div
         v-if="showProgressbar"
-        class="w-full h-8 my-2 flex flex-row flex-wrap justify-between"
+        class="flex flex-row flex-wrap justify-between w-full h-8 my-2"
         v-shared-element:[`${download.id}-progress-bar`]="{
           zIndex: 3,
         }"
@@ -145,7 +145,7 @@
       </div>
 
       <div
-        class="w-full h-12 mt-4 flex flex-row flex-wrap justify-between"
+        class="flex flex-row flex-wrap justify-between w-full h-12 mt-4"
       >
         <CTAButton
           v-if="showCancelButton"
@@ -294,6 +294,8 @@ export default {
     },
   },
   mounted: function() {
+
+    console.log(`this.download:`, this.download)
 
     this.$store.dispatch('navigate', { target: this.$route.name });
 

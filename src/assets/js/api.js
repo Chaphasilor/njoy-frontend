@@ -151,7 +151,7 @@ export default class API {
         })
         .catch(err => {
           console.warn(`Failed to fetch progress:`, err);
-          // respond with emtpy progress object
+          // respond with empty progress object
           return reject({
             active: [],
             queued: [],
@@ -345,26 +345,32 @@ export default class API {
     
   }
 
-  async fetchFileSize(url) {
+  async resolveUrl(url) {
 
     let res;
 
     try {
       
-      res = await fetch(this.apiEndpoint + `/fileSize/${encodeURIComponent(encodeURIComponent(url))}`, {
+      res = await fetch(this.apiEndpoint + `/resolve/`, {
         mode: `cors`,
-        method: `GET`,
+        method: `POST`,
         credentials: `include`,
+        headers: {
+          'Content-Type': `application/json`,
+        },
+        body: JSON.stringify({
+          url: url,
+        })
       });
 
     } catch (err) {
-      console.error(`Failed to fetch file size:`, err);
+      console.error(`Failed to resolve URL:`, err);
     }
 
     if (200 == res.status) {
-      return res.text();
+      return res.json();
     } else {
-      throw new Error(`Failed to fetch file size, server responded with status ${res.status}`);
+      throw new Error(`Failed to resolve URL, server responded with status ${res.status}`);
     }
     
     

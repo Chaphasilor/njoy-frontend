@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full px-2 py-4 rounded-lg border border-dark flex flex-col items-start overflow-scroll"
+    class="flex flex-col items-start w-full h-full px-2 py-4 overflow-auto border rounded-lg border-dark"
   >
 
     <div
@@ -9,7 +9,7 @@
       @click="$emit('directory-up')"
     >
       <div
-        class="w-8 text-center text-base leading-normal"
+        class="w-8 text-base leading-normal text-center"
       >
         ..
       </div>
@@ -18,11 +18,11 @@
     <div
       class="h-8 mb-2 bg-gray-300 rounded-lg"
       :key="index"
-      v-for="(dir, index) of currentDirectory.subdirectories"
+      v-for="(dir, index) of currentDirectory.subDirectories"
       @click="$emit('directory-down', dir)"
     >
       <div
-        class="p-2 text-center text-base leading-none"
+        class="p-2 text-base leading-none text-center"
       >
         {{ dir.name }}
       </div>

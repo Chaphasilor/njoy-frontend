@@ -21,7 +21,7 @@
 
     <div
       v-if="showProgressbar"
-      class="w-7/8 h-8 flex flex-col justify-center"
+      class="flex flex-col justify-center h-8 w-7/8"
       v-shared-element:[`${download.id}-progress-bar`]="{
         zIndex: 3,
       }"
@@ -59,7 +59,7 @@
     <InfoLine
       v-if="showSize"
       class="w-full h-8"
-      name="Progress"
+      :name="this.download.status === `queued` ? `Size` : `Progress`"
       :value="progressSizeString"
       :shared-id-base="download.id"
     />
@@ -100,6 +100,7 @@
         zIndex: 2,
       }"
     />
+
   </BetterRouterLink>
 </template>
 
@@ -174,7 +175,7 @@ export default {
       return this.download.eta.toLocaleTimeString();
     },
     progressSizeString: function() {
-      return `${this.download.downloaded} / ${this.download.size}`;
+      return this.download.status === `queued` ? this.download.size : `${this.download.downloaded} / ${this.download.size}`;
     },
   },
   mounted() {

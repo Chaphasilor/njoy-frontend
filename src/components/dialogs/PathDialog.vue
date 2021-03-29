@@ -1,29 +1,29 @@
 <template>
   <div>
     <div
-      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl"
+      class="relative w-full h-full overflow-y-auto bg-white shadow-xl text-dark"
     >
       <!-- fixed -->
       <div
-        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md  font-quicksand text-dark flex flex-row justify-start"
+        class="sticky top-0 flex flex-row justify-start h-auto pt-0 mb-4 bg-white shadow-md font-quicksand text-dark"
       >
       
         <img
-          class="h-5 my-3 mr-4 ml-5"
+          class="h-5 my-3 ml-5 mr-4"
           src="@/assets/icons/back.svg"
           alt="Remove"
           @click="$emit('show-dialog', {level: level, type: undefined});"
         >
 
         <h3
-          class="text-lg antialiased font-bold tracking-wide py-2"
+          class="py-2 text-lg antialiased font-bold tracking-wide"
         >
           Specify the Destination Path
         </h3>
       </div>
 
       <div
-        class="flex flex-row h-12 mb-8 justify-between"
+        class="flex flex-row justify-between h-12 mb-8"
       >
         <TextField
           name="displayPath"
@@ -36,7 +36,7 @@
       </div>
 
       <div
-        class="flex flex-row h-64 mb-2 px-4 justify-between"
+        class="flex flex-row justify-between h-64 px-4 mb-2"
       >
         <DirectoryBrowser
           class="w-full"
@@ -50,17 +50,17 @@
       </div>
 
       <div
-        class="w-full px-4 mb-6 flex flex-row justify-center"
+        class="flex flex-row justify-center w-full px-4 mb-6"
       >
 
         <transition
           mode="out-in"
-          enter-active-class="transform transition-all duration-200"
-          enter-class="opacity-0 scale-0"
-          enter-to-class="opacity-100 scale-100"
-          leave-active-class="transform transition-all duration-200"
-          leave-class="opacity-100 scale-100"
-          leave-to-class="opacity-0 scale-0"
+          enter-active-class="transition-all duration-200 transform"
+          enter-class="scale-0 opacity-0"
+          enter-to-class="scale-100 opacity-100"
+          leave-active-class="transition-all duration-200 transform"
+          leave-class="scale-100 opacity-100"
+          leave-to-class="scale-0 opacity-0"
         >
           <CTAButton
             v-if="!enableNewFolderInputs"
@@ -71,7 +71,7 @@
           />
 
           <div
-            class="w-full flex flex-row justify-between"
+            class="flex flex-row justify-between w-full"
             v-else
           >
 
@@ -96,7 +96,7 @@
       </div>
 
       <CTAButton
-        class="w-full px-4 mt-16 h-12"
+        class="w-full h-12 px-4 mt-16"
         type="good"
         label="Confirm"
         @click.native="$emit('show-dialog', {level: level, type: undefined})"
@@ -184,7 +184,7 @@ export default {
         return currentDirectory;
       } else {
 
-        let foundDir = currentDirectory.subdirectories.filter(dir => dir.name === currentPath[0]);
+        let foundDir = currentDirectory.subDirectories.filter(dir => dir.name === currentPath[0]);
         console.log(`foundDir:`, foundDir);
         if (foundDir.length === 0) {
           return {
@@ -265,9 +265,9 @@ export default {
 
       let current = this.findCurrentDirectoryDummy(rootDirectoryTreeCopy);
 
-      current.subdirectories.push({
+      current.subDirectories.push({
         name: name,
-        subdirectories: [],
+        subDirectories: [],
       })
       
       console.log(`current:`, current);
@@ -289,6 +289,7 @@ export default {
   mounted: function() {
 
     console.log(`this.currentPath:`, this.currentPath);
+    console.log(`this.rootDirectoryTree:`, this.rootDirectoryTree)
 
   }
 }

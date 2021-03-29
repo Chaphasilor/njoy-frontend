@@ -4,12 +4,12 @@
   >
 
     <div
-      class="w-full h-16 p-4 flex flex-row justify-between"
+      class="flex flex-row justify-between w-full h-16 p-4"
       v-shared-element:page-header
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
+        class="flex-shrink-0 w-5/6 text-2xl antialiased font-semibold tracking-wide text-left text-dark"
       >
         Start a Download
       </h2>
@@ -47,7 +47,7 @@
     />
 
     <span
-      class="inline-block w-full text-center font-quicksand-bold tracking-tighter font-bold text-lg text-dark opacity-25"
+      class="inline-block w-full text-lg font-bold tracking-tighter text-center opacity-25 font-quicksand-bold text-dark"
     >
       OR
     </span>
@@ -56,17 +56,16 @@
       @click.native="type = 'batch'"
       class="h-56 mx-6 my-4 opacity-25"
       type="batch"
-      v-haptic="0"
     />
 
     <transition
       name="dialog-slide-up"
-      enter-active-class="transform transition-all duration-300 ease-in-out"
-      enter-class="translate-y-full rounded-t-xl scale-x-90"
-      enter-to-class="translate-y-0 rounded-t-none scale-100"
-      leave-active-class="transform transition-all duration-200 ease-in"
-      leave-class="translate-y-0 rounded-t-none scale-100"
-      leave-to-class="translate-y-full rounded-t-xl scale-x-90"
+      enter-active-class="transition-all duration-300 ease-in-out transform"
+      enter-class="scale-x-90 translate-y-full rounded-t-xl"
+      enter-to-class="scale-100 translate-y-0 rounded-t-none"
+      leave-active-class="transition-all duration-200 ease-in transform"
+      leave-class="scale-100 translate-y-0 rounded-t-none"
+      leave-to-class="scale-x-90 translate-y-full rounded-t-xl"
     >
       <FileDialog
         v-if="showSingleFileDialog"
@@ -76,7 +75,7 @@
         :filename="$route.query.title"
         @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
         @download-submitted="handleDownloadSubmitted"
-        class="fixed bottom-0 left-0 w-full h-full z-10"
+        class="fixed bottom-0 left-0 z-10 w-full h-full"
       />
     </transition>
 

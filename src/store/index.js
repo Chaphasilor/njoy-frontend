@@ -34,116 +34,116 @@ const store = new Vuex.Store({
     activeView: undefined,
     rootDirectoryTree: {
       name: 'ROOT',
-      subdirectories: [
+      subDirectories: [
         {
           name: 'Backups',
-          subdirectories: [
+          subDirectories: [
             {
               name: 'OnePlus 5',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Raspberry Pi',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Spectre',
-              subdirectories: [],
+              subDirectories: [],
             },
           ]
         },
         {
           name: 'Documents',
-          subdirectories: [
+          subDirectories: [
             {
               name: 'Uni',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Unsorted',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Work',
-              subdirectories: [],
+              subDirectories: [],
             },
           ]
         },
         {
           name: 'Media',
-          subdirectories: [
+          subDirectories: [
             {
               name: 'eBooks',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Movies',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Music',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Pictures',
-              subdirectories: [
+              subDirectories: [
                 {
                   name: 'Wallpapers',
-                  subdirectories: [],
+                  subDirectories: [],
                 },
               ],
             },
             {
               name: 'TV Shows',
-              subdirectories: [
+              subDirectories: [
                 {
                   name: 'Altered Carbon (2018)',
-                  subdirectories: [],
+                  subDirectories: [],
                 },
                 {
                   name: 'Cloak and Dagger (2018)',
-                  subdirectories: [
+                  subDirectories: [
                     {
                       name: 'S1',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                     {
                       name: 'S2',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                   ],
                 },
                 {
                   name: 'Dark (2017)',
-                  subdirectories: [
+                  subDirectories: [
                     {
                       name: 'Season 1',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                     {
                       name: 'Season 2',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                     {
                       name: 'Season 3',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                   ],
                 },
                 {
                   name: 'Dark Matter (2015)',
-                  subdirectories: [
+                  subDirectories: [
                     {
                       name: 'Season 1',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                     {
                       name: 'Season 2',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                     {
                       name: 'Season 3',
-                      subdirectories: [],
+                      subDirectories: [],
                     },
                   ],
                 },
@@ -153,14 +153,14 @@ const store = new Vuex.Store({
         },
         {
           name: 'Misc',
-          subdirectories: [
+          subDirectories: [
             {
               name: 'Code',
-              subdirectories: [],
+              subDirectories: [],
             },
             {
               name: 'Jam Session',
-              subdirectories: [],
+              subDirectories: [],
             },
           ]
         },
@@ -323,11 +323,11 @@ const store = new Vuex.Store({
       // console.log(`baseUrl:`, baseUrl);
       
       // set api urls depending on mode
-      // if (process.env.NODE_ENV === `production`) {
+      if (process.env.NODE_ENV === `production`) {
         api = new API(baseUrl);
-      // } else {
-      //   api = new API(`http://192.168.2.129:70`);
-      // }
+      } else {
+        api = new API(`http://192.168.31.129:70`);
+      }
 
       context.commit(`SET_API`, api);
       
@@ -380,7 +380,7 @@ const store = new Vuex.Store({
         console.error(`Couldn't get root directory tree from API!`, err);
         tree = {
           name: `ROOT`,
-          subdirectories: [],
+          subDirectories: [],
         }
         
       }
@@ -462,20 +462,23 @@ const store = new Vuex.Store({
       return response;
       
     },
-    async getFileSize(context, url) {
+    async getFileInfo(context, url) {
 
-      let size;
+      let info;
       
       try {
-        size = await context.getters.api.fetchFileSize(url);
+        info = await context.getters.api.resolveUrl(url);
       } catch (err) {
         
         console.warn(`Couldn't fetch the file size for the given URL through the API:`, err);
-        size = `Unknown`;
+        info = `Unknown`;
         
       }
 
-      return size;
+      return {
+        name: (info.filename === `Unknown` || info.filename.length === 0) ? undefined : info.filename,
+        size: info.size
+      };
       
     },
     saveServiceWorkerRegistration(context, registration) {

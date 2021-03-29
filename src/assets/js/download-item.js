@@ -3,18 +3,18 @@ export default class DownloadItem {
   constructor (properties) {
 
     this.id = properties.id;
-    this.status = properties.status;
-    this.url = properties.url || properties._restore?.url;
-    this.downloadUrl = properties.downloadUrl || properties._restore?.downloadUrl;
-    this.filename = properties.name || properties.fileName;
-    this.path = properties.dest || properties._restore?.dest;
-    this.headers = properties.customHeaders || properties._restore?.customHeaders;
-    this.percentage = parseFloat(properties.percentage);
+    this.status = properties.status || `unknown`;
+    this.url = properties.url || properties._restore?.url || `unknown`;
+    this.downloadUrl = properties.downloadUrl || properties._restore?.downloadUrl || `unknown`;
+    this.filename = properties.name || properties.fileName || `unknown`;
+    this.path = properties.dest || properties._restore?.dest || `unknown`;
+    this.headers = properties.customHeaders || properties._restore?.customHeaders || {};
+    this.percentage = parseFloat(properties.percentage) || NaN;
     this.eta = new Date(properties.eta);
-    this.size = properties.size;
-    this.downloaded = properties.downloaded;
+    this.size = properties.size || `unknown`;
+    this.downloaded = properties.downloaded || `unknown`;
     this.startDate = new Date(properties.startDate);
-    this.speed = properties.speed;
+    this.speed = properties.speed || `unknown`;
     this.retries = parseInt(properties.retries);
 
     this.textColors = {
@@ -109,7 +109,7 @@ export default class DownloadItem {
       url: this.url,
       downloadUrl: this.downloadUrl,
       filename: this.filename,
-      path: this.path.join(`/`), // convert path from array to string 
+      path: this.path, 
       headers: this.headers,
       percentage: this.percentage,
       eta: this.eta,
