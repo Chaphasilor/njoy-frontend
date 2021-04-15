@@ -310,8 +310,8 @@ const store = new Vuex.Store({
     async mountApi(context) {
 
       // let response;
-      let baseUrl = `https://njoy.chaphasilor.xyz`;
-      let api;
+      // let baseUrl = `https://njoy.chaphasilor.xyz`;
+      // let api;
 
       // try {
       //   response = await fetch(`https://web-services.chaphasilor.xyz/url?type=njoy`);
@@ -323,11 +323,12 @@ const store = new Vuex.Store({
       // console.log(`baseUrl:`, baseUrl);
       
       // set api urls depending on mode
-      if (process.env.NODE_ENV === `production`) {
-        api = new API(baseUrl);
-      } else {
-        api = new API(`http://192.168.31.129:70`);
-      }
+      // if (process.env.NODE_ENV === `production`) {
+      //   api = new API(baseUrl);
+      // } else {
+      //   api = new API(`http://192.168.31.129:70`);
+      // }
+      const api = new API(process.env.VUE_APP_API_BASE_URL);
 
       context.commit(`SET_API`, api);
       
