@@ -6,7 +6,7 @@
 
     <!-- <div
       id="nav"
-      class="fixed bottom-0 h-16 text-center w-full rounded-t-xl shadow-top "
+      class="fixed bottom-0 w-full h-16 text-center rounded-t-xl shadow-top "
     >
       <router-link to="/">
         Progress
@@ -33,7 +33,14 @@ export default {
       await this.$store.dispatch(`mountApi`);
     }
     this.$store.dispatch(`checkAuthenticated`);
-    
+
+    try {
+      navigator.registerProtocolHandler(`web+download`, `download?url=%s`)
+    } catch (err) {
+      console.error(`err:`, err)
+    }
+    console.log(`Registered as protocol handler!`)
+
   }
 }
 </script>

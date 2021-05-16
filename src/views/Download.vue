@@ -125,13 +125,25 @@ export default {
     },
     receivedUrl: function() {
 
-      if (this.isValidHttpUrl(this.$route.query.url)) {
-        return this.$route.query.url;
-      } else if (this.isValidHttpUrl(this.$route.query.text)) {
-        return this.$route.query.text;
+      let url = decodeURI(this.$route.query.url)
+      console.log(`url:`, url)
+      if (url.split(`:`)[0] === `web+download`) {
+        let urlArray = url.split(`:`)
+        urlArray.shift()
+        url = urlArray.join(`:`)
       } else {
-        return ``;
+
+        if (this.isValidHttpUrl(this.$route.query.url)) {
+          url = this.$route.query.url;
+        } else if (this.isValidHttpUrl(this.$route.query.text)) {
+          url = this.$route.query.text;
+        } else {
+          url = ``;
+        }
+
       }
+
+      return url
       
     }
   },
