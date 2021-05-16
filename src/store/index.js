@@ -274,20 +274,23 @@ const store = new Vuex.Store({
 
           if (newSetting.value) {
 
-            // not sure if the try-catch block does anything...
             try {
-              navigator.registerProtocolHandler(`web+download`, `download?url=%s`)
-            } catch (err) {
-              console.error(`err:`, err)
-            }
-            console.log(`Registered as protocol handler!`)
 
-            newSetting.disabled = true // can't be unregistered other than by uninstalling the PWA/clearing data
-            console.log(`newSetting:`, newSetting)
+              navigator.registerProtocolHandler(`web+download`, `download?url=%s`)
+              newSetting.disabled = true // can't be unregistered other than by uninstalling the PWA/clearing data
+              console.log(`Registered as protocol handler!`)
+              
+            } catch (err) {
+
+              console.error(`Couldn't register protocol handler:`, err)
+              newSetting.value = false
+
+            }
             
           }
+
           store.dispatch(`updateSetting`, newSetting);
-          console.log(`store.getters.settings.schemeHandler.disabled:`, store.getters.settings.schemeHandler.disabled)
+
         }
       },
       test: {
