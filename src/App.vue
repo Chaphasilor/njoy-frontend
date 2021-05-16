@@ -34,13 +34,6 @@ export default {
     }
     this.$store.dispatch(`checkAuthenticated`);
 
-    try {
-      navigator.registerProtocolHandler(`web+download`, `download?url=%s`)
-    } catch (err) {
-      console.error(`err:`, err)
-    }
-    console.log(`Registered as protocol handler!`)
-
   }
 }
 </script>

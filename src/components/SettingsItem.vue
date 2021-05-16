@@ -1,10 +1,10 @@
 <template>
   <div
-    class="w-full h-full p-4 flex flex-row justify-between text-dark"
+    class="flex flex-row justify-between w-full h-full p-4 text-dark"
   >
 
     <div
-      class="h-full flex flex-row"
+      class="flex flex-row h-full"
       @click="$emit(`show-description`)"
     >
 
@@ -20,7 +20,7 @@
       />
 
       <span
-        class="text-lg font-bold cursor-default px-1"
+        class="px-1 text-lg font-bold cursor-default"
       >
         {{ title }}
       </span>
@@ -46,6 +46,7 @@
       class=""
       :name="`toggle-${name}`"
       :value="value"
+      :disabled="disabled"
       :timeout="timeout"
       @input="$emit(`change`, $event)"
       v-haptic
@@ -93,6 +94,13 @@ export default {
     value: {
       type: Boolean,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: function() {
+        return false
+      }
     },
     icon: {
       type: Object,

@@ -73,6 +73,8 @@ module.exports = {
     backgroundColor: ({ after }) => after(['active', 'checked']),
     backgroundImage: ({ after }) => after(['checked']),
     gradientColorStops: ({ after }) => after(['checked']),
+    opacity: ({ after }) => after(['disabled']),
+    cursor: ({ after }) => after(['disabled']),
   },
   plugins: [],
 }

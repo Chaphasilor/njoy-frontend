@@ -1,11 +1,12 @@
 <template>
   <div
-    class="relative w-14 h-7 rounded-full overflow-hidden"
+    class="relative overflow-hidden rounded-full w-14 h-7"
     type="checkbox"
   >
     <input
-      class="block appearance-none w-full h-full bg-gray-500 checked:bg-cta-green transition-colors duration-300 ease-out"
+      class="block w-full h-full transition-colors duration-300 ease-out bg-gray-500 appearance-none disabled:cursor-not-allowed disabled:opacity-50 checked:bg-cta-green"
       type="checkbox"
+      :disabled="disabled"
       :name="name"
       :ref="name"
       :id="id"
@@ -38,6 +39,13 @@ export default {
     value: {
       type: Boolean,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: function() {
+        return false
+      }
     },
     timeout: {
       type: Number,

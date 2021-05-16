@@ -242,6 +242,7 @@ const store = new Vuex.Store({
           `
         },
         value: false,
+        disabled: false,
         timeout: 750,
         onChange: async (newSetting) => {
           
@@ -255,9 +256,44 @@ const store = new Vuex.Store({
           
         }
       },
+      schemeHandler: {
+        title: `Handle download links`,
+        value: false,
+        disabled: false,
+        description: `Allow the app to handle 'web+download:' URLs (can't be disabled afterwards)`,
+        icon: {
+          paths: `
+          <circle cx="4.5" cy="9" r="1"/>
+          <circle cx="4.5" cy="15.5" r="1"/>
+          <path d="M8.5 21.25L14.25 2.5"" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14.5 21.5L20.25 2.75"" stroke-linecap="round" stroke-linejoin="round"/>
+          `
+        },
+        timeout: 350,
+        onChange: (newSetting) => {
+
+          if (newSetting.value) {
+
+            // not sure if the try-catch block does anything...
+            try {
+              navigator.registerProtocolHandler(`web+download`, `download?url=%s`)
+            } catch (err) {
+              console.error(`err:`, err)
+            }
+            console.log(`Registered as protocol handler!`)
+
+            newSetting.disabled = true // can't be unregistered other than by uninstalling the PWA/clearing data
+            console.log(`newSetting:`, newSetting)
+            
+          }
+          store.dispatch(`updateSetting`, newSetting);
+          console.log(`store.getters.settings.schemeHandler.disabled:`, store.getters.settings.schemeHandler.disabled)
+        }
+      },
       test: {
         title: `Test Setting`,
         value: true,
+        disabled: false,
         description: `This is just a test setting, nothing to see here...`,
         icon: {
           paths: `
@@ -302,8 +338,9 @@ const store = new Vuex.Store({
     SET_SERVICEWORKER_REGISTRATION(state, newRegistration) {
       state.swRegistration = newRegistration;
     },
-    SET_SETTING(state, { settingName, value }) {
+    SET_SETTING(state, { settingName, value, disabled }) {
       state.settings[settingName].value = value;
+      state.settings[settingName].disabled = disabled;
     },
   },
   actions: {
@@ -538,9 +575,9 @@ const store = new Vuex.Store({
       
     },
     //TODO move to a separate store
-    updateSetting(context, { settingName, value }) {
+    updateSetting(context, { settingName, value, disabled }) {
 
-      context.commit(`SET_SETTING`, { settingName, value});
+      context.commit(`SET_SETTING`, { settingName, value, disabled});
       context.dispatch(`persistSettings`);
       
     },
@@ -552,6 +589,7 @@ const store = new Vuex.Store({
         return {
           name: key,
           value: value.value,
+          disabled: value.disabled,
         }
       })
 
@@ -571,6 +609,7 @@ const store = new Vuex.Store({
             context.dispatch(`updateSetting`, {
               settingName: resurrectedSetting.name,
               value: resurrectedSetting.value,
+              disabled: resurrectedSetting.disabled,
             });
           });
 

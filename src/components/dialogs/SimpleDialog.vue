@@ -11,7 +11,7 @@
     >
       <div
         v-if="!initialState"
-        class="fixed top-0 left-0 w-screen h-screen bg-dark bg-opacity-25"
+        class="fixed top-0 left-0 w-screen h-screen bg-opacity-25 bg-dark"
       >
       </div>
     </transition>
@@ -22,38 +22,38 @@
       enter-class="-translate-y-10 opacity-0"
       enter-to-class="translate-y-0 opacity-100"
       :leave-active-class="`transition-all duration-${transitionDurationOut} ease-in`"
-      leave-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-75"
+      leave-class="scale-100 opacity-100"
+      leave-to-class="scale-75 opacity-0"
     >
 
       <div
         v-if="!initialState"
-        class="relative w-full h-full flex flex-col justify-center text-dark"
+        class="relative flex flex-col justify-center w-full h-full text-dark"
         @click="$emit('show-dialog', {level: level, type: undefined});"
       >
 
         <div
-          class="bg-white rounded-xl shadow-xl"
+          class="bg-white shadow-xl rounded-xl"
           @click.stop
         >
 
           <h4
-            class="p-4 text-center font-quicksand text-lg antialiased font-bold text-dark tracking-wide"
+            class="p-4 text-lg antialiased font-bold tracking-wide text-center font-quicksand text-dark"
           >
             {{ title }}
           </h4>
 
           <div
-            class="flex flex-row h-auto mb-2 px-4 justify-between text-center"
+            class="flex flex-row justify-between h-auto px-4 mb-2 text-center"
           >
             {{ text }}
           </div>
 
           <div
-            class="w-full px-4 py-6 flex flex-row justify-center"
+            class="flex flex-row justify-center w-full px-4 py-6"
           >
             <CTAButton
-              class=" w-full h-12"
+              class="w-full h-12 "
               type="good"
               :label="buttonLabel"
               @click.native="handleButton"

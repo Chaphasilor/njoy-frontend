@@ -4,18 +4,18 @@
   >
 
     <div
-      class="w-full h-16 p-4 flex flex-row justify-between mb-10"
+      class="flex flex-row justify-between w-full h-16 p-4 mb-10"
       v-shared-element:page-header
     >
 
       <h2
-        class="w-5/6 flex-shrink-0 text-left text-2xl antialiased font-semibold text-dark tracking-wide"
+        class="flex-shrink-0 w-5/6 text-2xl antialiased font-semibold tracking-wide text-left text-dark"
       >
         Settings
       </h2>
 
       <svg
-        class="w-8 h-8 stroke-current stroke-2 mr-px"
+        class="w-8 h-8 mr-px stroke-current stroke-2"
         viewBox="0 0 24 24"
         fill="none"
         stroke-linecap="round"
@@ -40,6 +40,7 @@
       :name="settingName"
       :icon="settingValue.icon"
       :value="settingValue.value"
+      :disabled="settingValue.disabled"
       :timeout="settingValue.timeout"
       @change="settingValue.onChange({
         settingName,
