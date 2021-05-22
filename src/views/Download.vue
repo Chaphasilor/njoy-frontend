@@ -71,9 +71,11 @@
         v-if="showSingleFileDialog"
         :level="0"
         :opened-dialogs="openedDialogs.slice(1)"
+        :close-dialog="openedDialogs[0].close"
         :download-url="receivedUrl"
         :filename="$route.query.title"
         @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
+        @close-dialog="openedDialogs.find(x => x.level == $event.level).close = false"
         @download-submitted="handleDownloadSubmitted"
         class="fixed bottom-0 left-0 z-10 w-full h-full"
       />
@@ -106,10 +108,12 @@ export default {
         {
           level: 0,
           type: undefined,
+          close: false,
         },
         {
           level: 1,
           type: undefined,
+          close: false,
         },
       ]
     };
@@ -158,7 +162,13 @@ export default {
 
         if (undefined != this.openedDialogs[level].type) {
 
-          this.openedDialogs[level].type = undefined;
+          // this.openedDialogs[level].type = undefined;
+          // send close "command"
+          this.openedDialogs[level].close = true
+          // setTimeout(() => {
+          //   this.openedDialogs[level].close = false
+          // })
+          
           navigator.vibrate(25);
           return next(false);
 

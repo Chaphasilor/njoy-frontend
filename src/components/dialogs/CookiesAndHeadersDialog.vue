@@ -1,35 +1,35 @@
 <template>
   <div>
     <div
-      class="relative bg-white w-full h-full overflow-y-auto text-dark shadow-xl"
+      class="relative w-full h-full overflow-y-auto bg-white shadow-xl text-dark"
     >
       <!-- fixed -->
       <div
-        class="sticky top-0 h-auto bg-white mb-4 pt-0 shadow-md  font-quicksand text-dark flex flex-row justify-start"
+        class="sticky top-0 flex flex-row justify-start h-auto pt-0 mb-4 bg-white shadow-md font-quicksand text-dark"
       >
       
         <img
-          class="h-5 my-3 mr-4 ml-5"
+          class="h-5 my-3 ml-5 mr-4"
           src="@/assets/icons/back.svg"
           alt="Remove"
-          @click="$emit('show-dialog', {level: level, type: undefined});"
+          @click="closeDialogIfPossible"
         >
 
         <h3
-          class="text-lg antialiased font-bold tracking-wide py-2"
+          class="py-2 text-lg antialiased font-bold tracking-wide"
         >
           Manage Cookies & Headers
         </h3>
       </div>
 
       <h4
-        class="pl-4 pb-2 font-quicksand text-rg antialiased font-bold text-dark tracking-wide"
+        class="pb-2 pl-4 antialiased font-bold tracking-wide font-quicksand text-rg text-dark"
       >
         Cookies
       </h4>
 
       <div
-        class="flex flex-row h-32 mb-2 px-4 justify-between"
+        class="flex flex-row justify-between h-32 px-4 mb-2"
       >
         <ValuePairList
           class="w-full"
@@ -92,13 +92,13 @@
       </div>
 
       <h4
-        class="pl-4 pb-2 font-quicksand text-rg antialiased font-bold text-dark tracking-wide"
+        class="pb-2 pl-4 antialiased font-bold tracking-wide font-quicksand text-rg text-dark"
       >
         Headers
       </h4>
 
       <div
-        class="flex flex-row h-32 mb-2 px-4 justify-between"
+        class="flex flex-row justify-between h-32 px-4 mb-2"
       >
         <ValuePairList
           class="w-full"
@@ -163,12 +163,26 @@
       </div>
 
       <CTAButton
-        class="w-full px-4 mt-12 h-12"
+        class="w-full h-12 px-4 mt-12"
         type="good"
         label="Confirm"
         @click.native="$emit('show-dialog', {level: level, type: undefined})"
       />    
     </div>
+
+    <ConfirmationDialog
+      v-if="confirmation.required"
+      class="fixed top-0 left-0 w-full h-full p-4"
+      title="Are you sure about that?"
+      text="If you leave this screen, all your changes will be discarded!"
+      confirm-label="Leave"
+      cancel-label="Cancel"
+      :level="level+1"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @confirm="confirmation.required = false; confirmation.result = true"
+      @cancel="confirmation.required = false; confirmation.result = false"
+      @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
+    />
     
   </div>
 </template>
@@ -178,6 +192,7 @@
 import CTAButton from '@/components/buttons/CTAButton';
 import TextField from '@/components/inputs/TextField';
 import ValuePairList from '@/components/inputs/ValuePairList';
+import ConfirmationDialog from  '@/components/dialogs/ConfirmationDialog';
 
 export default {
   name: 'CookiesAndHeadersDialog',
@@ -185,6 +200,7 @@ export default {
     CTAButton,
     ValuePairList,
     TextField,
+    ConfirmationDialog,
   },
   props: {
     value: {
@@ -202,6 +218,10 @@ export default {
       type: Array,
       required: true,
     },
+    closeDialog: {
+      type: Boolean,
+      required: true,
+    },
   },
   data: function() {
     return {
@@ -216,6 +236,10 @@ export default {
         key: ``,
         value: ``,
       },
+      confirmation: {
+        required: false,
+        result: undefined,
+      }
     }
   },
   computed: {
@@ -242,17 +266,78 @@ export default {
     newHeaderInputValid: function() {
       return this.newHeader.key.length > 0 && this.newHeader.value.length > 0;
     },
+    formDirty: function() {
+      return (this.newHeader.key.length > 0 || this.newHeader.value.length > 0) || (this.newCookie.key.length > 0 || this.newCookie.value.length > 0)
+    },
   },
   watch: {
+    closeDialog() {
+      if (this.closeDialog) {
+        this.closeDialogIfPossible()
+      }
+    },
     headers: {
       deep: true,
       handler: function() {
         console.log(`this.headers:`, this.headers);
         this.$emit('input', this.headers);
       }
-    }
+    },
+    enableNewCookieInputs() {
+      console.log(`new cookie inputs`)
+      if (!this.enableNewCookieInputs) {
+        this.newCookie.key = ``;
+        this.newCookie.value = ``;
+      }
+    },
+    enableNewHeaderInputs() {
+      console.log(`new header inputs`)
+      if (!this.enableNewHeaderInputs) {
+        this.newHeader.key = ``;
+        this.newHeader.value = ``;
+      }
+    },
   },
   methods: {
+    beforeWindowUnload(e) {
+
+      if (this.formDirty) {
+        // Cancel the event
+        e.preventDefault();
+        // Chrome requires returnValue to be set
+        e.returnValue = '';
+      }
+    },
+    async confirmCloseDialog() {
+      console.log(`this.formDirty:`, this.formDirty)
+      if (this.formDirty) {
+
+        this.confirmation.required = true
+        let result = await new Promise((resolve) => {
+          let interval = setInterval(() => {
+            if (!this.confirmation.required) {
+              clearInterval(interval)
+              return resolve(this.confirmation.result)
+            }
+          }, 100)
+        })
+        this.confirmation.result = undefined
+        
+        return result
+      } else {
+        return true
+      }
+    },
+    async closeDialogIfPossible() {
+      console.log(`trying to close dialog`)
+      let closeable = await this.confirmCloseDialog()
+      
+      this.$emit('close-dialog', {level: this.level})
+      
+      if (closeable) {
+        this.$emit('show-dialog', {level: this.level, type: undefined})
+      }
+    },
     generatePairsFromObject(object) {
 
       if (undefined == object) {
@@ -350,7 +435,11 @@ export default {
   mounted: function() {
 
     console.log(`this.value:`, this.value);
+    window.addEventListener(`beforeunload`, this.beforeWindowUnload)
 
+  },
+  beforeDestroy() {
+    window.removeEventListener(`beforeunload`, this.beforeWindowUnload)
   }
 }
 </script>

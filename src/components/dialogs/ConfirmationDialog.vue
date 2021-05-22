@@ -38,7 +38,7 @@
         >
 
           <h4
-            class="p-4 text-lg antialiased font-bold tracking-wide text-center font-quicksand text-dark"
+            class="p-4 text-xl antialiased font-bold tracking-wide text-center font-quicksand text-dark"
           >
             {{ title }}
           </h4>
@@ -53,10 +53,16 @@
             class="flex flex-row justify-center w-full px-4 py-6"
           >
             <CTAButton
-              class="w-full h-12 "
+              class="w-full h-12 mr-4"
               type="good"
-              :label="buttonLabel"
-              @click.native="handleButton"
+              :label="confirmLabel"
+              @click.native="handleConfirmButton"
+            />
+            <CTAButton
+              class="w-full h-12"
+              type="action"
+              :label="cancelLabel"
+              @click.native="handleCancelButton"
             />
           </div>
           
@@ -74,7 +80,7 @@
 import CTAButton from '@/components/buttons/CTAButton';
 
 export default {
-  name: `SimpleDialog`,
+  name: `ConfirmationDialog`,
   components: {
     CTAButton,
   },
@@ -93,7 +99,11 @@ export default {
         return ``;
       }
     },
-    buttonLabel: {
+    confirmLabel: {
+      type: String,
+      required: true,
+    },
+    cancelLabel: {
       type: String,
       required: true,
     },
@@ -114,11 +124,22 @@ export default {
     }
   },
   methods: {
-    handleButton() {
+    handleConfirmButton() {
 
       this.initialState = true;
       // wait for the transition to finish before hiding the dialog
       setTimeout(() => {
+        this.$emit('confirm');
+        this.$emit('show-dialog', {level: this.level, type: undefined});
+      }, this.transitionDurationOut);
+
+    },
+    handleCancelButton() {
+
+      this.initialState = true;
+      // wait for the transition to finish before hiding the dialog
+      setTimeout(() => {
+        this.$emit('cancel');
         this.$emit('show-dialog', {level: this.level, type: undefined});
       }, this.transitionDurationOut);
 

@@ -45,7 +45,11 @@ module.exports = {
           text: 'text',
           url: 'url'
         }
-      }
+      },
+      capture_links: [
+        'existing-client-navigate',
+        'new-client'
+      ],
     },
     // configure the workbox plugin
     workboxPluginMode: 'InjectManifest',

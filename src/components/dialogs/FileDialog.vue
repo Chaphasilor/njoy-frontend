@@ -11,7 +11,7 @@
           class="w-4 my-3 ml-5 mr-3"
           src="@/assets/icons/close.svg"
           alt="Remove"
-          @click="$emit('show-dialog', {level: level, type: undefined});"
+          @click="closeDialogIfPossible"
         >
 
         <h3
@@ -139,11 +139,27 @@
         v-if="showCookiesAndHeadersDialog"
         :level="level+1"
         :opened-dialogs="openedDialogs.slice(1)"
+        :close-dialog="openedDialogs[0].close"
         @show-dialog="$emit('show-dialog', $event)"
+        @close-dialog="openedDialogs.find(x => x.level == $event.level).close = false"
         v-model="fileToDownload.customHeaders"
         class="fixed bottom-0 left-0 w-full h-full"
       />
     </transition>
+
+    <ConfirmationDialog
+      v-if="confirmation.required"
+      class="fixed top-0 left-0 w-full h-full p-4"
+      title="Are you sure about that?"
+      text="If you leave this screen, all your changes will be discarded!"
+      confirm-label="Leave"
+      cancel-label="Cancel"
+      :level="level+1"
+      :opened-dialogs="openedDialogs.slice(1)"
+      @confirm="confirmation.required = false; confirmation.result = true"
+      @cancel="confirmation.required = false; confirmation.result = false"
+      @show-dialog="openedDialogs.find(x => x.level == $event.level).type = $event.type;"
+    />
     
   </div>
 </template>
@@ -155,6 +171,7 @@ import SmallButton from '@/components/buttons/SmallButton';
 import TextField from '@/components/inputs/TextField';
 import PathDialog from  '@/components/dialogs/PathDialog';
 import CookiesAndHeadersDialog from  '@/components/dialogs/CookiesAndHeadersDialog';
+import ConfirmationDialog from  '@/components/dialogs/ConfirmationDialog';
 
 export default {
   name: 'FileDialog',
@@ -164,6 +181,7 @@ export default {
     TextField,
     PathDialog,
     CookiesAndHeadersDialog,
+    ConfirmationDialog,
   },
   props: {
     //TODO use object for v-ifs of dialogs, open dialogs by emitting an event to the view
@@ -173,6 +191,10 @@ export default {
     },
     openedDialogs: {
       type: Array,
+      required: true,
+    },
+    closeDialog: {
+      type: Boolean,
       required: true,
     },
     downloadUrl: {
@@ -219,6 +241,10 @@ export default {
       // showPathDialog: false,
       // showCookiesAndHeadersDialog: false,
       pathString: '',
+      confirmation: {
+        required: false,
+        result: undefined,
+      }
     }
   },
   computed: {
@@ -236,9 +262,17 @@ export default {
     },
     sizeString: function() {
       return this.fileToDownload.size ? `Size: ${this.fileToDownload.size}` : ``;
-    }
+    },
+    formDirty: function() {
+      return this.fileToDownload.url.length > 0 || this.fileToDownload.filename.length > 0 || this.fileToDownload.path.length > 0 || Object.entries(this.fileToDownload.customHeaders).length > 0
+    },
   },
   watch: {
+    closeDialog() {
+      if (this.closeDialog) {
+        this.closeDialogIfPossible()
+      }
+    },
     pathString: function() {
       this.fileToDownload.path = this.arrayifyPath(this.pathString);
     },
@@ -257,6 +291,45 @@ export default {
     //TODO update pathString when path array changes
   },
   methods: {
+    beforeWindowUnload(e) {
+
+      if (this.formDirty) {
+        // Cancel the event
+        e.preventDefault();
+        // Chrome requires returnValue to be set
+        e.returnValue = '';
+      }
+    },
+    async confirmCloseDialog() {
+      console.log(`this.formDirty:`, this.formDirty)
+      if (this.formDirty) {
+
+        this.confirmation.required = true
+        let result = await new Promise((resolve) => {
+          let interval = setInterval(() => {
+            if (!this.confirmation.required) {
+              clearInterval(interval)
+              return resolve(this.confirmation.result)
+            }
+          }, 100)
+        })
+        this.confirmation.result = undefined
+        
+        return result
+      } else {
+        return true
+      }
+    },
+    async closeDialogIfPossible() {
+      console.log(`trying to close dialog`)
+      let closeable = await this.confirmCloseDialog()
+      
+      this.$emit('close-dialog', {level: this.level})
+      
+      if (closeable) {
+        this.$emit('show-dialog', {level: this.level, type: undefined})
+      }
+    },
     handleDownloadButton() {
 
       if (this.downloadButtonActive) {
@@ -335,7 +408,14 @@ export default {
     
     this.$store.dispatch(`loadRootDirectoryTree`); // pre-fetch directories
 
-  }
+    window.addEventListener(`beforeunload`, this.beforeWindowUnload)
+
+  },
+  beforeDestroy() {
+
+    window.removeEventListener(`beforeunload`, this.beforeWindowUnload)
+    
+  },
 }
 </script>
 
