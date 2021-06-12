@@ -181,15 +181,23 @@ export default {
       return next();
       
     },
-    handleDownloadSubmitted() {
+    handleDownloadSubmitted(downloadId) {
 
       // close all dialogs
       this.openedDialogs.forEach(x => x.type = undefined);
       
-      // navigate back to progress overview
-      this.$router.push({
-        name: 'Progress',
-      })
+      if (downloadId) {
+        // navigate back to progress overview
+        this.$router.push({
+          path: `/details/${downloadId}`,
+        })
+        } else {
+        // navigate back to progress overview
+        this.$router.push({
+          name: 'Progress',
+        })
+      }
+      
       
     },
     isValidHttpUrl(string) {

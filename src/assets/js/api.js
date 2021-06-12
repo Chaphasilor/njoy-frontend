@@ -212,7 +212,7 @@ export default class API {
         
         return {
           status: response.status,
-          text: await response.text(),
+          info: await response.json(),
         }
         
       })
@@ -220,22 +220,22 @@ export default class API {
 
         switch (result.status) {
           case 200:
-            return resolve(result.text);
+            return resolve(result.info);
           case 201:
-            return resolve(result.text);
+            return resolve(result.info);
           case 400:
-            return reject(result.text);
+            return reject(result.info);
           case 500:
-            return reject(result.text);
+            return reject(result.info);
             
           default:
-            return reject(result.text);
+            return reject(result.info);
         }
         
       })
       .catch(err => {
         console.error(err);
-        return reject(`An error occured during the request!`);
+        return reject(`An error occurred during the request!`);
       })
     
     })

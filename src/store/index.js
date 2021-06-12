@@ -491,16 +491,16 @@ const store = new Vuex.Store({
 
       console.log(`download.path:`, download.path);
       
-      let response;
+      let info;
 
       try {
-        response = await context.getters.api.submitDownload(download);
+        info = await context.getters.api.submitDownload(download);
       } catch (err) {
         console.error(`Failed to submit download:`, err);
         throw new Error(`Failed to submit download!`);
       }
 
-      return response;
+      return info;
       
     },
     async getFileInfo(context, url) {

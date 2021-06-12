@@ -225,7 +225,7 @@ export default {
         },
         export: function() {
           return {
-            filename: this.filename,
+            name: this.filename,
             url: this.url,
             path: this.path.join(`/`),
             customHeaders: Object.keys(this.customHeaders).filter(key => `cookie` != key).reduce((headerObject, key) => {
@@ -341,19 +341,19 @@ export default {
     },
     async submitDownload() {
 
-      let responseText;
+      let downloadInfo;
 
       try {
 
-        responseText = await this.$store.dispatch(`submitDownload`, this.fileToDownload.export());
+        downloadInfo = await this.$store.dispatch(`submitDownload`, this.fileToDownload.export());
 
-        this.$emit(`download-submitted`);
+        this.$emit(`download-submitted`, downloadInfo.id);
         
       } catch (err) {
         console.error(err);
       }
 
-      console.log(`responseText:`, responseText);
+      console.log(`downloadInfo:`, downloadInfo);
 
     },
     stringifyPath(pathArray) {
