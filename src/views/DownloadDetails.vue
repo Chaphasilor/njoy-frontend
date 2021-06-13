@@ -237,6 +237,11 @@ export default {
         url: 'Unknown',
         retries: 'Unknown',
         headers: {},
+      },
+      textColors: {
+        red: [],
+        yellow: [],
+        green: [],
       }
     }
   },

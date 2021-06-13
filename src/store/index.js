@@ -447,8 +447,6 @@ const store = new Vuex.Store({
         downloads = emptyObject;
       }
 
-      downloads = [...downloads.active,...downloads.queued, ...downloads.finished, ...downloads.failed];
-
       downloads = downloads.map(item => new DownloadItem(item));
 
       context.commit('SET_DOWNLOADS', downloads);
@@ -462,13 +460,16 @@ const store = new Vuex.Store({
 
         switch (action) {
           case `pause`:
-            newStatus = await context.getters.api.pauseDownload(id);
+            await context.getters.api.pauseDownload(id);
+            newStatus = `paused`
             break;
           case `resume`:
-            newStatus = await context.getters.api.resumeDownload(id);
+            await context.getters.api.resumeDownload(id);
+            newStatus = `downloading`
             break;
           case `stop`:
-            newStatus = await context.getters.api.stopDownload(id);
+            await context.getters.api.stopDownload(id);
+            newStatus = `canceled`
             break;
         
           default:

@@ -18,7 +18,7 @@ export default class DownloadItem {
     this.retries = parseInt(properties.retries);
 
     this.textColors = {
-      red: ['error', 'failed', 'incomplete'],
+      red: ['error', 'canceled', 'failed', 'incomplete'],
       yellow: ['paused', 'duplicate'],
       green: ['completed'],
     }
@@ -34,6 +34,9 @@ export default class DownloadItem {
     switch (this.status) {
       case `paused`:
         color = `cta-yellow`
+        break;
+      case `canceled`:
+        color = `cta-red`
         break;
       case `error`:
         color = `cta-red`
@@ -75,6 +78,9 @@ export default class DownloadItem {
         break;
       case `paused`:
         statusString = `Paused`;
+        break;
+      case `canceled`:
+        statusString = `Aborted`;
         break;
       case `error`:
         statusString = `Error`;

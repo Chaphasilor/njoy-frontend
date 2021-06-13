@@ -152,15 +152,12 @@ export default class API {
         .catch(err => {
           console.warn(`Failed to fetch progress:`, err);
           // respond with empty progress object
-          return reject({
-            active: [],
-            queued: [],
-            finished: [],
-            failed: [{
+          return reject([
+            {
               name: `Failed to load progress!`,
               status: `failed`,
-            }],
-          })
+            },
+          ])
           // return reject(`Couldn`t fetch progress!`);
         })
     
@@ -263,7 +260,7 @@ export default class API {
       })
       .catch(err => {
         console.error(err);
-        return reject(`An error occured during the request!`);
+        return reject(`An error occurred during the request!`);
       })
     
     })
