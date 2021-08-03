@@ -9,12 +9,13 @@ export default class DownloadItem {
     this.filename = properties.name || properties.fileName || `unknown`;
     this.path = properties.dest || properties._restore?.dest || `unknown`;
     this.headers = properties.customHeaders || properties._restore?.customHeaders || {};
-    this.percentage = parseFloat(properties.percentage) || NaN;
+    this.percentage = parseFloat(properties.percentage);
     this.eta = new Date(properties.eta);
     this.size = properties.size || `unknown`;
     this.downloaded = properties.downloaded || `unknown`;
     this.startDate = new Date(properties.startDate);
     this.speed = properties.speed || `unknown`;
+    this.averageSpeed = properties.averageSpeed || `unknown`;
     this.retries = parseInt(properties.retries);
 
     this.textColors = {

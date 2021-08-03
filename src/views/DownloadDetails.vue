@@ -82,8 +82,15 @@
 
       <InfoLine
         class="w-full h-8"
-        name="Download Speed"
+        name="Current Speed"
         :value="download.speed"
+        :shared-id-base="download.id"
+      />
+
+      <InfoLine
+        class="w-full h-8"
+        name="Average Speed"
+        :value="download.averageSpeed"
         :shared-id-base="download.id"
       />
 
@@ -96,8 +103,8 @@
 
       <InfoLine
         class="w-full h-8"
-        name="Elapsed"
-        :value="elapsedString"
+        name="Started"
+        :value="startedString"
         :shared-id-base="download.id"
       />
 
@@ -250,7 +257,9 @@ export default {
 
       if (undefined != this.$route.params.downloadId) {
 
+        console.log(`this.$store.getters.downloads:`, this.$store.getters.downloads)
         let found = this.$store.getters.downloads.find(x => x.id == this.$route.params.downloadId);
+        console.log(`found:`, found)
 
         if (found) {
           return found;
@@ -287,12 +296,10 @@ export default {
     etaString: function() {
       //TODO show date as designed in Figma
       return this.download.eta.toLocaleTimeString();
-      
     },
-    elapsedString: function() {
+    startedString: function() {
       //TODO show date as designed in Figma
       return this.download.startDate.toLocaleTimeString();
-      
     },
     progressSizeString: function() {
       return `${this.download.downloaded} / ${this.download.size}`;
